@@ -1,20 +1,15 @@
 package main
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/sirikon/gonference/postgres"
 )
 
 func main() {
-	migrations, err := postgres.GetMigrations()
+	err := postgres.Migrate()
 	if err != nil {
 		log.Fatal(err)
-	}
-
-	for _, migration := range migrations {
-		fmt.Println(migration)
 	}
 }
 

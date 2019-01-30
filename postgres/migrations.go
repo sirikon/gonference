@@ -23,6 +23,7 @@ type MigrationFile struct {
 	Name      string
 	Direction string
 	Path      string
+	Content   string
 }
 
 // GetMigrations .
@@ -47,9 +48,9 @@ func GetMigrations() ([]Migration, error) {
 		}
 
 		if file.Direction == "up" {
-			migration.Up = file.Path
+			migration.Up = file.Content
 		} else {
-			migration.Down = file.Path
+			migration.Down = file.Content
 		}
 	}
 
@@ -82,6 +83,11 @@ func getMigrationsFiles() ([]MigrationFile, error) {
 		}
 		mf := parseMigrationFileName(file.Name())
 		mf.Path = filepath.Join(migrationsDirectoryPath, file.Name())
+		data, err := ioutil.ReadFile(mf.Path)
+		if err != nil {
+			return nil, err
+		}
+		mf.Content = string(data)
 		migrationFiles = append(migrationFiles, mf)
 	}
 
