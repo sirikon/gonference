@@ -1,6 +1,9 @@
 package postgres
 
 import (
+	"log"
+	"strconv"
+
 	"github.com/jmoiron/sqlx"
 )
 
@@ -27,6 +30,7 @@ func Migrate() error {
 	}
 
 	for _, migration := range migrations {
+		log.Println("Applying migration [" + strconv.Itoa(migration.Order) + "] '" + migration.Name + "'")
 		_, err := conn.Exec(migration.Up)
 		if err != nil {
 			return err
@@ -53,10 +57,13 @@ func EnsureDatabaseExists(name string) error {
 	}
 
 	if !exists {
+		log.Println("Database 'gonference' doesn't exist. Creating.")
 		_, err = conn.Exec("CREATE DATABASE gonference;")
 		if err != nil {
 			return err
 		}
+	} else {
+		log.Println("Database 'gonference' already exists.")
 	}
 
 	return nil
