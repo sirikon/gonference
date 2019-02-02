@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"net/http"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/sirikon/gonference"
 )
 
@@ -13,15 +15,20 @@ type Server struct {
 }
 
 func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
+	handleErr := func(err error) {
+		log.Error(err)
+		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+	}
+
 	talks, err := s.TalkRepository.GetAll()
 	if err != nil {
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		handleErr(err)
 		return
 	}
 
 	message, err := json.Marshal(talks)
 	if err != nil {
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		handleErr(err)
 		return
 	}
 	w.Write(message)
