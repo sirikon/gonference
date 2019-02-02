@@ -1,8 +1,28 @@
 package postgres
 
-// PersonModel .
-type PersonModel struct {
-	FirstName string `db:"first_name"`
-	LastName  string `db:"last_name"`
-	Email     string
+import (
+	"github.com/sirikon/gonference"
+)
+
+// TalkModel .
+type TalkModel struct {
+	ID   int    `db:"id"`
+	Name string `db:"name"`
+}
+
+// ToDomainTalk .
+func (tm TalkModel) ToDomainTalk() gonference.Talk {
+	return gonference.Talk{
+		ID:   tm.ID,
+		Name: tm.Name,
+	}
+}
+
+// TalksToDomainTalks .
+func TalksToDomainTalks(talks []TalkModel) []gonference.Talk {
+	result := []gonference.Talk{}
+	for _, talk := range talks {
+		result = append(result, talk.ToDomainTalk())
+	}
+	return result
 }

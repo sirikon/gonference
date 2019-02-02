@@ -1,1 +1,1 @@
-DROP TABLE User;
+DROP TABLE talk;
