@@ -1,8 +1,9 @@
 package postgres
 
 import (
-	"log"
 	"strconv"
+
+	log "github.com/sirupsen/logrus"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
