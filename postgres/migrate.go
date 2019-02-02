@@ -29,7 +29,15 @@ func Migrate() error {
 		return err
 	}
 
+	lastMigrationID, err := GetMostRecentMigrationID(conn)
+	if err != nil {
+		return err
+	}
+
 	for _, migration := range migrations {
+		if migration.Order <= lastMigrationID {
+			continue
+		}
 		log.Println("Applying migration [" + strconv.Itoa(migration.Order) + "] '" + migration.Name + "'")
 		_, err := conn.Exec(migration.Up)
 		if err != nil {
@@ -87,6 +95,19 @@ func RegisterMigration(db *sqlx.DB, migration Migration) error {
 		("id", "name") VALUES ($1, $2);
 	`, migration.Order, migration.Name)
 	return err
+}
+
+// GetMostRecentMigrationID .
+func GetMostRecentMigrationID(db *sqlx.DB) (int, error) {
+	migrations := []int{}
+	err := db.Select(&migrations, "SELECT id FROM __migration_history order by id desc LIMIT 1")
+	if err != nil {
+		return -1, err
+	}
+	if len(migrations) == 0 {
+		return -1, nil
+	}
+	return migrations[0], nil
 }
 
 // CheckDatabaseExists .
