@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Talks</title>
+    </head>
+    <body>
+        <h1>Talks</h1>
+        <ul>
+            {{range .}}
+                <li>[{{ .ID }}] {{ .Name }}</li>
+            {{else}}
+                <p>No talks found</p>
+            {{end}}
+        </ul>
+    </body>
+</html>

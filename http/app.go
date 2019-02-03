@@ -1,12 +1,10 @@
 package http
 
 import (
-	"encoding/json"
 	"net/http"
 
-	log "github.com/sirupsen/logrus"
-
 	"github.com/sirikon/gonference"
+	log "github.com/sirupsen/logrus"
 )
 
 // Server .
@@ -26,12 +24,13 @@ func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	message, err := json.Marshal(talks)
+	result, err := RenderTemplate("index", talks)
 	if err != nil {
 		handleErr(err)
 		return
 	}
-	w.Write(message)
+
+	w.Write(result)
 }
 
 // Run .
