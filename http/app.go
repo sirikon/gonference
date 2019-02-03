@@ -35,6 +35,7 @@ func (s *Server) indexHandler(w http.ResponseWriter, r *http.Request) {
 
 // Run .
 func (s *Server) Run() error {
+	http.Handle("/assets/", http.StripPrefix("/assets/", http.FileServer(http.Dir("./http/assets"))))
 	http.HandleFunc("/", s.indexHandler)
 	err := http.ListenAndServe(":3000", nil)
 	if err != nil {
