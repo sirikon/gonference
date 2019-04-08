@@ -2,6 +2,6 @@ package gonference
 
 // Talk .
 type Talk struct {
-	ID   int
-	Name string
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }

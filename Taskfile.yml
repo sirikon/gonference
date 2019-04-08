@@ -1,0 +1,36 @@
+# https://taskfile.dev
+
+version: '2'
+
+env:
+  DEVENV_PATH: docker/gonference-devenv
+
+tasks:
+
+  devenv-up:
+    desc: Runs the development environment.
+    cmds:
+      - |
+        cd $DEVENV_PATH
+        docker-compose up -d
+    silent: true
+
+  devenv-down:
+    desc: Stops the development environment.
+    cmds:
+      - |
+        cd $DEVENV_PATH
+        docker-compose down
+    silent: true
+
+  build:
+    desc: Builds gonference and generates a binary file called 'gonference' on project root folder.
+    cmds:
+      - go build ./cmd/gonference
+    silent: true
+  
+  run:
+    desc: Runs gonference.
+    cmds:
+      - go run ./cmd/gonference/main.go
+    silent: true
