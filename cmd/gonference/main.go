@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/sirikon/gonference/ioc"
 	log "github.com/sirupsen/logrus"
 
 	"github.com/sirikon/gonference/http"
@@ -18,12 +19,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	talkRepository := &postgres.TalkRepository{
-		DB: conn,
-	}
+	serviceProvider := ioc.CreateServiceProvider(conn)
 
 	httpServer := http.Server{
-		TalkRepository: talkRepository,
+		ServiceProvider: serviceProvider,
 	}
 
 	err = httpServer.Run()

@@ -9,13 +9,13 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// TalksController .
-type TalksController struct {
+// TalksAPIController .
+type TalksAPIController struct {
 	TalkRepository gonference.TalkRepository
 }
 
 // GetAllHandler .
-func (s *TalksController) GetAllHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (s *TalksAPIController) GetAllHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	handleErr := func(err error) {
 		log.Error(err)
 		http.Error(w, "Something went wrong", http.StatusInternalServerError)

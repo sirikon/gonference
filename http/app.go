@@ -3,34 +3,30 @@ package http
 import (
 	"net/http"
 
-	"github.com/julienschmidt/httprouter"
+	"github.com/sirikon/gonference/ioc"
 
-	"github.com/sirikon/gonference"
-	apiControllers "github.com/sirikon/gonference/http/controllers/api"
-	publicControllers "github.com/sirikon/gonference/http/controllers/public"
+	"github.com/julienschmidt/httprouter"
 )
 
 // Server .
 type Server struct {
-	TalkRepository gonference.TalkRepository
+	ServiceProvider *ioc.ServiceProvider
 }
 
 // Run .
 func (s *Server) Run() error {
 
-	indexController := publicControllers.IndexController{
-		TalkRepository: s.TalkRepository,
-	}
-
-	talksController := apiControllers.TalksController{
-		TalkRepository: s.TalkRepository,
-	}
-
 	router := httprouter.New()
-	router.GET("/", indexController.Handler)
+
+	router.GET("/", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		s.ServiceProvider.CreateRequestScope().GetIndexController().Handler(w, r, ps)
+	})
 	router.ServeFiles("/assets/*filepath", http.Dir("./http/assets/public"))
 
-	router.GET("/api/talks", talksController.GetAllHandler)
+	router.GET("/api/talks", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().GetAllHandler(w, r, ps)
+	})
+
 	router.ServeFiles("/admin/*filepath", http.Dir("./http/assets/backoffice"))
 
 	err := http.ListenAndServe(":3000", router)
