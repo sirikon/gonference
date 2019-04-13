@@ -1,0 +1,18 @@
+{
+  "name": "backoffice-ui",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.js",
+  "scripts": {
+    "build": "mkdir -p ../http/assets/backoffice/js && cp ./node_modules/mithril/mithril.min.js ../http/assets/backoffice/js/mithril.min.js && rollup -c",
+    "start": "npm run build -- -w"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "rollup": "^1.10.0"
+  },
+  "dependencies": {
+    "mithril": "~1.1.6"
+  }
+}

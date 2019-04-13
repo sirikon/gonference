@@ -34,3 +34,15 @@ tasks:
     cmds:
       - go run ./cmd/gonference/main.go
     silent: true
+
+  backoffice-ui-build:
+    desc: Builds the Backoffice UI
+    dir: backoffice-ui
+    cmds:
+      - npm run build
+
+  backoffice-ui-dev:
+    desc: Starts continuous-build process for Backoffice UI development
+    dir: backoffice-ui
+    cmds:
+      - npm start
