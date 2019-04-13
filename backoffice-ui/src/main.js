@@ -1,4 +1,9 @@
 import m from 'mithril';
 import App from './app';
+import Router from './router';
 
-m.mount(document.getElementById('app'), App);
+m.route(
+  document.getElementById('app'),
+  Router.getDefaultPath(),
+  Router.getMithrilRoutes(App),
+);
