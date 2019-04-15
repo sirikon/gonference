@@ -26,3 +26,11 @@ func TalksToDomainTalks(talks []TalkModel) []gonference.Talk {
 	}
 	return result
 }
+
+// DomainTalkToTalk .
+func DomainTalkToTalk(talk gonference.Talk) TalkModel {
+	return TalkModel{
+		ID:   talk.ID,
+		Name: talk.Name,
+	}
+}

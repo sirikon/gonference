@@ -1,6 +1,16 @@
 import m from 'mithril';
 import Router from '../router';
 
+const displayedRoutePaths = [
+  '/talks',
+  '/settings',
+];
+
+function getDisplayedRoutes() {
+  return Router.getRoutes()
+    .filter(r => displayedRoutePaths.indexOf(r.path) >= 0);
+}
+
 function navbarTitle(text) {
   return m('a', { class: 'navbar-item', href: '/admin/' }, [
     m('h1', { class: 'title is-4' }, text),
@@ -22,7 +32,7 @@ function navbarBurger() {
 }
 
 function navbarMenuItems() {
-  return Router.getRoutes().map((route) => {
+  return getDisplayedRoutes().map((route) => {
     const isActiveClass = route.path === m.route.get() ? 'is-active' : '';
     return m('div', { class: 'navbar-start' }, [
       m(`a[href=${route.path}]`, { class: `navbar-item ${isActiveClass}`, oncreate: m.route.link }, route.name),

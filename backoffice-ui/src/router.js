@@ -1,5 +1,6 @@
 import m from 'mithril';
 import Talks from './views/talks';
+import TalkForm from './components/talkForm';
 import Settings from './views/settings';
 
 const routes = [
@@ -7,6 +8,11 @@ const routes = [
     name: 'Talks',
     path: '/talks',
     component: Talks,
+  },
+  {
+    name: 'New Talk',
+    path: '/talks/new',
+    component: TalkForm,
   },
   {
     name: 'Settings',

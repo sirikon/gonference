@@ -1,4 +1,5 @@
 import m from 'mithril';
+import level from '../components/bulma/level';
 
 function Talks() {
   let talks = [];
@@ -15,18 +16,12 @@ function Talks() {
 
   return {
     view: () => m('div', [
-      m('nav', { class: 'level' }, [
-        m('div', { class: 'level-left' }, [
-          m('div', { class: 'level-item' }, [
-            m('h1', { class: 'title is-3' }, 'Talks'),
-          ]),
+      level(
+        m('h1', { class: 'title is-3' }, 'Talks'),
+        m('a[href=/talks/new]', { oncreate: m.route.link }, [
+          m('button', { class: 'button is-primary' }, 'New'),
         ]),
-        m('div', { class: 'level-right' }, [
-          m('div', { class: 'level-item' }, [
-            m('button', { class: 'button is-primary' }, 'New'),
-          ]),
-        ]),
-      ]),
+      ),
       m('table', { class: 'table is-fullwidth is-striped' }, [
         m('thead', [
           m('tr', [
@@ -40,7 +35,6 @@ function Talks() {
         ]),
       ]),
     ]),
-
     oninit: () => loadTalks(),
   };
 }

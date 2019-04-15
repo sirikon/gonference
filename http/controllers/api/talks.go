@@ -36,3 +36,41 @@ func (s *TalksAPIController) GetAllHandler(w http.ResponseWriter, r *http.Reques
 	w.Header().Add("content-type", "application/json")
 	w.Write(result)
 }
+
+// AddTalkViewModel .
+type AddTalkViewModel struct {
+	Name string `json:"name"`
+}
+
+// ToDomainTalk .
+func (vm AddTalkViewModel) ToDomainTalk() gonference.Talk {
+	return gonference.Talk{
+		Name: vm.Name,
+	}
+}
+
+// AddHandler .
+func (s *TalksAPIController) AddHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+	handleErr := func(err error) {
+		log.Error(err)
+		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	var vm AddTalkViewModel
+	err := decoder.Decode(&vm)
+	if err != nil {
+		handleErr(err)
+		return
+	}
+
+	talk := vm.ToDomainTalk()
+
+	err = s.TalkRepository.Add(talk)
+	if err != nil {
+		handleErr(err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}

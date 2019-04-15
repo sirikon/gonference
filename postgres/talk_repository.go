@@ -25,3 +25,17 @@ func (tr *TalkRepository) GetAll() ([]gonference.Talk, error) {
 
 	return TalksToDomainTalks(talks), nil
 }
+
+// Add .
+func (tr *TalkRepository) Add(domainTalk gonference.Talk) error {
+	talk := DomainTalkToTalk(domainTalk)
+	query := "INSERT INTO talk (name) VALUES ($1)"
+
+	tr.Logger.Info("Executing query '" + query + "' with name '" + talk.Name + "'")
+	_, err := tr.DB.Exec(query, talk.Name)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
