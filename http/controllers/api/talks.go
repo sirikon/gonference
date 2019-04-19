@@ -39,13 +39,23 @@ func (s *TalksAPIController) GetAllHandler(w http.ResponseWriter, r *http.Reques
 
 // AddTalkViewModel .
 type AddTalkViewModel struct {
-	Name string `json:"name"`
+	Name         string `json:"name"`
+	Description  string `json:"description"`
+	SpeakerName  string `json:"speakerName"`
+	SpeakerTitle string `json:"speakerTitle"`
+	Track        string `json:"track"`
+	When         string `json:"when"`
 }
 
 // ToDomainTalk .
 func (vm AddTalkViewModel) ToDomainTalk() gonference.Talk {
 	return gonference.Talk{
-		Name: vm.Name,
+		Name:         vm.Name,
+		Description:  vm.Description,
+		SpeakerName:  vm.SpeakerName,
+		SpeakerTitle: vm.SpeakerTitle,
+		Track:        vm.Track,
+		When:         vm.When,
 	}
 }
 

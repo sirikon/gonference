@@ -1,69 +1,43 @@
 import m from 'mithril';
-import level from './bulma/level';
+import input from './input';
 
-function TalkForm() {
-  const data = {
-    name: '',
-    description: '',
-  };
-
-  let error = null;
-
-  function save() {
-    error = '';
-    m.request({
-      method: 'POST',
-      url: '/api/talks',
-      data,
-    })
-      .then(() => {
-        window.history.back();
-      })
-      .catch(() => {
-        error = 'There was a problem while saving the talk.';
-      });
-  }
-
-  return {
-    view: () => m('div', [
-      error ? m('div', { class: 'notification is-danger' }, [
-        m('button', { class: 'delete', onclick: () => { error = null; } }),
-        error,
-      ]) : null,
-      level(
-        m('h1', { class: 'title is-3' }, 'New Talk'),
-        [
-          m('button', { class: 'button', onclick: () => { window.history.back(); } }, 'Cancel'),
-          m('button', { class: 'button is-primary', onclick: () => save() }, 'Save'),
-        ],
-      ),
-      m('form', [
-        m('div', { class: 'field' }, [
-          m('label', { class: 'label' }, 'Name'),
-          m('div', { class: 'control' }, [
-            m('input', {
-              class: 'input is-medium',
-              type: 'text',
-              placeholder: 'Name',
-              value: data.name,
-              oninput: (e) => { data.name = e.target.value; },
-            }),
-          ]),
-        ]),
-        m('div', { class: 'field' }, [
-          m('label', { class: 'label' }, 'Description'),
-          m('div', { class: 'control' }, [
-            m('textarea', {
-              class: 'textarea',
-              placeholder: 'Description',
-              value: data.description,
-              oninput: (e) => { data.description = e.target.value; },
-            }),
-          ]),
-        ]),
-      ]),
+const TalkForm = {
+  view: vnode => m('div', [
+    m('form', [
+      input({
+        label: 'Name',
+        value: vnode.attrs.talk.name,
+        oninput: (e) => { vnode.attrs.talk.name = e.target.value; },
+        size: 'medium',
+      }),
+      input({
+        label: 'Description',
+        value: vnode.attrs.talk.description,
+        oninput: (e) => { vnode.attrs.talk.description = e.target.value; },
+        multiline: true,
+      }),
+      input({
+        label: 'Speaker Name',
+        value: vnode.attrs.talk.speakerName,
+        oninput: (e) => { vnode.attrs.talk.speakerName = e.target.value; },
+      }),
+      input({
+        label: 'Speaker Title',
+        value: vnode.attrs.talk.speakerTitle,
+        oninput: (e) => { vnode.attrs.talk.speakerTitle = e.target.value; },
+      }),
+      input({
+        label: 'Track',
+        value: vnode.attrs.talk.track,
+        oninput: (e) => { vnode.attrs.talk.track = e.target.value; },
+      }),
+      input({
+        label: 'When',
+        value: vnode.attrs.talk.when,
+        oninput: (e) => { vnode.attrs.talk.when = e.target.value; },
+      }),
     ]),
-  };
-}
+  ]),
+};
 
 export default TalkForm;

@@ -34,3 +34,12 @@ tasks:
     cmds:
       - go run ./cmd/gonference/main.go
     silent: true
+
+  ci:
+    desc: Runs continuous integration procedures
+    cmds:
+      - |
+        cd backoffice-ui
+        npm i && npm run lint && npm run build
+        cd ..
+        task build
