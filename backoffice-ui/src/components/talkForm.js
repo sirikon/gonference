@@ -1,40 +1,44 @@
 import m from 'mithril';
 import input from './input';
+import Debug from './debug';
 
 const TalkForm = {
   view: vnode => m('div', [
+    m(Debug, vnode.attrs.talk),
     m('form', [
       input({
         label: 'Name',
         value: vnode.attrs.talk.name,
-        oninput: (e) => { vnode.attrs.talk.name = e.target.value; },
+        onchange: (value) => { vnode.attrs.talk.name = value; },
         size: 'medium',
       }),
       input({
         label: 'Description',
         value: vnode.attrs.talk.description,
-        oninput: (e) => { vnode.attrs.talk.description = e.target.value; },
+        onchange: (value) => { vnode.attrs.talk.description = value; },
         multiline: true,
       }),
       input({
         label: 'Speaker Name',
         value: vnode.attrs.talk.speakerName,
-        oninput: (e) => { vnode.attrs.talk.speakerName = e.target.value; },
+        onchange: (value) => { vnode.attrs.talk.speakerName = value; },
       }),
       input({
         label: 'Speaker Title',
         value: vnode.attrs.talk.speakerTitle,
-        oninput: (e) => { vnode.attrs.talk.speakerTitle = e.target.value; },
+        onchange: (value) => { vnode.attrs.talk.speakerTitle = value; },
       }),
       input({
         label: 'Track',
         value: vnode.attrs.talk.track,
-        oninput: (e) => { vnode.attrs.talk.track = e.target.value; },
+        onchange: (value) => { vnode.attrs.talk.track = value; },
       }),
       input({
         label: 'When',
+        date: true,
+        time: true,
         value: vnode.attrs.talk.when,
-        oninput: (e) => { vnode.attrs.talk.when = e.target.value; },
+        onchange: (value) => { vnode.attrs.talk.when = value; },
       }),
     ]),
   ]),

@@ -3,6 +3,13 @@ import TalkForm from '../components/talkForm';
 import level from '../components/bulma/level';
 import ErrorBox from '../components/errorBox';
 
+function now() {
+  const d = new Date();
+  d.setSeconds(0);
+  d.setMilliseconds(0);
+  return d;
+}
+
 function NewTalk() {
   const talk = {
     name: '',
@@ -10,7 +17,7 @@ function NewTalk() {
     speakerName: '',
     speakerTitle: '',
     track: '',
-    when: '',
+    when: now(),
   };
 
   let error = null;
