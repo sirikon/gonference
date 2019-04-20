@@ -4,9 +4,7 @@ import level from '../components/bulma/level';
 import ErrorBox from '../components/errorBox';
 
 function EditTalk(initialVnode) {
-  const talkId = initialVnode.attrs.talkId;
-
-  console.log(initialVnode.attrs);
+  const { talkId } = initialVnode.attrs;
 
   let talk = {
     id: '',
@@ -24,22 +22,21 @@ function EditTalk(initialVnode) {
     error = '';
     m.request({
       method: 'GET',
-      url: '/api/talks/' + talkId
+      url: `/api/talks/${talkId}`,
     })
-    .then((result) => {
-      talk = result;
-    })
-    .catch((err) => {
-      console.log(err)
-      error = 'There was a problem while getting the talk information.'
-    });
+      .then((result) => {
+        talk = result;
+      })
+      .catch(() => {
+        error = 'There was a problem while getting the talk information.';
+      });
   }
 
   function save() {
     error = '';
     m.request({
       method: 'PUT',
-      url: '/api/talks/' + talkId,
+      url: `/api/talks/${talkId}`,
       data: talk,
     })
       .then(() => {

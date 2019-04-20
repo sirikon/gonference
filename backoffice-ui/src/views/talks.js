@@ -43,7 +43,7 @@ function Talks() {
             m('td', talk.track),
             m('td', talk.when),
             m('td', [
-              m('a[href=/talks/' + talk.id + '].button.is-small', { oncreate: m.route.link }, 'Edit'),
+              m(`a[href=/talks/${talk.id}].button.is-small`, { oncreate: m.route.link }, 'Edit'),
               m('a.button.is-small.is-danger', 'Delete'),
             ]),
           ])),

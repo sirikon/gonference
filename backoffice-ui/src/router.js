@@ -39,7 +39,7 @@ const Router = {
     routes.forEach((r) => {
       mithrilRoutes[r.path] = {
         render: (function renderProxy(component) {
-          return (vnode) => m(layoutComponent, m(component, vnode.attrs));
+          return vnode => m(layoutComponent, m(component, vnode.attrs));
         }(r.component)),
       };
     });
