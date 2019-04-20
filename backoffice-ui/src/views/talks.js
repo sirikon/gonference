@@ -14,6 +14,16 @@ function Talks() {
       });
   }
 
+  function deleteTalk(talkId) {
+    return m.request({
+      method: 'DELETE',
+      url: `/api/talks/${talkId}`,
+    })
+      .then(() => {
+        loadTalks();
+      })
+  }
+
   return {
     view: () => m('div', [
       level(
@@ -44,7 +54,7 @@ function Talks() {
             m('td', talk.when),
             m('td', [
               m(`a[href=/talks/${talk.id}].button.is-small`, { oncreate: m.route.link }, 'Edit'),
-              m('a.button.is-small.is-danger', 'Delete'),
+              m('a.button.is-small.is-danger', { onclick: () => deleteTalk(talk.id) } , 'Delete'),
             ]),
           ])),
         ]),

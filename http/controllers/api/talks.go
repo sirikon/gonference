@@ -185,3 +185,31 @@ func (s *TalksAPIController) UpdateHandler(w http.ResponseWriter, r *http.Reques
 
 	w.WriteHeader(http.StatusOK)
 }
+
+// DeleteHandler .
+func (s *TalksAPIController) DeleteHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+	handleErr := func(err error) {
+		log.Error(err)
+		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+	}
+
+	talkIDStr := p.ByName("id")
+	if talkIDStr == "" {
+		handleErr(errors.New("Talk id missing"))
+		return
+	}
+
+	talkID, err := strconv.Atoi(talkIDStr)
+	if err != nil {
+		handleErr(err)
+		return
+	}
+
+	err = s.TalkRepository.Delete(talkID)
+	if err != nil {
+		handleErr(err)
+		return
+	}
+
+	w.WriteHeader(http.StatusOK)
+}

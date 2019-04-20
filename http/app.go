@@ -35,6 +35,9 @@ func (s *Server) Run() error {
 	router.PUT("/api/talks/:id", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().UpdateHandler(w, r, ps)
 	})
+	router.DELETE("/api/talks/:id", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().DeleteHandler(w, r, ps)
+	})
 
 	router.ServeFiles("/admin/*filepath", http.Dir("./http/assets/backoffice"))
 

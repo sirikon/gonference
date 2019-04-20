@@ -51,3 +51,10 @@ func (tr *TalkRepository) Update(domainTalk gonference.Talk) error {
 	_, err := tr.DB.Exec(query, talk.ID, talk.Name, talk.Description, talk.SpeakerName, talk.SpeakerTitle, talk.Track, talk.When)
 	return err
 }
+
+// Delete .
+func (tr *TalkRepository) Delete(id int) error {
+	query := "DELETE FROM talk WHERE id = $1"
+	_, err := tr.DB.Exec(query, id)
+	return err
+}
