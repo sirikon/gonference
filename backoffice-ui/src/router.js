@@ -2,6 +2,7 @@ import m from 'mithril';
 import Talks from './views/talks';
 import NewTalk from './views/newTalk';
 import Settings from './views/settings';
+import EditTalk from './views/editTalk';
 
 const routes = [
   {
@@ -13,6 +14,11 @@ const routes = [
     name: 'New Talk',
     path: '/talks/new',
     component: NewTalk,
+  },
+  {
+    name: 'Edit Talk',
+    path: '/talks/:talkId',
+    component: EditTalk,
   },
   {
     name: 'Settings',
@@ -33,7 +39,7 @@ const Router = {
     routes.forEach((r) => {
       mithrilRoutes[r.path] = {
         render: (function renderProxy(component) {
-          return () => m(layoutComponent, m(component));
+          return (vnode) => m(layoutComponent, m(component, vnode.attrs));
         }(r.component)),
       };
     });

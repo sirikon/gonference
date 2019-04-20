@@ -33,9 +33,21 @@ func (tr *TalkRepository) Add(domainTalk gonference.Talk) error {
 
 	tr.Logger.Info("Executing query '" + query + "' with name '" + talk.Name + "'")
 	_, err := tr.DB.Exec(query, talk.Name, talk.Description, talk.SpeakerName, talk.SpeakerTitle, talk.Track, talk.When)
-	if err != nil {
-		return err
-	}
+	return err
+}
 
-	return nil
+// Get .
+func (tr *TalkRepository) Get(id int) (gonference.Talk, error) {
+	var talk TalkModel
+	query := "SELECT * FROM talk WHERE id = $1 LIMIT 1"
+	err := tr.DB.QueryRowx(query, id).StructScan(&talk)
+	return talk.ToDomainTalk(), err
+}
+
+// Update .
+func (tr *TalkRepository) Update(domainTalk gonference.Talk) error {
+	talk := DomainTalkToTalk(domainTalk)
+	query := "UPDATE talk SET name = $2, description = $3, speaker_name = $4, speaker_title = $5, track = $6, when_date = $7 WHERE id = $1"
+	_, err := tr.DB.Exec(query, talk.ID, talk.Name, talk.Description, talk.SpeakerName, talk.SpeakerTitle, talk.Track, talk.When)
+	return err
 }

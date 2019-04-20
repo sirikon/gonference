@@ -29,6 +29,12 @@ func (s *Server) Run() error {
 	router.POST("/api/talks", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().AddHandler(w, r, ps)
 	})
+	router.GET("/api/talks/:id", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().GetHandler(w, r, ps)
+	})
+	router.PUT("/api/talks/:id", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().UpdateHandler(w, r, ps)
+	})
 
 	router.ServeFiles("/admin/*filepath", http.Dir("./http/assets/backoffice"))
 
