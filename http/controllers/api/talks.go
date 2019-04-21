@@ -5,6 +5,7 @@ import (
 	"errors"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirikon/gonference"
@@ -41,23 +42,23 @@ func (s *TalksAPIController) GetAllHandler(w http.ResponseWriter, r *http.Reques
 
 // AddTalkViewModel .
 type AddTalkViewModel struct {
-	Name         string `json:"name"`
-	Description  string `json:"description"`
-	SpeakerName  string `json:"speakerName"`
-	SpeakerTitle string `json:"speakerTitle"`
-	Track        string `json:"track"`
-	When         string `json:"when"`
+	Name         string    `json:"name"`
+	Description  string    `json:"description"`
+	SpeakerName  string    `json:"speakerName"`
+	SpeakerTitle string    `json:"speakerTitle"`
+	Track        string    `json:"track"`
+	When         time.Time `json:"when"`
 }
 
 // UpdateTalkViewModel .
 type UpdateTalkViewModel struct {
-	ID           int    `json:"id"`
-	Name         string `json:"name"`
-	Description  string `json:"description"`
-	SpeakerName  string `json:"speakerName"`
-	SpeakerTitle string `json:"speakerTitle"`
-	Track        string `json:"track"`
-	When         string `json:"when"`
+	ID           int       `json:"id"`
+	Name         string    `json:"name"`
+	Description  string    `json:"description"`
+	SpeakerName  string    `json:"speakerName"`
+	SpeakerTitle string    `json:"speakerTitle"`
+	Track        string    `json:"track"`
+	When         time.Time `json:"when"`
 }
 
 // ToDomainTalk .

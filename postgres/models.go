@@ -1,18 +1,20 @@
 package postgres
 
 import (
+	"time"
+
 	"github.com/sirikon/gonference"
 )
 
 // TalkModel .
 type TalkModel struct {
-	ID           int    `db:"id"`
-	Name         string `db:"name"`
-	Description  string `db:"description"`
-	SpeakerName  string `db:"speaker_name"`
-	SpeakerTitle string `db:"speaker_title"`
-	Track        string `db:"track"`
-	When         string `db:"when_date"`
+	ID           int       `db:"id"`
+	Name         string    `db:"name"`
+	Description  string    `db:"description"`
+	SpeakerName  string    `db:"speaker_name"`
+	SpeakerTitle string    `db:"speaker_title"`
+	Track        string    `db:"track"`
+	When         time.Time `db:"when_date"`
 }
 
 // ToDomainTalk .

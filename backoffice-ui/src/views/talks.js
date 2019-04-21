@@ -21,7 +21,7 @@ function Talks() {
     })
       .then(() => {
         loadTalks();
-      })
+      });
   }
 
   return {
@@ -54,7 +54,7 @@ function Talks() {
             m('td', talk.when),
             m('td', [
               m(`a[href=/talks/${talk.id}].button.is-small`, { oncreate: m.route.link }, 'Edit'),
-              m('a.button.is-small.is-danger', { onclick: () => deleteTalk(talk.id) } , 'Delete'),
+              m('a.button.is-small.is-danger', { onclick: () => deleteTalk(talk.id) }, 'Delete'),
             ]),
           ])),
         ]),

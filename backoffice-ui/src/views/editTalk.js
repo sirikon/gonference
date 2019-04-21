@@ -13,7 +13,7 @@ function EditTalk(initialVnode) {
     speakerName: '',
     speakerTitle: '',
     track: '',
-    when: '',
+    when: new Date(),
   };
 
   let error = null;
@@ -26,6 +26,7 @@ function EditTalk(initialVnode) {
     })
       .then((result) => {
         talk = result;
+        talk.when = new Date(talk.when);
       })
       .catch(() => {
         error = 'There was a problem while getting the talk information.';

@@ -1,10 +1,8 @@
 import m from 'mithril';
 import input from './input';
-import Debug from './debug';
 
 const TalkForm = {
   view: vnode => m('div', [
-    m(Debug, vnode.attrs.talk),
     m('form', [
       input({
         label: 'Name',

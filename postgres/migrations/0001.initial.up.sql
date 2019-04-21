@@ -5,5 +5,5 @@ CREATE TABLE talk (
     speaker_name VARCHAR (200) NOT NULL,
     speaker_title VARCHAR (200) NOT NULL,
     track VARCHAR (50) NOT NULL,
-    when_date VARCHAR (50) NOT NULL
+    when_date TIMESTAMP NOT NULL
 );

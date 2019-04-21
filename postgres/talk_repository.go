@@ -15,7 +15,7 @@ type TalkRepository struct {
 // GetAll .
 func (tr *TalkRepository) GetAll() ([]gonference.Talk, error) {
 	talks := []TalkModel{}
-	query := "SELECT * FROM talk"
+	query := "SELECT * FROM talk ORDER BY when_date ASC"
 
 	tr.Logger.Info("Executing query '" + query + "'")
 	err := tr.DB.Select(&talks, query)
