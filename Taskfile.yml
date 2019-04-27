@@ -46,15 +46,17 @@ tasks:
 
   backoffice-ui-build:
     desc: Builds the backoffice UI.
-    dir: src/backoffice-ui
     cmds:
-      - npm i && npm run build
+      - |
+        cd $BACKOFFICE_UI_PATH
+        npm run build
 
-  backoffice-ui-run:
+  backoffice-ui-start:
     desc: Starts development service for the backoffice UI.
-    dir: src/backoffice-ui
     cmds:
-      - npm start
+      - |
+        cd $BACKOFFICE_UI_PATH
+        npm start
 
   ci:
     desc: Runs continuous integration procedures
