@@ -2,12 +2,18 @@ package templates
 
 import (
 	"bytes"
+	"github.com/gobuffalo/packr/v2"
 	"html/template"
 )
 
 // RenderTemplate .
 func RenderTemplate(templateName string, data interface{}) ([]byte, error) {
-	tmpl, err := template.ParseFiles("./src/http/templates/" + templateName + ".html")
+	box := packr.New("template-files", "./files")
+	content, err := box.FindString(templateName + ".html")
+	if err != nil {
+		return nil, err
+	}
+	tmpl, err := template.New(templateName).Parse(content)
 	if err != nil {
 		return nil, err
 	}

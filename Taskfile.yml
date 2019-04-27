@@ -12,6 +12,7 @@ tasks:
     desc: Installs all the dependencies for Go and Node.
     cmds:
       - |
+        go get -u github.com/gobuffalo/packr/v2/packr2
         go get
         cd $BACKOFFICE_UI_PATH
         npm i
@@ -32,10 +33,28 @@ tasks:
         docker-compose down
     silent: true
 
+  pack:
+    desc: Runs packr2 in the directories which is needed to bundle static assets.
+    cmds:
+      - |
+        cd src/http && packr2
+        cd ../database && packr2
+    silent: true
+
+  pack-clean:
+    desc: Cleans generated packr2 files.
+    cmds:
+      - |
+        cd src/http && packr2 clean
+        cd ../database && packr2 clean
+    silent: true
+
   build:
     desc: Builds gonference and generates a binary file called 'gonference' on project root folder.
     cmds:
+      - task pack
       - go build -o ./out/gonference ./cmd/gonference
+      - task pack-clean
     silent: true
   
   run:

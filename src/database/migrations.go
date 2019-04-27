@@ -2,8 +2,7 @@ package database
 
 import (
 	"fmt"
-	"io/ioutil"
-	"path/filepath"
+	"github.com/gobuffalo/packr/v2"
 	"sort"
 	"strconv"
 	"strings"
@@ -22,7 +21,6 @@ type MigrationFile struct {
 	Order     int
 	Name      string
 	Direction string
-	Path      string
 	Content   string
 }
 
@@ -66,28 +64,18 @@ func GetMigrations() ([]Migration, error) {
 }
 
 func getMigrationsFiles() ([]MigrationFile, error) {
-	migrationsDirectoryPath, err := filepath.Abs("./src/database/migrations")
-	if err != nil {
-		return nil, err
-	}
+	box := packr.New("Database migrations", "./migrations")
 
 	migrationFiles := make([]MigrationFile, 0)
-	files, err := ioutil.ReadDir(migrationsDirectoryPath)
-	if err != nil {
-		return nil, err
-	}
+	files := box.List()
 
 	for _, file := range files {
-		if file.IsDir() {
-			continue
-		}
-		mf := parseMigrationFileName(file.Name())
-		mf.Path = filepath.Join(migrationsDirectoryPath, file.Name())
-		data, err := ioutil.ReadFile(mf.Path)
+		data, err := box.FindString(file)
 		if err != nil {
 			return nil, err
 		}
-		mf.Content = string(data)
+		mf := parseMigrationFileName(file)
+		mf.Content = data
 		migrationFiles = append(migrationFiles, mf)
 	}
 

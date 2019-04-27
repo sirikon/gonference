@@ -12,5 +12,5 @@
 *.out
 
 # Custom
-/gonference
+/out/gonference
 /http/assets/backoffice/js

@@ -1,9 +1,9 @@
 package http
 
 import (
-	"net/http"
-
+	"github.com/gobuffalo/packr/v2"
 	"github.com/sirikon/gonference/src/ioc"
+	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -16,12 +16,20 @@ type Server struct {
 // Run .
 func (s *Server) Run() error {
 
+	publicAssetsBox := packr.New("public-assets", "./assets/public")
+	backofficeAssetsBox := packr.New("backoffice-assets", "./assets/backoffice")
+
 	router := httprouter.New()
 
-	router.GET("/", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		s.ServiceProvider.CreateRequestScope().GetIndexController().Handler(w, r, ps)
+	/* Administration */
+	router.GET("/admin/", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data, err := backofficeAssetsBox.Find("index.html")
+		if err != nil {
+			http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		}
+		w.Write(data)
 	})
-	router.ServeFiles("/assets/*filepath", http.Dir("./src/http/assets/public"))
+	router.ServeFiles("/admin/assets/*filepath", backofficeAssetsBox)
 
 	router.GET("/api/talks", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().GetAllHandler(w, r, ps)
@@ -39,7 +47,11 @@ func (s *Server) Run() error {
 		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().DeleteHandler(w, r, ps)
 	})
 
-	router.ServeFiles("/admin/*filepath", http.Dir("./src/http/assets/backoffice"))
+	/* Public */
+	router.GET("/", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		s.ServiceProvider.CreateRequestScope().GetIndexController().Handler(w, r, ps)
+	})
+	router.ServeFiles("/assets/*filepath", publicAssetsBox)
 
 	err := http.ListenAndServe(":3000", router)
 	if err != nil {
