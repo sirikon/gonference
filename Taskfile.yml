@@ -4,8 +4,17 @@ version: '2'
 
 env:
   DEVENV_PATH: docker/gonference-devenv
+  BACKOFFICE_UI_PATH: src/backoffice-ui
 
 tasks:
+
+  install-dependencies:
+    desc: Installs all the dependencies for Go and Node.
+    cmds:
+      - |
+        go get
+        cd $BACKOFFICE_UI_PATH
+        npm i
 
   devenv-up:
     desc: Runs the development environment.
@@ -26,7 +35,7 @@ tasks:
   build:
     desc: Builds gonference and generates a binary file called 'gonference' on project root folder.
     cmds:
-      - go build ./cmd/gonference
+      - go build -o ./out/gonference ./cmd/gonference
     silent: true
   
   run:
@@ -35,11 +44,23 @@ tasks:
       - go run ./cmd/gonference/main.go
     silent: true
 
+  backoffice-ui-build:
+    desc: Builds the backoffice UI.
+    dir: src/backoffice-ui
+    cmds:
+      - npm i && npm run build
+
+  backoffice-ui-run:
+    desc: Starts development service for the backoffice UI.
+    dir: src/backoffice-ui
+    cmds:
+      - npm start
+
   ci:
     desc: Runs continuous integration procedures
     cmds:
       - |
-        cd backoffice-ui
+        cd src/backoffice-ui
         npm i && npm run lint && npm run build
-        cd ..
+        cd ../..
         task build

@@ -1,20 +1,19 @@
 package main
 
 import (
-	"github.com/sirikon/gonference/ioc"
+	"github.com/sirikon/gonference/src/database"
+	"github.com/sirikon/gonference/src/http"
+	"github.com/sirikon/gonference/src/ioc"
 	log "github.com/sirupsen/logrus"
-
-	"github.com/sirikon/gonference/http"
-	"github.com/sirikon/gonference/postgres"
 )
 
 func main() {
-	err := postgres.Migrate()
+	err := database.Migrate()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	conn, err := postgres.GetConnectionForDatabase("gonference")
+	conn, err := database.GetConnectionForDatabase("gonference")
 	if err != nil {
 		log.Fatal(err)
 	}
