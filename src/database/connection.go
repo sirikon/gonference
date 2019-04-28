@@ -6,11 +6,6 @@ import (
 )
 
 // GetConnection .
-func GetConnection() (*sqlx.DB, error) {
-	return sqlx.Connect("postgres", "user=postgres password=12345 sslmode=disable")
-}
-
-// GetConnectionForDatabase .
-func GetConnectionForDatabase(databaseName string) (*sqlx.DB, error) {
-	return sqlx.Connect("postgres", "user=postgres password=12345 dbname="+databaseName+" sslmode=disable")
+func GetConnection(connectionString string) (*sqlx.DB, error) {
+	return sqlx.Connect("postgres", connectionString)
 }

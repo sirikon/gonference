@@ -3,6 +3,8 @@
 version: '2'
 
 env:
+  DATABASE_URL: "postgresql://postgres:12345@localhost/gonference?sslmode=disable"
+  PORT: 3000
   DEVENV_PATH: docker/gonference-devenv
   BACKOFFICE_UI_PATH: src/backoffice-ui
 
@@ -62,6 +64,16 @@ tasks:
     cmds:
       - go run ./cmd/gonference/main.go
     silent: true
+
+  docker-run:
+    desc: Runs gonference using Docker.
+    cmds:
+      - docker-compose up -d
+  
+  docker-stop:
+    desc: Runs gonference using Docker.
+    cmds:
+      - docker-compose down
 
   backoffice-ui-build:
     desc: Builds the backoffice UI.

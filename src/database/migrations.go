@@ -16,6 +16,10 @@ type Migration struct {
 	Down  string
 }
 
+func (m Migration) String() string {
+	return "[" + strconv.Itoa(m.Order) + "] '" + m.Name + "'"
+}
+
 // MigrationFile .
 type MigrationFile struct {
 	Order     int

@@ -1,8 +1,6 @@
 package database
 
 import (
-	"strconv"
-
 	log "github.com/sirupsen/logrus"
 
 	"github.com/jmoiron/sqlx"
@@ -10,22 +8,12 @@ import (
 )
 
 // Migrate .
-func Migrate() error {
+func Migrate(conn *sqlx.DB) error {
 	wrapErr := func(err error) error {
 		return errors.Wrap(err, "Migrating")
 	}
 
-	err := EnsureDatabaseExists("gonference")
-	if err != nil {
-		return wrapErr(err)
-	}
-
 	migrations, err := GetMigrations()
-	if err != nil {
-		return wrapErr(err)
-	}
-
-	conn, err := GetConnectionForDatabase("gonference")
 	if err != nil {
 		return wrapErr(err)
 	}
@@ -42,9 +30,10 @@ func Migrate() error {
 
 	for _, migration := range migrations {
 		if migration.Order <= lastMigrationID {
+			log.Println("Migration", migration, "already applied. Skipping.")
 			continue
 		}
-		log.Println("Applying migration [" + strconv.Itoa(migration.Order) + "] '" + migration.Name + "'")
+		log.Println("Applying migration ", migration)
 		_, err := conn.Exec(migration.Up)
 		if err != nil {
 			return wrapErr(err)
@@ -55,34 +44,7 @@ func Migrate() error {
 		}
 	}
 
-	return nil
-}
-
-// EnsureDatabaseExists .
-func EnsureDatabaseExists(name string) error {
-	wrapErr := func(err error) error {
-		return errors.Wrap(err, "Ensuring database '"+name+"' exists")
-	}
-
-	conn, err := GetConnection()
-	if err != nil {
-		return wrapErr(err)
-	}
-
-	exists, err := CheckDatabaseExists(conn, name)
-	if err != nil {
-		return wrapErr(err)
-	}
-
-	if !exists {
-		log.Println("Database 'gonference' doesn't exist. Creating.")
-		_, err = conn.Exec("CREATE DATABASE gonference;")
-		if err != nil {
-			return wrapErr(err)
-		}
-	} else {
-		log.Println("Database 'gonference' already exists.")
-	}
+	log.Println("Migration done.")
 
 	return nil
 }

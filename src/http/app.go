@@ -3,6 +3,7 @@ package http
 import (
 	"github.com/gobuffalo/packr/v2"
 	"github.com/sirikon/gonference/src/ioc"
+	log "github.com/sirupsen/logrus"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -14,7 +15,7 @@ type Server struct {
 }
 
 // Run .
-func (s *Server) Run() error {
+func (s *Server) Run(port string) error {
 
 	publicAssetsBox := packr.New("public-assets", "./assets/public")
 	backofficeAssetsBox := packr.New("backoffice-assets", "./assets/backoffice")
@@ -53,7 +54,8 @@ func (s *Server) Run() error {
 	})
 	router.ServeFiles("/assets/*filepath", publicAssetsBox)
 
-	err := http.ListenAndServe(":3000", router)
+	log.Println("HTTP server listening on port " + port + ".")
+	err := http.ListenAndServe("0.0.0.0:"+port, router)
 	if err != nil {
 		return err
 	}
