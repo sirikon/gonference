@@ -5,6 +5,7 @@ import (
 	"github.com/sirikon/gonference/src/ioc"
 	log "github.com/sirupsen/logrus"
 	"net/http"
+	"time"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -12,6 +13,27 @@ import (
 // Server .
 type Server struct {
 	ServiceProvider *ioc.ServiceProvider
+}
+
+// WrappedHandler .
+type WrappedHandler func(scope *ioc.ServiceProvider) httprouter.Handle
+
+// WrapHandler .
+func (s *Server) WrapHandler(wh WrappedHandler) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		scope := s.ServiceProvider.CreateRequestScope()
+		logger := scope.GetLogger()
+		logger.WithFields(log.Fields{
+			"url":    r.URL,
+			"method": r.Method,
+		}).Info("Request started")
+		start := time.Now()
+		wh(scope)(w, r, ps)
+		elapsed := time.Since(start)
+		logger.WithFields(log.Fields{
+			"elapsed": elapsed,
+		}).Info("Request finished")
+	}
 }
 
 func (s *Server) backofficeRoutes(router *httprouter.Router) {
@@ -33,28 +55,29 @@ func (s *Server) backofficeRoutes(router *httprouter.Router) {
 func (s *Server) publicRoutes(router *httprouter.Router) {
 	publicAssetsBox := packr.New("public-assets", "./assets/public")
 
-	router.GET("/", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		s.ServiceProvider.CreateRequestScope().GetIndexController().Handler(w, r, ps)
-	})
+	router.GET("/", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+		return s.GetIndexController().Handler
+	}))
+
 	router.ServeFiles("/assets/*filepath", publicAssetsBox)
 }
 
 func (s *Server) apiRoutes(router *httprouter.Router) {
-	router.GET("/api/talks", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().GetAllHandler(w, r, ps)
-	})
-	router.POST("/api/talks", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().AddHandler(w, r, ps)
-	})
-	router.GET("/api/talks/:id", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().GetHandler(w, r, ps)
-	})
-	router.PUT("/api/talks/:id", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().UpdateHandler(w, r, ps)
-	})
-	router.DELETE("/api/talks/:id", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		s.ServiceProvider.CreateRequestScope().GetTalksAPIController().DeleteHandler(w, r, ps)
-	})
+	router.GET("/api/talks", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+		return s.GetTalksAPIController().GetAllHandler
+	}))
+	router.POST("/api/talks", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+		return s.GetTalksAPIController().AddHandler
+	}))
+	router.GET("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+		return s.GetTalksAPIController().GetHandler
+	}))
+	router.PUT("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+		return s.GetTalksAPIController().UpdateHandler
+	}))
+	router.DELETE("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+		return s.GetTalksAPIController().DeleteHandler
+	}))
 }
 
 // Run .
