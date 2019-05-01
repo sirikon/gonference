@@ -4,8 +4,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirikon/gonference/src/database"
 	"github.com/sirikon/gonference/src/domain"
-	"github.com/sirikon/gonference/src/http/controllers/api"
-	"github.com/sirikon/gonference/src/http/controllers/public"
+	"github.com/sirikon/gonference/src/web/controllers/api"
+	"github.com/sirikon/gonference/src/web/controllers/public"
 	"github.com/sirikon/gonference/src/utils"
 	"github.com/sirupsen/logrus"
 )

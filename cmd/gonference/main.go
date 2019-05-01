@@ -2,8 +2,8 @@ package main
 
 import (
 	"github.com/sirikon/gonference/src/database"
-	"github.com/sirikon/gonference/src/http"
 	"github.com/sirikon/gonference/src/ioc"
+	"github.com/sirikon/gonference/src/web"
 	log "github.com/sirupsen/logrus"
 	"os"
 )
@@ -24,7 +24,7 @@ func main() {
 
 	serviceProvider := ioc.CreateServiceProvider(conn)
 
-	httpServer := http.Server{
+	httpServer := web.Server{
 		ServiceProvider: serviceProvider,
 	}
 

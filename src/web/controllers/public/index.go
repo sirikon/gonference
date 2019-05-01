@@ -5,7 +5,7 @@ import (
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/sirikon/gonference/src/domain"
-	"github.com/sirikon/gonference/src/http/templates"
+	"github.com/sirikon/gonference/src/web/templates"
 	log "github.com/sirupsen/logrus"
 )
 

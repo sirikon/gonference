@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/main.js",
   "scripts": {
-    "build": "mkdir -p ../http/assets/backoffice/js && cp ./node_modules/mithril/mithril.min.js ../http/assets/backoffice/js/mithril.min.js && rollup -c",
+    "build": "mkdir -p ../web/assets/backoffice/js && cp ./node_modules/mithril/mithril.min.js ../web/assets/backoffice/js/mithril.min.js && rollup -c",
     "start": "npm run build -- -w",
     "lint": "eslint src/**",
     "lint:fix": "npm run lint -- --fix"

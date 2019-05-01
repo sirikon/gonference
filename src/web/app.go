@@ -1,8 +1,9 @@
-package http
+package web
 
 import (
 	"github.com/gobuffalo/packr/v2"
 	"github.com/sirikon/gonference/src/ioc"
+	"github.com/sirikon/gonference/src/web/auth"
 	log "github.com/sirupsen/logrus"
 	"net/http"
 	"time"
@@ -23,13 +24,20 @@ func (s *Server) WrapHandler(wh WrappedHandler) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		scope := s.ServiceProvider.CreateRequestScope()
 		logger := scope.GetLogger()
+
 		logger.WithFields(log.Fields{
 			"url":    r.URL,
 			"method": r.Method,
 		}).Info("Request started")
+
+		_ = auth.EnsureCookie(w, r)
+
 		start := time.Now()
+
 		wh(scope)(w, r, ps)
+
 		elapsed := time.Since(start)
+
 		logger.WithFields(log.Fields{
 			"elapsed": elapsed,
 		}).Info("Request finished")
