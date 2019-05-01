@@ -13,4 +13,5 @@
 
 # Custom
 /out/gonference
-/src/web/assets/backoffice/js
+/src/web/assets/backoffice/js/
+/src/backoffice-ui/node_modules/
