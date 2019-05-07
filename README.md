@@ -1,13 +1,13 @@
 # Gonference
 
-Requires Taskfile to run the project's tasks. More info [here](https://taskfile.dev/#/installation).
+Requires `tsk` to run the project's tasks. More info [here](https://github.com/Sirikon/tsk).
 
 ```bash
-task install-dependencies # Install dependencies
-task backoffice-ui-build # Build backoffice UI
-task devenv-up # Start development environment (Postgre SQL)
-task run # Run the application
-task -l # List available commands
+tsk install # Install dependencies
+tsk backoffice build # Build backoffice UI
+tsk devenv up # Start development environment (Postgre SQL)
+tsk run # Run the application
+tsk # List available commands
 ```
 
 Now open:
