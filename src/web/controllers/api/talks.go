@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/julienschmidt/httprouter"
 	"github.com/sirikon/gonference/src/domain"
+	"github.com/sirikon/gonference/src/web/middleware"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -17,10 +17,10 @@ type TalksAPIController struct {
 }
 
 // GetAllHandler .
-func (s *TalksAPIController) GetAllHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (s *TalksAPIController) GetAllHandler(ctx *middleware.RequestContext) {
 	handleErr := func(err error) {
 		log.Error(err)
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
 	}
 
 	talks, err := s.TalkRepository.GetAll()
@@ -35,18 +35,18 @@ func (s *TalksAPIController) GetAllHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	w.Header().Add("content-type", "application/json")
-	w.Write(result)
+	ctx.ResponseWritter.Header().Add("content-type", "application/json")
+	ctx.ResponseWritter.Write(result)
 }
 
 // AddHandler .
-func (s *TalksAPIController) AddHandler(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
+func (s *TalksAPIController) AddHandler(ctx *middleware.RequestContext) {
 	handleErr := func(err error) {
 		log.Error(err)
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
 	}
 
-	decoder := json.NewDecoder(r.Body)
+	decoder := json.NewDecoder(ctx.Request.Body)
 	var vm AddTalkViewModel
 	err := decoder.Decode(&vm)
 	if err != nil {
@@ -62,17 +62,17 @@ func (s *TalksAPIController) AddHandler(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	ctx.ResponseWritter.WriteHeader(http.StatusOK)
 }
 
 // GetHandler .
-func (s *TalksAPIController) GetHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (s *TalksAPIController) GetHandler(ctx *middleware.RequestContext) {
 	handleErr := func(err error) {
 		log.Error(err)
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
 	}
 
-	talkIDStr := p.ByName("id")
+	talkIDStr := ctx.Params.ByName("id")
 	if talkIDStr == "" {
 		handleErr(errors.New("Talk id missing"))
 		return
@@ -96,18 +96,18 @@ func (s *TalksAPIController) GetHandler(w http.ResponseWriter, r *http.Request, 
 		return
 	}
 
-	w.Header().Add("content-type", "application/json")
-	w.Write(result)
+	ctx.ResponseWritter.Header().Add("content-type", "application/json")
+	ctx.ResponseWritter.Write(result)
 }
 
 // UpdateHandler .
-func (s *TalksAPIController) UpdateHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (s *TalksAPIController) UpdateHandler(ctx *middleware.RequestContext) {
 	handleErr := func(err error) {
 		log.Error(err)
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
 	}
 
-	talkIDStr := p.ByName("id")
+	talkIDStr := ctx.Params.ByName("id")
 	if talkIDStr == "" {
 		handleErr(errors.New("Talk id missing"))
 		return
@@ -119,7 +119,7 @@ func (s *TalksAPIController) UpdateHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	decoder := json.NewDecoder(r.Body)
+	decoder := json.NewDecoder(ctx.Request.Body)
 	var vm UpdateTalkViewModel
 	err = decoder.Decode(&vm)
 	if err != nil {
@@ -137,17 +137,17 @@ func (s *TalksAPIController) UpdateHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	ctx.ResponseWritter.WriteHeader(http.StatusOK)
 }
 
 // DeleteHandler .
-func (s *TalksAPIController) DeleteHandler(w http.ResponseWriter, r *http.Request, p httprouter.Params) {
+func (s *TalksAPIController) DeleteHandler(ctx *middleware.RequestContext) {
 	handleErr := func(err error) {
 		log.Error(err)
-		http.Error(w, "Something went wrong", http.StatusInternalServerError)
+		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
 	}
 
-	talkIDStr := p.ByName("id")
+	talkIDStr := ctx.Params.ByName("id")
 	if talkIDStr == "" {
 		handleErr(errors.New("Talk id missing"))
 		return
@@ -165,5 +165,5 @@ func (s *TalksAPIController) DeleteHandler(w http.ResponseWriter, r *http.Reques
 		return
 	}
 
-	w.WriteHeader(http.StatusOK)
+	ctx.ResponseWritter.WriteHeader(http.StatusOK)
 }

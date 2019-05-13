@@ -1,12 +1,14 @@
 package web
 
 import (
+	"net/http"
+	"time"
+
 	"github.com/gobuffalo/packr/v2"
 	"github.com/sirikon/gonference/src/ioc"
 	"github.com/sirikon/gonference/src/web/auth"
+	"github.com/sirikon/gonference/src/web/middleware"
 	log "github.com/sirupsen/logrus"
-	"net/http"
-	"time"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -17,7 +19,7 @@ type Server struct {
 }
 
 // WrappedHandler .
-type WrappedHandler func(scope *ioc.ServiceProvider) httprouter.Handle
+type WrappedHandler func(scope *ioc.ServiceProvider) middleware.RequestHandler
 
 // WrapHandler .
 func (s *Server) WrapHandler(wh WrappedHandler) httprouter.Handle {
@@ -30,11 +32,18 @@ func (s *Server) WrapHandler(wh WrappedHandler) httprouter.Handle {
 			"method": r.Method,
 		}).Info("Request started")
 
-		_ = auth.EnsureCookie(w, r)
+		session := auth.GetSession(r)
 
 		start := time.Now()
 
-		wh(scope)(w, r, ps)
+		context := &middleware.RequestContext{
+			ResponseWritter: w,
+			Request:         r,
+			Params:          ps,
+			Session:         session,
+		}
+
+		wh(scope)(context)
 
 		elapsed := time.Since(start)
 
@@ -63,7 +72,7 @@ func (s *Server) backofficeRoutes(router *httprouter.Router) {
 func (s *Server) publicRoutes(router *httprouter.Router) {
 	publicAssetsBox := packr.New("public-assets", "./assets/public")
 
-	router.GET("/", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+	router.GET("/", s.WrapHandler(func(s *ioc.ServiceProvider) middleware.RequestHandler {
 		return s.GetIndexController().Handler
 	}))
 
@@ -71,19 +80,23 @@ func (s *Server) publicRoutes(router *httprouter.Router) {
 }
 
 func (s *Server) apiRoutes(router *httprouter.Router) {
-	router.GET("/api/talks", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+	router.GET("/api/me", s.WrapHandler(func(s *ioc.ServiceProvider) middleware.RequestHandler {
+		return s.GetMeAPIController().Handler
+	}))
+
+	router.GET("/api/talks", s.WrapHandler(func(s *ioc.ServiceProvider) middleware.RequestHandler {
 		return s.GetTalksAPIController().GetAllHandler
 	}))
-	router.POST("/api/talks", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+	router.POST("/api/talks", s.WrapHandler(func(s *ioc.ServiceProvider) middleware.RequestHandler {
 		return s.GetTalksAPIController().AddHandler
 	}))
-	router.GET("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+	router.GET("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) middleware.RequestHandler {
 		return s.GetTalksAPIController().GetHandler
 	}))
-	router.PUT("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+	router.PUT("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) middleware.RequestHandler {
 		return s.GetTalksAPIController().UpdateHandler
 	}))
-	router.DELETE("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) httprouter.Handle {
+	router.DELETE("/api/talks/:id", s.WrapHandler(func(s *ioc.ServiceProvider) middleware.RequestHandler {
 		return s.GetTalksAPIController().DeleteHandler
 	}))
 }

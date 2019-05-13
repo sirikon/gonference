@@ -4,9 +4,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirikon/gonference/src/database"
 	"github.com/sirikon/gonference/src/domain"
+	util "github.com/sirikon/gonference/src/utils"
 	"github.com/sirikon/gonference/src/web/controllers/api"
 	"github.com/sirikon/gonference/src/web/controllers/public"
-	"github.com/sirikon/gonference/src/utils"
 	"github.com/sirupsen/logrus"
 )
 
@@ -68,4 +68,9 @@ func (sp *ServiceProvider) GetTalksAPIController() *api.TalksAPIController {
 	return &api.TalksAPIController{
 		TalkRepository: sp.GetTalkRepository(),
 	}
+}
+
+// GetMeAPIController .
+func (sp *ServiceProvider) GetMeAPIController() *api.MeAPIController {
+	return &api.MeAPIController{}
 }

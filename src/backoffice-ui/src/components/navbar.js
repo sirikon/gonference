@@ -46,16 +46,46 @@ function navbarMenu() {
   ]);
 }
 
-const Navbar = {
-  view: () => m('div', { class: 'navbar is-light', role: 'navigation', 'aria-label': 'main navigation' }, [
-    m('div', { class: 'container' }, [
-      m('div', { class: 'navbar-brand' }, [
-        navbarTitle('Gonference'),
-        navbarBurger(),
+function navbarProfile(username) {
+  return m('div.navbar-end', [
+    m('div.navbar-item.has-dropdown.is-hoverable', [
+      m('a.navbar-link is-arrowless', `Hello, ${username}!`),
+      m('div.navbar-dropdown', [
+        m('a.navbar-item', 'Log out'),
       ]),
-      navbarMenu(),
     ]),
-  ]),
-};
+  ]);
+}
+
+function Navbar() {
+  const state = {
+    username: null,
+  };
+
+  function fetchUser() {
+    m.request({
+      method: 'GET',
+      url: '/api/me',
+    })
+      .then((result) => {
+        state.username = result.username;
+      })
+      .catch(() => {});
+  }
+
+  return {
+    oninit: () => fetchUser(),
+    view: () => m('div', { class: 'navbar is-light', role: 'navigation', 'aria-label': 'main navigation' }, [
+      m('div', { class: 'container' }, [
+        m('div', { class: 'navbar-brand' }, [
+          navbarTitle('Gonference'),
+          navbarBurger(),
+        ]),
+        navbarMenu(),
+        state.username ? navbarProfile(state.username) : null,
+      ]),
+    ]),
+  };
+}
 
 export default Navbar;
