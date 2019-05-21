@@ -65,7 +65,7 @@ func (s *Server) backofficeRoutes(router *httprouter.Router) {
 		if err != nil {
 			http.Error(w, "Something went wrong", http.StatusInternalServerError)
 		}
-		w.Write(data)
+		_, _ = w.Write(data)
 	})
 }
 

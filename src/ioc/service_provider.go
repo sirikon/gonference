@@ -4,7 +4,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"github.com/sirikon/gonference/src/database"
 	"github.com/sirikon/gonference/src/domain"
-	util "github.com/sirikon/gonference/src/utils"
+	"github.com/sirikon/gonference/src/utils"
 	"github.com/sirikon/gonference/src/web/controllers/api"
 	"github.com/sirikon/gonference/src/web/controllers/public"
 	"github.com/sirupsen/logrus"
@@ -33,7 +33,7 @@ func (sp *ServiceProvider) CreateRequestScope() *ServiceProvider {
 	return &ServiceProvider{
 		dbConnection: sp.dbConnection,
 		requestInfo: &RequestInfo{
-			UID: util.RandomString(32),
+			UID: utils.RandomString(32),
 		},
 	}
 }
