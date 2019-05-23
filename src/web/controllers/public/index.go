@@ -33,5 +33,5 @@ func (s *IndexController) Handler(ctx *middleware.RequestContext) {
 		return
 	}
 
-	ctx.ResponseWritter.Write(result)
+	_, _ = ctx.ResponseWritter.Write(result)
 }

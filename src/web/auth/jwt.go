@@ -4,15 +4,16 @@ import (
 	"errors"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
-	"net/http"
 )
 
-func readSessionFromCookie(cookie *http.Cookie) (*Session, error) {
-	token, err := jwt.Parse(cookie.Value, func(token *jwt.Token) (interface{}, error) {
+const signingSecret = "secret"
+
+func serializeSession(s string) (*Session, error) {
+	token, err := jwt.Parse(s, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
 		}
-		return []byte("secret"), nil
+		return []byte(signingSecret), nil
 	})
 
 	if err != nil {
@@ -30,11 +31,18 @@ func readSessionFromCookie(cookie *http.Cookie) (*Session, error) {
 	}
 
 	session := createSession()
-	role, ok := claims["role"].(Role)
+	role, ok := claims["role"].(float64)
 	if !ok {
 		return nil, errors.New("there was a problem parsing user role")
 	}
-	session.role = role
+	session.role = Role(role)
 
 	return session, nil
+}
+
+func deserializeSession(session *Session) (string, error) {
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"role": session.role,
+	})
+	return token.SignedString([]byte(signingSecret))
 }

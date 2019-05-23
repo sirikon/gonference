@@ -32,7 +32,7 @@ func (s *Server) WrapHandler(wh WrappedHandler) httprouter.Handle {
 			"method": r.Method,
 		}).Info("Request started")
 
-		session := auth.GetSession(r)
+		session := auth.EnsureSession(logger, r, w)
 
 		start := time.Now()
 
