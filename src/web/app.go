@@ -6,6 +6,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/sirikon/gonference/src/ioc"
+	"github.com/sirupsen/logrus"
+	ginlogrus "github.com/toorop/gin-logrus"
 	"net/http"
 )
 
@@ -72,8 +74,11 @@ func (s *Server) apiRoutes(r *gin.Engine) {
 
 // Run .
 func (s *Server) Run(port string) error {
-	r := gin.New()
+	log := logrus.New()
 	store := cookie.NewStore([]byte("secret"))
+
+	r := gin.New()
+	r.Use(ginlogrus.Logger(log), gin.Recovery())
 	r.Use(sessions.Sessions("gonference", store))
 
 	r.Use(func(c *gin.Context) {

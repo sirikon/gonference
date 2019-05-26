@@ -11,6 +11,7 @@ require (
 	github.com/lib/pq v1.0.0
 	github.com/pkg/errors v0.8.1
 	github.com/sirupsen/logrus v1.4.1
+	github.com/toorop/gin-logrus v0.0.0-20190324082946-8887861896bb
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect
 	golang.org/x/sys v0.0.0-20190426135247-a129542de9ae // indirect
 	golang.org/x/tools v0.0.0-20190425222832-ad9eeb80039a // indirect
