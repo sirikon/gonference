@@ -6,6 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
 	"github.com/sirikon/gonference/src/ioc"
+	"github.com/sirikon/gonference/src/web/session"
 	"github.com/sirupsen/logrus"
 	ginlogrus "github.com/toorop/gin-logrus"
 	"net/http"
@@ -47,10 +48,22 @@ func (s *Server) publicRoutes(r *gin.Engine) {
 		return sp.GetIndexController().Handler
 	}))
 
+	r.GET("/login", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
+		return sp.GetLoginController().GetHandler
+	}))
+
+	r.POST("/login", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
+		return sp.GetLoginController().PostHandler
+	}))
+
+	r.GET("/logout", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
+		return sp.GetLoginController().LogoutHandler
+	}))
+
 	r.StaticFS("/assets", publicAssetsBox)
 }
 
-func (s *Server) apiRoutes(r *gin.Engine) {
+func (s *Server) apiRoutes(r *gin.RouterGroup) {
 	r.GET("/api/me", s.wrapHandler(func(sp *ioc.ServiceProvider) gin.HandlerFunc {
 		return sp.GetMeAPIController().Handler
 	}))
@@ -91,10 +104,20 @@ func (s *Server) Run(port string) error {
 		}
 	})
 
-	r.GET("/admin/*filepath", backofficeRoutes())
+	secured := r.Group("")
+	{
+		secured.Use(func(ctx *gin.Context) {
+			s := session.GetSession(ctx)
+			if s.GetRole() != "admin" {
+				ctx.Status(http.StatusForbidden)
+				ctx.Abort()
+			}
+		})
+		secured.GET("/admin/*filepath", backofficeRoutes())
+		s.apiRoutes(secured)
+	}
 
 	s.publicRoutes(r)
-	s.apiRoutes(r)
 
 	return r.Run("0.0.0.0:" + port)
 }

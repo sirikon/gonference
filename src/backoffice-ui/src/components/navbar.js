@@ -51,7 +51,7 @@ function navbarProfile(username) {
     m('div.navbar-item.has-dropdown.is-hoverable', [
       m('a.navbar-link is-arrowless', `Hello, ${username}!`),
       m('div.navbar-dropdown', [
-        m('a.navbar-item', 'Log out'),
+        m('a.navbar-item[href="/logout"]', 'Log out'),
       ]),
     ]),
   ]);

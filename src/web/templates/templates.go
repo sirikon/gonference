@@ -2,8 +2,10 @@ package templates
 
 import (
 	"bytes"
+	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
 	"html/template"
+	"net/http"
 )
 
 // RenderTemplate .
@@ -24,4 +26,14 @@ func RenderTemplate(templateName string, data interface{}) ([]byte, error) {
 	}
 
 	return result.Bytes(), nil
+}
+
+func ReplyTemplate(c *gin.Context, templateName string, data interface{}) {
+	result, err := RenderTemplate(templateName, data)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	c.Data(http.StatusOK, "text/html", result)
 }

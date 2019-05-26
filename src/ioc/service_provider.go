@@ -63,6 +63,11 @@ func (sp *ServiceProvider) GetIndexController() *public.IndexController {
 	}
 }
 
+func (sp *ServiceProvider) GetLoginController() *public.LoginController {
+	return &public.LoginController{
+	}
+}
+
 // GetTalksAPIController .
 func (sp *ServiceProvider) GetTalksAPIController() *api.TalksAPIController {
 	return &api.TalksAPIController{
