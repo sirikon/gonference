@@ -56,17 +56,27 @@ func (s *Server) WrapHandler(wh WrappedHandler) httprouter.Handle {
 func (s *Server) backofficeRoutes(router *httprouter.Router) {
 	backofficeAssetsBox := packr.New("backoffice-assets", "./assets/backoffice")
 
-	router.GET("/admin/*filepath", func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		path := ps.ByName("filepath")
-		if path == "/" {
-			path = "/index.html"
+	router.GET("/admin/*filepath", s.WrapHandler(func(s *ioc.ServiceProvider) middleware.RequestHandler {
+		return func(context *middleware.RequestContext) {
+			path := context.Params.ByName("filepath")
+			if context.Session.GetRole() == auth.UserRole {
+				context.ResponseWritter.WriteHeader(http.StatusForbidden)
+				if path == "/" {
+					_, _ = context.ResponseWritter.Write([]byte("Can't"))
+				}
+				return
+			}
+
+			if path == "/" {
+				path = "/index.html"
+			}
+			data, err := backofficeAssetsBox.Find(path)
+			if err != nil {
+				http.Error(context.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
+			}
+			_, _ = context.ResponseWritter.Write(data)
 		}
-		data, err := backofficeAssetsBox.Find(path)
-		if err != nil {
-			http.Error(w, "Something went wrong", http.StatusInternalServerError)
-		}
-		_, _ = w.Write(data)
-	})
+	}))
 }
 
 func (s *Server) publicRoutes(router *httprouter.Router) {
