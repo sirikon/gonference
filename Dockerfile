@@ -11,6 +11,7 @@ COPY scripts ./scripts
 COPY Tskfile.yml .
 RUN tsk install
 RUN tsk backoffice build
+RUN tsk front-style build
 RUN tsk build
 
 FROM alpine:3.9

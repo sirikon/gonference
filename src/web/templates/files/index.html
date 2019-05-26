@@ -4,15 +4,24 @@
         <link rel="stylesheet" href="/assets/style.css">
     </head>
     <body>
-        <div class="container">
-            <h1>Talks</h1>
-            <ul>
+
+        <header class="x-header">
+            <div class="x-container">
+                <h1 class="x-header-title">Gonference</h1>
+            </div>
+        </header>
+
+        <div class="x-container">
+            <div class="x-talk-list">
                 {{range .}}
-                    <li>[{{ .ID }}] {{ .Name }}</li>
+                    <a class="x-talk-list-item" href="#">
+                        <h3 class="x-talk-list-item-title" data-id="{{ .ID }}">{{ .Name }}</h3>
+                        <span class="x-talk-list-item-speaker">{{ .SpeakerName }}</span>
+                    </a>
                 {{else}}
                     <p>No talks found</p>
                 {{end}}
-            </ul>
+            </div>
         </div>
     </body>
 </html>

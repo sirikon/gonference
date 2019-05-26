@@ -1,0 +1,15 @@
+@import "../variables";
+
+.x-talk-list {
+  &-item {
+    display: block;
+    color: inherit;
+    text-decoration: inherit;
+    background-color: white;
+    margin: 1em 0;
+    padding: 1em;
+    &-title {
+      margin: 0;
+    }
+  }
+}

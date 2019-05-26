@@ -4,3 +4,4 @@ env:
   PORT: 3000
   DEVENV_PATH: docker/gonference-devenv
   BACKOFFICE_UI_PATH: src/backoffice-ui
+  FRONT_STYLE_PATH: src/front-style

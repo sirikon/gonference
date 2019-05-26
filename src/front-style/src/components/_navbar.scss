@@ -1,0 +1,11 @@
+@import "../variables";
+
+.x-header {
+  padding: 1em 0;
+  background-color: lightblue;
+
+  &-title {
+    margin: 0;
+    text-align: center;
+  }
+}
