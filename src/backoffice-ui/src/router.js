@@ -3,6 +3,7 @@ import Talks from './views/talks';
 import NewTalk from './views/newTalk';
 import Settings from './views/settings';
 import EditTalk from './views/editTalk';
+import ChangePasswordView from './views/changePassword';
 
 const routes = [
   {
@@ -24,6 +25,11 @@ const routes = [
     name: 'Settings',
     path: '/settings',
     component: Settings,
+  },
+  {
+    name: 'Change Password',
+    path: '/change-password',
+    component: ChangePasswordView,
   },
 ];
 

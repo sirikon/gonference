@@ -67,6 +67,9 @@ func (s *Server) apiRoutes(r *gin.RouterGroup) {
 	r.GET("/api/me", s.wrapHandler(func(sp *ioc.ServiceProvider) gin.HandlerFunc {
 		return sp.GetMeAPIController().Handler
 	}))
+	r.POST("/api/me/change-password", s.wrapHandler(func(sp *ioc.ServiceProvider) gin.HandlerFunc {
+		return sp.GetMeAPIController().ChangePasswordHandler
+	}))
 
 	r.GET("/api/talks", s.wrapHandler(func(s *ioc.ServiceProvider) gin.HandlerFunc {
 		return s.GetTalksAPIController().GetAllHandler

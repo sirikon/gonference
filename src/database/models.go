@@ -32,7 +32,7 @@ func (tm TalkModel) ToDomainTalk() domain.Talk {
 
 // TalksToDomainTalks .
 func TalksToDomainTalks(talks []TalkModel) []domain.Talk {
-	var result []domain.Talk
+	result := []domain.Talk{}
 	for _, talk := range talks {
 		result = append(result, talk.ToDomainTalk())
 	}

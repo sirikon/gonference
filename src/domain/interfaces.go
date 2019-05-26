@@ -3,14 +3,15 @@ package domain
 // TalkRepository .
 type TalkRepository interface {
 	GetAll() ([]Talk, error)
-	Get(int) (Talk, error)
-	Add(Talk) error
-	Update(Talk) error
-	Delete(int) error
+	Get(id int) (Talk, error)
+	Add(talk Talk) error
+	Update(talk Talk) error
+	Delete(id int) error
 }
 
 // UserService .
 type UserService interface {
-	UserExists(string) bool
-	CheckPassword(string, string) (bool, error)
+	UserExists(username string) bool
+	CheckPassword(username string, password string) (bool, error)
+	ChangePassword(username string, currentPassword string, newPassword string) error
 }

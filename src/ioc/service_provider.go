@@ -85,5 +85,7 @@ func (sp *ServiceProvider) GetTalksAPIController() *api.TalksAPIController {
 
 // GetMeAPIController .
 func (sp *ServiceProvider) GetMeAPIController() *api.MeAPIController {
-	return &api.MeAPIController{}
+	return &api.MeAPIController{
+		UserService: sp.GetUserService(),
+	}
 }

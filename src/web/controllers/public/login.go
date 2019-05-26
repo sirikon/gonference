@@ -37,6 +37,7 @@ func (l *LoginController) PostHandler(c *gin.Context) {
 
 	if result {
 		s.SetRole("admin")
+		s.SetUsername(username)
 		c.Redirect(http.StatusFound, "/admin/")
 	} else {
 		templates.ReplyTemplate(c, "login", nil)
@@ -46,5 +47,6 @@ func (l *LoginController) PostHandler(c *gin.Context) {
 func (l *LoginController) LogoutHandler(c *gin.Context) {
 	s := session.GetSession(c)
 	s.SetRole("user")
+	s.SetUsername("")
 	c.Redirect(http.StatusFound, "/")
 }

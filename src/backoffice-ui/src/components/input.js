@@ -1,10 +1,10 @@
 import m from 'mithril';
 
 function textElement({
-  label, value, onchange, size,
+  label, value, onchange, size, type,
 }) {
   return m('input.input', {
-    type: 'text',
+    type,
     class: size ? `is-${size}` : '',
     placeholder: label,
     value,
@@ -96,7 +96,7 @@ function getTimezoneText(value) {
 }
 
 function input({
-  label, value, onchange, size, multiline, date, time,
+  label, value, onchange, size, multiline, date, time, secure,
 }) {
   let internalInput = null;
 
@@ -128,7 +128,7 @@ function input({
     internalInput = timeElement({ value, onchange, size });
   } else {
     internalInput = textElement({
-      label, value, onchange, size,
+      label, value, onchange, size, type: secure ? 'password' : 'text',
     });
   }
 
