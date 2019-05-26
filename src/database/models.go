@@ -32,7 +32,7 @@ func (tm TalkModel) ToDomainTalk() domain.Talk {
 
 // TalksToDomainTalks .
 func TalksToDomainTalks(talks []TalkModel) []domain.Talk {
-	result := []domain.Talk{}
+	var result []domain.Talk
 	for _, talk := range talks {
 		result = append(result, talk.ToDomainTalk())
 	}
@@ -50,4 +50,9 @@ func DomainTalkToTalk(talk domain.Talk) TalkModel {
 		Track:        talk.Track,
 		When:         talk.When,
 	}
+}
+
+type UserModel struct {
+	Username string `db:"username"`
+	Password string `db:"password"`
 }

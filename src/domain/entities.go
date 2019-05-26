@@ -14,3 +14,8 @@ type Talk struct {
 	Track        string    `json:"track"`
 	When         time.Time `json:"when"`
 }
+
+type User struct {
+	Username string
+	Password string
+}

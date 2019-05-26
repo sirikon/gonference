@@ -2,13 +2,16 @@ package public
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/sirikon/gonference/src/domain"
 	"github.com/sirikon/gonference/src/web/session"
 	"github.com/sirikon/gonference/src/web/templates"
 	"net/http"
 )
 
 // LoginController .
-type LoginController struct {}
+type LoginController struct {
+	UserService domain.UserService
+}
 
 // GetHandler .
 func (l *LoginController) GetHandler(c *gin.Context) {
@@ -21,7 +24,18 @@ func (l *LoginController) PostHandler(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
 
-	if username == "admin" && password == "admin" {
+	if !l.UserService.UserExists(username) {
+		templates.ReplyTemplate(c, "login", nil)
+		return
+	}
+
+	result, err := l.UserService.CheckPassword(username, password)
+	if err != nil {
+		_ = c.Error(err)
+		return
+	}
+
+	if result {
 		s.SetRole("admin")
 		c.Redirect(http.StatusFound, "/admin/")
 	} else {

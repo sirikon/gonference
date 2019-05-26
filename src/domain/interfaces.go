@@ -8,3 +8,9 @@ type TalkRepository interface {
 	Update(Talk) error
 	Delete(int) error
 }
+
+// UserService .
+type UserService interface {
+	UserExists(string) bool
+	CheckPassword(string, string) (bool, error)
+}

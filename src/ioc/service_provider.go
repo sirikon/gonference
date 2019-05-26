@@ -56,6 +56,13 @@ func (sp *ServiceProvider) GetTalkRepository() domain.TalkRepository {
 	}
 }
 
+func (sp *ServiceProvider) GetUserService() domain.UserService {
+	return &database.UserService{
+		DB:     sp.GetDbConnection(),
+		Logger: sp.GetLogger(),
+	}
+}
+
 // GetIndexController .
 func (sp *ServiceProvider) GetIndexController() *public.IndexController {
 	return &public.IndexController{
@@ -65,6 +72,7 @@ func (sp *ServiceProvider) GetIndexController() *public.IndexController {
 
 func (sp *ServiceProvider) GetLoginController() *public.LoginController {
 	return &public.LoginController{
+		UserService: sp.GetUserService(),
 	}
 }
 

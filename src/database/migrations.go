@@ -68,7 +68,7 @@ func GetMigrations() ([]Migration, error) {
 }
 
 func getMigrationsFiles() ([]MigrationFile, error) {
-	box := packr.New("Database migrations", "./migrations")
+	box := packr.New("database-migrations", "./migrations")
 
 	migrationFiles := make([]MigrationFile, 0)
 	files := box.List()
