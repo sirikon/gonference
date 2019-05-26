@@ -97,11 +97,6 @@ func (s *Server) Run(port string) error {
 	r.Use(func(c *gin.Context) {
 		scope := s.ServiceProvider.CreateScope()
 		c.Set("ServiceProvider", scope)
-		session := sessions.Default(c)
-		if session.Get("username") == nil {
-			session.Set("username", "user")
-			_ = session.Save()
-		}
 	})
 
 	secured := r.Group("")

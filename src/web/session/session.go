@@ -5,12 +5,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const usernameKey = "username"
+const roleKey = "role"
+
 type Session struct {
 	internalSession sessions.Session
 }
 
 func (s *Session) GetUsername() string {
-	value := s.internalSession.Get("username")
+	value := s.internalSession.Get(usernameKey)
 	if value == nil {
 		return ""
 	}
@@ -18,12 +21,12 @@ func (s *Session) GetUsername() string {
 }
 
 func (s *Session) SetUsername(username string) {
-	s.internalSession.Set("username", username)
+	s.internalSession.Set(usernameKey, username)
 	_ = s.internalSession.Save()
 }
 
 func (s *Session) GetRole() string {
-	value := s.internalSession.Get("role")
+	value := s.internalSession.Get(roleKey)
 	if value == nil {
 		return "user"
 	}
@@ -31,7 +34,7 @@ func (s *Session) GetRole() string {
 }
 
 func (s *Session) SetRole(role string) {
-	s.internalSession.Set("role", role)
+	s.internalSession.Set(roleKey, role)
 	_ = s.internalSession.Save()
 }
 
