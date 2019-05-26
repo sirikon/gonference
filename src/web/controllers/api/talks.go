@@ -3,12 +3,11 @@ package api
 import (
 	"encoding/json"
 	"errors"
+	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
 
 	"github.com/sirikon/gonference/src/domain"
-	"github.com/sirikon/gonference/src/web/middleware"
-	log "github.com/sirupsen/logrus"
 )
 
 // TalksAPIController .
@@ -17,10 +16,9 @@ type TalksAPIController struct {
 }
 
 // GetAllHandler .
-func (s *TalksAPIController) GetAllHandler(ctx *middleware.RequestContext) {
+func (s *TalksAPIController) GetAllHandler(ctx *gin.Context) {
 	handleErr := func(err error) {
-		log.Error(err)
-		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
+		_ = ctx.Error(err)
 	}
 
 	talks, err := s.TalkRepository.GetAll()
@@ -29,21 +27,13 @@ func (s *TalksAPIController) GetAllHandler(ctx *middleware.RequestContext) {
 		return
 	}
 
-	result, err := json.Marshal(talks)
-	if err != nil {
-		handleErr(err)
-		return
-	}
-
-	ctx.ResponseWritter.Header().Add("content-type", "application/json")
-	ctx.ResponseWritter.Write(result)
+	ctx.JSON(http.StatusOK, talks)
 }
 
 // AddHandler .
-func (s *TalksAPIController) AddHandler(ctx *middleware.RequestContext) {
+func (s *TalksAPIController) AddHandler(ctx *gin.Context) {
 	handleErr := func(err error) {
-		log.Error(err)
-		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
+		_ = ctx.Error(err)
 	}
 
 	decoder := json.NewDecoder(ctx.Request.Body)
@@ -62,19 +52,18 @@ func (s *TalksAPIController) AddHandler(ctx *middleware.RequestContext) {
 		return
 	}
 
-	ctx.ResponseWritter.WriteHeader(http.StatusOK)
+	ctx.Status(http.StatusOK)
 }
 
 // GetHandler .
-func (s *TalksAPIController) GetHandler(ctx *middleware.RequestContext) {
+func (s *TalksAPIController) GetHandler(ctx *gin.Context) {
 	handleErr := func(err error) {
-		log.Error(err)
-		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
+		_ = ctx.Error(err)
 	}
 
 	talkIDStr := ctx.Params.ByName("id")
 	if talkIDStr == "" {
-		handleErr(errors.New("Talk id missing"))
+		handleErr(errors.New("talk id missing"))
 		return
 	}
 
@@ -90,26 +79,18 @@ func (s *TalksAPIController) GetHandler(ctx *middleware.RequestContext) {
 		return
 	}
 
-	result, err := json.Marshal(talk)
-	if err != nil {
-		handleErr(err)
-		return
-	}
-
-	ctx.ResponseWritter.Header().Add("content-type", "application/json")
-	ctx.ResponseWritter.Write(result)
+	ctx.JSON(http.StatusOK, talk)
 }
 
 // UpdateHandler .
-func (s *TalksAPIController) UpdateHandler(ctx *middleware.RequestContext) {
+func (s *TalksAPIController) UpdateHandler(ctx *gin.Context) {
 	handleErr := func(err error) {
-		log.Error(err)
-		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
+		_ = ctx.Error(err)
 	}
 
 	talkIDStr := ctx.Params.ByName("id")
 	if talkIDStr == "" {
-		handleErr(errors.New("Talk id missing"))
+		handleErr(errors.New("talk id missing"))
 		return
 	}
 
@@ -137,19 +118,18 @@ func (s *TalksAPIController) UpdateHandler(ctx *middleware.RequestContext) {
 		return
 	}
 
-	ctx.ResponseWritter.WriteHeader(http.StatusOK)
+	ctx.Status(http.StatusOK)
 }
 
 // DeleteHandler .
-func (s *TalksAPIController) DeleteHandler(ctx *middleware.RequestContext) {
+func (s *TalksAPIController) DeleteHandler(ctx *gin.Context) {
 	handleErr := func(err error) {
-		log.Error(err)
-		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
+		_ = ctx.Error(err)
 	}
 
 	talkIDStr := ctx.Params.ByName("id")
 	if talkIDStr == "" {
-		handleErr(errors.New("Talk id missing"))
+		handleErr(errors.New("talk id missing"))
 		return
 	}
 
@@ -165,5 +145,5 @@ func (s *TalksAPIController) DeleteHandler(ctx *middleware.RequestContext) {
 		return
 	}
 
-	ctx.ResponseWritter.WriteHeader(http.StatusOK)
+	ctx.Status(http.StatusOK)
 }

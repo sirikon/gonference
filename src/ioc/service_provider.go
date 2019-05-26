@@ -28,8 +28,8 @@ func CreateServiceProvider(dbConnection *sqlx.DB) *ServiceProvider {
 	}
 }
 
-// CreateRequestScope .
-func (sp *ServiceProvider) CreateRequestScope() *ServiceProvider {
+// CreateScope .
+func (sp *ServiceProvider) CreateScope() *ServiceProvider {
 	return &ServiceProvider{
 		dbConnection: sp.dbConnection,
 		requestInfo: &RequestInfo{

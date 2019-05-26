@@ -1,12 +1,12 @@
 module github.com/sirikon/gonference
 
 require (
-	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/gin-contrib/sessions v0.0.0-20190512062852-3cb4c4f2d615
+	github.com/gin-gonic/gin v1.4.0
 	github.com/gobuffalo/genny v0.1.1 // indirect
 	github.com/gobuffalo/gogen v0.1.1 // indirect
 	github.com/gobuffalo/packr/v2 v2.2.0
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/julienschmidt/httprouter v1.2.0
 	github.com/karrick/godirwalk v1.8.2 // indirect
 	github.com/lib/pq v1.0.0
 	github.com/pkg/errors v0.8.1

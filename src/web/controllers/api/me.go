@@ -1,11 +1,9 @@
 package api
 
 import (
-	"encoding/json"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-gonic/gin"
 	"net/http"
-
-	"github.com/sirikon/gonference/src/web/middleware"
-	log "github.com/sirupsen/logrus"
 )
 
 // MeAPIController .
@@ -13,22 +11,12 @@ type MeAPIController struct {
 }
 
 // Handler .
-func (s *MeAPIController) Handler(ctx *middleware.RequestContext) {
-	handleErr := func(err error) {
-		log.Error(err)
-		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
-	}
+func (s *MeAPIController) Handler(ctx *gin.Context) {
+	session := sessions.Default(ctx)
 
 	user := User{
-		Username: ctx.Session.GetUsername(),
+		Username: session.Get("username").(string),
 	}
 
-	result, err := json.Marshal(user)
-	if err != nil {
-		handleErr(err)
-		return
-	}
-
-	ctx.ResponseWritter.Header().Add("content-type", "application/json")
-	ctx.ResponseWritter.Write(result)
+	ctx.JSON(http.StatusOK, user)
 }

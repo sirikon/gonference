@@ -1,12 +1,10 @@
 package public
 
 import (
-	"net/http"
-
+	"github.com/gin-gonic/gin"
 	"github.com/sirikon/gonference/src/domain"
-	"github.com/sirikon/gonference/src/web/middleware"
 	"github.com/sirikon/gonference/src/web/templates"
-	log "github.com/sirupsen/logrus"
+	"net/http"
 )
 
 // IndexController .
@@ -15,10 +13,9 @@ type IndexController struct {
 }
 
 // Handler .
-func (s *IndexController) Handler(ctx *middleware.RequestContext) {
+func (s *IndexController) Handler(c *gin.Context) {
 	handleErr := func(err error) {
-		log.Error(err)
-		http.Error(ctx.ResponseWritter, "Something went wrong", http.StatusInternalServerError)
+		_ = c.Error(err)
 	}
 
 	talks, err := s.TalkRepository.GetAll()
@@ -33,5 +30,5 @@ func (s *IndexController) Handler(ctx *middleware.RequestContext) {
 		return
 	}
 
-	_, _ = ctx.ResponseWritter.Write(result)
+	c.Data(http.StatusOK, "text/html", result)
 }
