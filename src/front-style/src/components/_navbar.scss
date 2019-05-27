@@ -1,8 +1,6 @@
-@import "../variables";
-
 .x-header {
   padding: 1em 0;
-  background-color: lightblue;
+  background-color: var(--color-primary);
 
   &-title {
     margin: 0;

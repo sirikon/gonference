@@ -1,8 +1,7 @@
-@import "variables";
-
 body {
   margin: 0;
   padding: 0;
-  background-color: whitesmoke;
-  font-family: $font-family;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-family)
 }

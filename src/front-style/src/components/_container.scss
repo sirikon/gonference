@@ -1,7 +1,5 @@
-@import "../variables";
-
 .x-container {
-  max-width: $max-width;
+  max-width: var(--max-width);
   display: block;
   margin: auto;
 }
