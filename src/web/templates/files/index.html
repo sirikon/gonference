@@ -29,7 +29,7 @@
                             <div class="x-talk-list-item-info">
                                 <span class="x-talk-list-item-speaker">{{ .SpeakerName }}</span>
                                 <span class="x-talk-list-item-track">{{ .Track }}</span>
-                                <span class="x-talk-list-item-hour">9:30-10:30</span>
+                                <span class="x-talk-list-item-hour">{{ .When.Format "15:04" }}</span>
                             </div>
                         </a>
                     {{else}}
