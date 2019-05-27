@@ -11,17 +11,37 @@
             </div>
         </header>
 
-        <div class="x-container">
-            <div class="x-talk-list">
-                {{range .}}
-                    <a class="x-talk-list-item" href="#">
-                        <h3 class="x-talk-list-item-title" data-id="{{ .ID }}">{{ .Name }}</h3>
-                        <span class="x-talk-list-item-speaker">{{ .SpeakerName }}</span>
-                    </a>
-                {{else}}
-                    <p>No talks found</p>
-                {{end}}
+        <div class="x-body">
+            <div class="x-container">
+                <div class="x-talk-list">
+                    {{range .}}
+                        <a class="x-talk-list-item" href="#">
+
+                            <div class="x-talk-list-item-arrow">
+                                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 129 129" xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 129 129">
+                                    <g>
+                                        <path d="m40.4,121.3c-0.8,0.8-1.8,1.2-2.9,1.2s-2.1-0.4-2.9-1.2c-1.6-1.6-1.6-4.2 0-5.8l51-51-51-51c-1.6-1.6-1.6-4.2 0-5.8 1.6-1.6 4.2-1.6 5.8,0l53.9,53.9c1.6,1.6 1.6,4.2 0,5.8l-53.9,53.9z"></path>
+                                    </g>
+                                </svg>
+                            </div>
+
+                            <h3 class="x-talk-list-item-title" data-id="{{ .ID }}">{{ .Name }}</h3>
+                            <div class="x-talk-list-item-info">
+                                <span class="x-talk-list-item-speaker">{{ .SpeakerName }}</span>
+                                <span class="x-talk-list-item-track">{{ .Track }}</span>
+                                <span class="x-talk-list-item-hour">9:30-10:30</span>
+                            </div>
+                        </a>
+                    {{else}}
+                        <p>No talks found</p>
+                    {{end}}
+                </div>
             </div>
         </div>
+
+        <footer class="x-footer">
+            <span>Gonference 2019</span>
+        </footer>
+
     </body>
 </html>

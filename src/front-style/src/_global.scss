@@ -1,7 +1,12 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-background);
+  height: 100%;
+  background-color: var(--background-color);
   color: var(--color-text);
-  font-family: var(--font-family)
+  font-family: var(--font-family);
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  overflow-y: scroll;
 }

@@ -1,9 +1,14 @@
 .x-header {
-  padding: 1em 0;
   background-color: var(--color-primary);
+  height: var(--navbar-height);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
 
   &-title {
     margin: 0;
     text-align: center;
+    color: var(--header-text-color);
   }
 }

@@ -4,10 +4,52 @@
     color: inherit;
     text-decoration: inherit;
     background-color: white;
-    margin: 1em 0;
-    padding: 1em;
+    margin: 10px 10px 0 10px;
+    padding: 13px 35px 13px 15px;
+    position: relative;
+
     &-title {
-      margin: 0;
+      margin: 0 0 .4em 0;
+      color: var(--color-primary);
+      font-size: 1.3em;
+    }
+
+    &-info {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    &-speaker {
+      color: var(--color-accent);
+      font-style: italic;
+      font-weight: 700;
+      font-size: 1em;
+      flex-grow: 1;
+    }
+
+    &-arrow {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      width: 15px;
+      height: 15px;
+      transform: translate(0, -50%);
+
+      svg {
+        fill: #d09c2e;
+      }
+    }
+
+    &-track, &-hour {
+      font-size: 1em;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    &-track {
+      color: #d09c2e;
+      margin: 0 .6em;
     }
   }
 }
