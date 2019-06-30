@@ -1,9 +1,10 @@
 #!/bin/sh
 
-go get -u github.com/gobuffalo/packr/v2/packr2
-go get
+GO111MODULE=off go get -u github.com/gobuffalo/packr/v2/packr2
+go mod download
+npm i -g yarn
 cd $FRONT_STYLE_PATH
-npm i
+yarn
 cd ../../
 cd $BACKOFFICE_UI_PATH
-npm i
+yarn
