@@ -1,0 +1,30 @@
+{{define "layout"}}
+
+<html>
+<head>
+    <title>Talks</title>
+    <meta charset="utf8">
+    <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+<header class="x-header">
+    <div class="x-container">
+        <h1 class="x-header-title">Gonference</h1>
+    </div>
+</header>
+
+<div class="x-body">
+    <div class="x-container">
+        {{ template "content" . }}
+    </div>
+</div>
+
+<footer class="x-footer">
+    <span>Gonference 2019</span>
+</footer>
+
+</body>
+</html>
+
+{{end}}
