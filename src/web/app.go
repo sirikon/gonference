@@ -48,6 +48,10 @@ func (s *Server) publicRoutes(r *gin.Engine) {
 		return sp.GetIndexController().Handler
 	}))
 
+	r.GET("/talk/:id", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
+		return sp.GetTalkController().Handler
+	}))
+
 	r.GET("/login", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
 		return sp.GetLoginController().GetHandler
 	}))

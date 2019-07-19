@@ -70,6 +70,13 @@ func (sp *ServiceProvider) GetIndexController() *public.IndexController {
 	}
 }
 
+// GetTalkController .
+func (sp *ServiceProvider) GetTalkController() *public.TalkController {
+	return &public.TalkController{
+		TalkRepository: sp.GetTalkRepository(),
+	}
+}
+
 func (sp *ServiceProvider) GetLoginController() *public.LoginController {
 	return &public.LoginController{
 		UserService: sp.GetUserService(),
