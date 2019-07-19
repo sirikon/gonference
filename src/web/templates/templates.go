@@ -37,7 +37,7 @@ func renderTemplate(templateName string, data interface{}) (result []byte, err e
 func includeCommonTemplates(tmpl *template.Template)  {
 	var err error
 	_, err = tmpl.Parse(getTemplateContent("_layout")); utils.HandleErr(err)
-	_, err = tmpl.Parse(getTemplateContent("icons/chevron-right")); utils.HandleErr(err)
+	_, err = tmpl.Parse(getTemplateContent("_icons")); utils.HandleErr(err)
 }
 
 func getTemplateContent(templateName string) string {
