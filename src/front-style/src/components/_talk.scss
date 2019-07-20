@@ -1,0 +1,60 @@
+.x-talk {
+  margin: 0px 10px;
+
+  &-section {
+    padding: 15px;
+    margin-top: 10px;
+
+    &.is-boxed {
+      background-color: white;
+    }
+  }
+
+  &-title {
+    font-size: 1.7em;
+    line-height: 1em;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-primary);
+  }
+
+  &-info {
+    margin-top: 10px;
+  }
+
+  &-track {
+    font-size: 1em;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin: 0 .6em 0 0;
+    white-space: nowrap;
+  }
+
+  &-when {
+    font-size: 1em;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  &-description {
+    line-height: 1.4em;
+    margin: 10px 0 0 0;
+    color: #333;
+  }
+
+  &-speaker {
+    &-name {
+      display: block;
+      font-size: 1.4em;
+      line-height: 1em;
+      font-weight: bold;
+      color: var(--color-primary);
+    }
+    &-title {
+      margin: .5em 0 0 0;
+      display: inline-block;
+      line-height: 1.42;
+      color: var(--color-primary);
+    }
+  }
+}

@@ -9,6 +9,9 @@
   &-title {
     margin: 0;
     text-align: center;
+    text-decoration: none;
+    font-size: 2em;
+    font-weight: bold;
     color: var(--header-text-color);
   }
 }
