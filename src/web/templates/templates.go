@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"github.com/gin-gonic/gin"
 	"github.com/gobuffalo/packr/v2"
+	"github.com/russross/blackfriday"
 	"github.com/sirikon/gonference/src/utils"
 	"html/template"
 	"net/http"
@@ -24,7 +25,9 @@ func renderTemplate(templateName string, data interface{}) (result []byte, err e
 	defer utils.HandlePanic(&err)
 
 	content := getTemplateContent(templateName)
-	tmpl, err := template.New(templateName).Parse(content); utils.HandleErr(err)
+	tmpl, err := template.New(templateName).
+		Funcs(templateFunctions()).
+		Parse(content); utils.HandleErr(err)
 
 	includeCommonTemplates(tmpl)
 
@@ -32,6 +35,14 @@ func renderTemplate(templateName string, data interface{}) (result []byte, err e
 	utils.HandleErr(tmpl.ExecuteTemplate(&buffer, "layout", data))
 
 	return buffer.Bytes(), nil
+}
+
+func templateFunctions() template.FuncMap {
+	return template.FuncMap{
+		"markdown": func(text string) template.HTML {
+			return template.HTML(blackfriday.Run([]byte(text)))
+		},
+	}
 }
 
 func includeCommonTemplates(tmpl *template.Template)  {

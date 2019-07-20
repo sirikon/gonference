@@ -7,7 +7,7 @@
                 <span class="x-talk-track">{{.Track}}</span>
                 <span class="x-talk-when">{{.When.Format "15:04"}}</span>
             </div>
-            <div class="x-talk-description">{{.Description}}</div>
+            <div class="x-talk-description">{{markdown .Description}}</div>
         </section>
 
         <section class="x-talk-section x-talk-speaker">
