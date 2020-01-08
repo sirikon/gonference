@@ -22,10 +22,10 @@ func main() {
 		log.Fatal(err)
 	}
 
-	serviceProvider := ioc.CreateServiceProvider(conn)
+	jobContext := ioc.CreateJobContext(conn)
 
 	httpServer := web.Server{
-		ServiceProvider: serviceProvider,
+		JobContext: jobContext,
 	}
 
 	err = httpServer.Run(port)

@@ -1,6 +1,7 @@
 package ioc
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
 	"github.com/sirikon/gonference/src/database"
 	"github.com/sirikon/gonference/src/domain"
@@ -10,89 +11,98 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// RequestInfo .
-type RequestInfo struct {
-	UID string
+type Handler interface {
+	Handler(ctx *gin.Context)
 }
 
 // ServiceProvider .
-type ServiceProvider struct {
+type JobContext struct {
+	UID string
 	dbConnection *sqlx.DB
-	requestInfo  *RequestInfo
 }
 
-// CreateServiceProvider .
-func CreateServiceProvider(dbConnection *sqlx.DB) *ServiceProvider {
-	return &ServiceProvider{
+// CreateJobContext .
+func CreateJobContext(dbConnection *sqlx.DB) *JobContext {
+	return &JobContext{
 		dbConnection: dbConnection,
 	}
 }
 
 // CreateScope .
-func (sp *ServiceProvider) CreateScope() *ServiceProvider {
-	return &ServiceProvider{
-		dbConnection: sp.dbConnection,
-		requestInfo: &RequestInfo{
-			UID: utils.RandomString(32),
-		},
+func (ctx *JobContext) CreateScope() *JobContext {
+	return &JobContext{
+		dbConnection: ctx.dbConnection,
+		UID:          utils.RandomString(32),
 	}
 }
 
-// GetLogger .
-func (sp *ServiceProvider) GetLogger() *logrus.Entry {
-	return logrus.WithField("request_uid", sp.requestInfo.UID)
+// Logger .
+func Logger(ctx *JobContext) *logrus.Entry {
+	return logrus.WithField("job_uid", ctx.UID)
 }
 
-// GetDbConnection .
-func (sp *ServiceProvider) GetDbConnection() *sqlx.DB {
-	return sp.dbConnection
+// DbConnection .
+func DbConnection(ctx *JobContext) *sqlx.DB {
+	return ctx.dbConnection
 }
 
-// GetTalkRepository .
-func (sp *ServiceProvider) GetTalkRepository() domain.TalkRepository {
+// TalkRepository .
+func TalkRepository(ctx *JobContext) domain.TalkRepository {
 	return &database.TalkRepository{
-		DB:     sp.GetDbConnection(),
-		Logger: sp.GetLogger(),
+		DB:     DbConnection(ctx),
+		Logger: Logger(ctx),
 	}
 }
 
-func (sp *ServiceProvider) GetUserService() domain.UserService {
+func UserService(ctx *JobContext) domain.UserService {
 	return &database.UserService{
-		DB:     sp.GetDbConnection(),
-		Logger: sp.GetLogger(),
+		DB:     DbConnection(ctx),
+		Logger: Logger(ctx),
 	}
 }
 
-// GetIndexController .
-func (sp *ServiceProvider) GetIndexController() *public.IndexController {
+// IndexController .
+func IndexController(ctx *JobContext) *public.IndexController {
 	return &public.IndexController{
-		TalkRepository: sp.GetTalkRepository(),
+		TalkRepository: TalkRepository(ctx),
 	}
 }
+func IndexHandler(ctx *JobContext) gin.HandlerFunc { return IndexController(ctx).Handler }
 
-// GetTalkController .
-func (sp *ServiceProvider) GetTalkController() *public.TalkController {
+// TalkController .
+func TalkController(ctx *JobContext) *public.TalkController {
 	return &public.TalkController{
-		TalkRepository: sp.GetTalkRepository(),
+		TalkRepository: TalkRepository(ctx),
 	}
 }
+func TalkHandler(ctx *JobContext) gin.HandlerFunc { return TalkController(ctx).Handler }
 
-func (sp *ServiceProvider) GetLoginController() *public.LoginController {
+func LoginController(ctx *JobContext) *public.LoginController {
 	return &public.LoginController{
-		UserService: sp.GetUserService(),
+		UserService: UserService(ctx),
 	}
 }
+func LoginGetHandler(ctx *JobContext) gin.HandlerFunc { return LoginController(ctx).GetHandler }
+func LoginPostHandler(ctx *JobContext) gin.HandlerFunc { return LoginController(ctx).PostHandler }
+func LoginLogoutHandler(ctx *JobContext) gin.HandlerFunc { return LoginController(ctx).LogoutHandler }
 
-// GetTalksAPIController .
-func (sp *ServiceProvider) GetTalksAPIController() *api.TalksAPIController {
+// TalksAPIController .
+func TalksAPIController(ctx *JobContext) *api.TalksAPIController {
 	return &api.TalksAPIController{
-		TalkRepository: sp.GetTalkRepository(),
+		TalkRepository: TalkRepository(ctx),
 	}
 }
+func TalksAPIGetHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).GetHandler }
+func TalksAPIGetAllHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).GetAllHandler }
+func TalksAPIAddHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).AddHandler }
+func TalksAPIUpdateHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).UpdateHandler }
+func TalksAPIDeleteHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).DeleteHandler }
 
-// GetMeAPIController .
-func (sp *ServiceProvider) GetMeAPIController() *api.MeAPIController {
+// MeAPIController .
+func MeAPIController(ctx *JobContext) *api.MeAPIController {
 	return &api.MeAPIController{
-		UserService: sp.GetUserService(),
+		UserService: UserService(ctx),
 	}
 }
+func MeAPIHandler(ctx *JobContext) gin.HandlerFunc { return MeAPIController(ctx).Handler }
+func MeAPIChangePasswordHandler(ctx *JobContext) gin.HandlerFunc { return MeAPIController(ctx).ChangePasswordHandler }

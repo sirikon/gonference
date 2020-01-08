@@ -14,14 +14,14 @@ import (
 
 // Server .
 type Server struct {
-	ServiceProvider *ioc.ServiceProvider
+	JobContext *ioc.JobContext
 }
 
-type WrappedHandler func(scope *ioc.ServiceProvider) gin.HandlerFunc
+type WrappedHandler func(ctx *ioc.JobContext) ioc.Handler
 
-func (s *Server) wrapHandler(wh WrappedHandler) gin.HandlerFunc {
+func (s *Server) handle(wh func(ctx *ioc.JobContext) gin.HandlerFunc) gin.HandlerFunc {
 	return func (c *gin.Context) {
-		serviceProvider := c.MustGet("ServiceProvider").(*ioc.ServiceProvider)
+		serviceProvider := c.MustGet("JobContext").(*ioc.JobContext)
 		wh(serviceProvider)(c)
 	}
 }
@@ -44,52 +44,25 @@ func backofficeRoutes() gin.HandlerFunc {
 func (s *Server) publicRoutes(r *gin.Engine) {
 	publicAssetsBox := packr.New("public-assets", "./assets/public")
 
-	r.GET("/", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
-		return sp.GetIndexController().Handler
-	}))
+	r.GET("/", s.handle(ioc.IndexHandler))
+	r.GET("/talk/:id", s.handle(ioc.TalkHandler))
 
-	r.GET("/talk/:id", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
-		return sp.GetTalkController().Handler
-	}))
-
-	r.GET("/login", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
-		return sp.GetLoginController().GetHandler
-	}))
-
-	r.POST("/login", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
-		return sp.GetLoginController().PostHandler
-	}))
-
-	r.GET("/logout", s.wrapHandler(func (sp *ioc.ServiceProvider) gin.HandlerFunc {
-		return sp.GetLoginController().LogoutHandler
-	}))
+	r.GET("/login", s.handle(ioc.LoginGetHandler))
+	r.POST("/login", s.handle(ioc.LoginPostHandler))
+	r.GET("/logout", s.handle(ioc.LoginLogoutHandler))
 
 	r.StaticFS("/assets", publicAssetsBox)
 }
 
 func (s *Server) apiRoutes(r *gin.RouterGroup) {
-	r.GET("/api/me", s.wrapHandler(func(sp *ioc.ServiceProvider) gin.HandlerFunc {
-		return sp.GetMeAPIController().Handler
-	}))
-	r.POST("/api/me/change-password", s.wrapHandler(func(sp *ioc.ServiceProvider) gin.HandlerFunc {
-		return sp.GetMeAPIController().ChangePasswordHandler
-	}))
+	r.GET("/api/me", s.handle(ioc.MeAPIHandler))
+	r.POST("/api/me/change-password", s.handle(ioc.MeAPIChangePasswordHandler))
 
-	r.GET("/api/talks", s.wrapHandler(func(s *ioc.ServiceProvider) gin.HandlerFunc {
-		return s.GetTalksAPIController().GetAllHandler
-	}))
-	r.POST("/api/talks", s.wrapHandler(func(s *ioc.ServiceProvider) gin.HandlerFunc {
-		return s.GetTalksAPIController().AddHandler
-	}))
-	r.GET("/api/talks/:id", s.wrapHandler(func(s *ioc.ServiceProvider) gin.HandlerFunc {
-		return s.GetTalksAPIController().GetHandler
-	}))
-	r.PUT("/api/talks/:id", s.wrapHandler(func(s *ioc.ServiceProvider) gin.HandlerFunc {
-		return s.GetTalksAPIController().UpdateHandler
-	}))
-	r.DELETE("/api/talks/:id", s.wrapHandler(func(s *ioc.ServiceProvider) gin.HandlerFunc {
-		return s.GetTalksAPIController().DeleteHandler
-	}))
+	r.GET("/api/talks", s.handle(ioc.TalksAPIGetAllHandler))
+	r.POST("/api/talks", s.handle(ioc.TalksAPIAddHandler))
+	r.GET("/api/talks/:id", s.handle(ioc.TalksAPIGetHandler))
+	r.PUT("/api/talks/:id", s.handle(ioc.TalksAPIUpdateHandler))
+	r.DELETE("/api/talks/:id", s.handle(ioc.TalksAPIDeleteHandler))
 }
 
 // Run .
@@ -102,8 +75,8 @@ func (s *Server) Run(port string) error {
 	r.Use(sessions.Sessions("gonference", store))
 
 	r.Use(func(c *gin.Context) {
-		scope := s.ServiceProvider.CreateScope()
-		c.Set("ServiceProvider", scope)
+		scope := s.JobContext.CreateScope()
+		c.Set("JobContext", scope)
 	})
 
 	secured := r.Group("")
