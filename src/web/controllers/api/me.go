@@ -16,7 +16,7 @@ type MeAPIController struct {
 // Handler .
 func (s *MeAPIController) Handler(ctx *gin.Context) {
 	user := User{
-		Username: session.GetSession(ctx).GetUsername(),
+		Username: session.GetSession(ctx).Get(session.UsernameKey),
 	}
 
 	ctx.JSON(http.StatusOK, user)
@@ -34,7 +34,7 @@ func (s *MeAPIController) ChangePasswordHandler(ctx *gin.Context) {
 		_ = ctx.Error(errors.New("Passwords doesn't match"))
 	}
 
-	err = s.UserService.ChangePassword(session.GetSession(ctx).GetUsername(), vm.CurrentPassword, vm.NewPassword)
+	err = s.UserService.ChangePassword(session.GetSession(ctx).Get(session.UsernameKey), vm.CurrentPassword, vm.NewPassword)
 	if err != nil {
 		_ = ctx.Error(err)
 		return

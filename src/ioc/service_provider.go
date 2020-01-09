@@ -11,11 +11,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-type Handler interface {
-	Handler(ctx *gin.Context)
-}
-
-// ServiceProvider .
+// JobContext .
 type JobContext struct {
 	UID string
 	dbConnection *sqlx.DB
