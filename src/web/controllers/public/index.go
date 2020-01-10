@@ -3,6 +3,7 @@ package public
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/sirikon/gonference/src/domain"
+	"github.com/sirikon/gonference/src/utils"
 	"github.com/sirikon/gonference/src/web/templates"
 )
 
@@ -13,15 +14,6 @@ type IndexController struct {
 
 // Handler .
 func (s *IndexController) Handler(c *gin.Context) {
-	handleErr := func(err error) {
-		_ = c.Error(err)
-	}
-
-	talks, err := s.TalkRepository.GetAll()
-	if err != nil {
-		handleErr(err)
-		return
-	}
-
+	talks, err := s.TalkRepository.GetAll(); utils.HandleErr(err)
 	templates.ReplyTemplate(c, "index", talks)
 }

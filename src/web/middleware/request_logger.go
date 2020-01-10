@@ -8,5 +8,5 @@ import (
 
 func RequestLogger(r *gin.Engine)  {
 	log := logrus.New()
-	r.Use(ginlogrus.Logger(log), gin.Recovery())
+	r.Use(ginlogrus.Logger(log))
 }
