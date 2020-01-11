@@ -28,7 +28,7 @@ function Talks() {
     view: () => m('div', [
       level(
         m('h1', { class: 'title is-3' }, 'Talks'),
-        m('a[href=/talks/new]', { oncreate: m.route.link }, [
+        m('a[href=#!/talks/new]', { oncreate: m.route.link }, [
           m('button', { class: 'button is-primary' }, 'New'),
         ]),
       ),
@@ -53,7 +53,7 @@ function Talks() {
             m('td', talk.track),
             m('td', talk.when),
             m('td', [
-              m(`a[href=/talks/${talk.id}].button.is-small`, { oncreate: m.route.link }, 'Edit'),
+              m(`a[href=#!/talks/${talk.id}].button.is-small`, { oncreate: m.route.link }, 'Edit'),
               m('a.button.is-small.is-danger', { onclick: () => deleteTalk(talk.id) }, 'Delete'),
             ]),
           ])),

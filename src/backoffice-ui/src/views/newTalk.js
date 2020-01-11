@@ -27,7 +27,8 @@ function NewTalk() {
     m.request({
       method: 'POST',
       url: '/api/talks',
-      data: talk,
+      body: talk,
+      withCredentials: true
     })
       .then(() => {
         window.history.back();

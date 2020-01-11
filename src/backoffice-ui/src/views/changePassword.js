@@ -13,7 +13,8 @@ function ChangePasswordView() {
     m.request({
       method: 'POST',
       url: '/api/me/change-password',
-      data,
+      body: data,
+      withCredentials: true
     })
       .then(() => {
         window.history.back();

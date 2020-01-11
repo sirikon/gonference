@@ -12,7 +12,7 @@ function getDisplayedRoutes() {
 }
 
 function navbarTitle(text) {
-  return m('a', { class: 'navbar-item', href: '/admin/' }, [
+  return m('a', { class: 'navbar-item', href: '#!/' }, [
     m('h1', { class: 'title is-4' }, text),
   ]);
 }
@@ -35,7 +35,7 @@ function navbarMenuItems() {
   return getDisplayedRoutes().map((route) => {
     const isActiveClass = route.path === m.route.get() ? 'is-active' : '';
     return m('div', { class: 'navbar-start' }, [
-      m(`a[href=${route.path}]`, { class: `navbar-item ${isActiveClass}`, oncreate: m.route.link }, route.name),
+      m(`a[href=#!${route.path}]`, { class: `navbar-item ${isActiveClass}`, oncreate: m.route.link }, route.name),
     ]);
   });
 }

@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gin-gonic/gin"
+	"gonference/pkg/utils"
 	"net/http"
 	"strconv"
 
@@ -32,25 +33,13 @@ func (s *TalksAPIController) GetAllHandler(ctx *gin.Context) {
 
 // AddHandler .
 func (s *TalksAPIController) AddHandler(ctx *gin.Context) {
-	handleErr := func(err error) {
-		_ = ctx.Error(err)
-	}
-
 	decoder := json.NewDecoder(ctx.Request.Body)
 	var vm AddTalkViewModel
-	err := decoder.Decode(&vm)
-	if err != nil {
-		handleErr(err)
-		return
-	}
+	utils.HandleErr(decoder.Decode(&vm))
 
 	talk := vm.ToDomainTalk()
 
-	err = s.TalkRepository.Add(talk)
-	if err != nil {
-		handleErr(err)
-		return
-	}
+	utils.HandleErr(s.TalkRepository.Add(talk))
 
 	ctx.Status(http.StatusOK)
 }

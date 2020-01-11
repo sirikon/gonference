@@ -38,7 +38,8 @@ function EditTalk(initialVnode) {
     m.request({
       method: 'PUT',
       url: `/api/talks/${talkId}`,
-      data: talk,
+      body: talk,
+      withCredentials: true
     })
       .then(() => {
         window.history.back();
