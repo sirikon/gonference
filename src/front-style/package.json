@@ -1,15 +1,9 @@
 {
-  "name": "front-style",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "dart-sass --watch ./src/main.scss ../web/assets/public/style.css",
-    "build": "dart-sass ./src/main.scss ../web/assets/public/style.css"
+    "start": "sass --watch ./src/main.scss ./dist/style.css",
+    "build": "sass ./src/main.scss ./dist/style.css"
   },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "dart-sass": "^1.20.1"
+  "devDependencies": {
+    "sass": "^1.24.4"
   }
 }

@@ -1,4 +1,6 @@
 #!/bin/sh
 
-cd $DEVENV_PATH
-docker-compose down
+(cd ./docker && docker-compose \
+  -p gonference-devenv \
+  -f devenv.yml \
+  down)

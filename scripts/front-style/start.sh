@@ -1,4 +1,3 @@
 #!/bin/sh
 
-cd $FRONT_STYLE_PATH
-npm start
+(cd "${FRONT_STYLE_PATH}" && npm start)

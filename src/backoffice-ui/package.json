@@ -1,23 +1,14 @@
 {
-  "name": "backoffice-ui",
-  "version": "1.0.0",
-  "description": "",
-  "main": "src/main.js",
-  "scripts": {
-    "build": "mkdir -p ../web/assets/backoffice/js && cp ./node_modules/mithril/mithril.min.js ../web/assets/backoffice/js/mithril.min.js && rollup -c",
-    "start": "npm run build -- -w",
-    "lint": "eslint src/**",
-    "lint:fix": "npm run lint -- --fix"
-  },
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "eslint": "^5.16.0",
-    "eslint-config-airbnb-base": "^13.1.0",
-    "eslint-plugin-import": "^2.17.1",
-    "rollup": "^1.10.0"
-  },
-  "dependencies": {
-    "mithril": "~1.1.6"
-  }
+    "scripts": {
+        "start": "parcel watch src/index.html",
+        "build": "rm -rf dist/ && parcel build src/index.html"
+    },
+    "devDependencies": {
+        "bulma": "^0.8.0",
+        "parcel": "^1.12.4",
+        "sass": "^1.24.4"
+    },
+    "dependencies": {
+        "mithril": "^2.0.4"
+    }
 }

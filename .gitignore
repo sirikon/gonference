@@ -13,9 +13,8 @@
 
 # Custom
 /out/gonference
-/src/web/assets/backoffice/js/
-/src/web/assets/public/
-/src/backoffice-ui/node_modules/
+/src/app/pkg/assets/backoffice/js/
+/src/app/pkg/assets/public/
 /src/front-style/node_modules/
 /.idea
 /.vscode

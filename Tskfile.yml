@@ -1,5 +1,6 @@
 name: Gonference
 env:
+  GOPROXY: direct
   DATABASE_URL: "postgresql://postgres:12345@localhost/gonference?sslmode=disable"
   PORT: 3000
   DEVENV_PATH: docker/gonference-devenv
