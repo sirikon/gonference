@@ -3,13 +3,13 @@
 Requires `tsk` to run the project's tasks. More info [here](https://github.com/Sirikon/tsk).
 
 ```bash
-tsk install # Install dependencies
-tsk backoffice build # Build backoffice UI
-tsk devenv up # Start development environment (Postgre SQL)
-tsk run # Run the application
 tsk # List available commands
+tsk backoffice-ui build # Build backoffice UI
+tsk front-style build # Build front CSS
+tsk devenv up # Start development environment (PostgreSQL)
+tsk run # Run the application
 ```
 
 Now open:
 - http://localhost:3000
-- http://localhost:3000/admin
+- http://localhost:3000/login
