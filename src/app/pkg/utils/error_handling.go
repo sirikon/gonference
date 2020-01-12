@@ -6,7 +6,7 @@ func HandlePanic(err *error) {
 	}
 }
 
-func HandleErr(err error)  {
+func Check(err error)  {
 	if err != nil {
 		panic(err)
 	}

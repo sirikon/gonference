@@ -3,7 +3,7 @@ package public
 import (
 	"github.com/gin-gonic/gin"
 	"gonference/pkg/domain"
-	"gonference/pkg/utils"
+	u "gonference/pkg/utils"
 	"gonference/pkg/web/templates"
 )
 
@@ -14,6 +14,6 @@ type IndexController struct {
 
 // Handler .
 func (s *IndexController) Handler(c *gin.Context) {
-	talks, err := s.TalkRepository.GetAll(); utils.HandleErr(err)
+	talks, err := s.TalkRepository.GetAll(); u.Check(err)
 	templates.ReplyTemplate(c, "index", talks)
 }

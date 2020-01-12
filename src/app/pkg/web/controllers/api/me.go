@@ -2,8 +2,8 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/pkg/errors"
 	"gonference/pkg/domain"
+	"gonference/pkg/utils"
 	"gonference/pkg/web/session"
 	"net/http"
 )
@@ -24,21 +24,18 @@ func (s *MeAPIController) Handler(ctx *gin.Context) {
 
 func (s *MeAPIController) ChangePasswordHandler(ctx *gin.Context) {
 	var vm ChangePasswordViewModel
-	err := ctx.BindJSON(&vm)
-	if err != nil {
-		_ = ctx.Error(err)
-		return
-	}
+	utils.Check(ctx.BindJSON(&vm))
 
-	if vm.NewPassword != vm.RepeatNewPassword {
-		_ = ctx.Error(errors.New("Passwords doesn't match"))
-	}
+	checkNewPasswordMatchesWithRepetition(vm)
 
-	err = s.UserService.ChangePassword(session.GetSession(ctx).Get(session.UsernameKey), vm.CurrentPassword, vm.NewPassword)
-	if err != nil {
-		_ = ctx.Error(err)
-		return
-	}
+	username := session.GetSession(ctx).Get(session.UsernameKey)
+	utils.Check(s.UserService.ChangePassword(username, vm.CurrentPassword, vm.NewPassword))
 
 	ctx.Status(http.StatusOK)
+}
+
+func checkNewPasswordMatchesWithRepetition(vm ChangePasswordViewModel)  {
+	if vm.NewPassword != vm.RepeatNewPassword {
+		panic(UserError{"New passwords doesn't match"})
+	}
 }

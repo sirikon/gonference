@@ -30,7 +30,7 @@ func (s *Session) Get(key Key) string {
 
 func (s *Session) Set(key Key, value string) {
 	s.internalSession.Set(string(key), value)
-	utils.HandleErr(s.internalSession.Save())
+	utils.Check(s.internalSession.Save())
 }
 
 func GetSession(ctx *gin.Context) *Session {

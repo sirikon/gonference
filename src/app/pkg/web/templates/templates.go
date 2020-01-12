@@ -27,12 +27,12 @@ func renderTemplate(templateName string, data interface{}) (result []byte, err e
 	content := getTemplateContent(templateName)
 	tmpl, err := template.New(templateName).
 		Funcs(templateFunctions()).
-		Parse(content); utils.HandleErr(err)
+		Parse(content); utils.Check(err)
 
 	includeCommonTemplates(tmpl)
 
 	var buffer bytes.Buffer
-	utils.HandleErr(tmpl.ExecuteTemplate(&buffer, "layout", data))
+	utils.Check(tmpl.ExecuteTemplate(&buffer, "layout", data))
 
 	return buffer.Bytes(), nil
 }
@@ -47,13 +47,13 @@ func templateFunctions() template.FuncMap {
 
 func includeCommonTemplates(tmpl *template.Template)  {
 	var err error
-	_, err = tmpl.Parse(getTemplateContent("_layout")); utils.HandleErr(err)
-	_, err = tmpl.Parse(getTemplateContent("_icons")); utils.HandleErr(err)
+	_, err = tmpl.Parse(getTemplateContent("_layout")); utils.Check(err)
+	_, err = tmpl.Parse(getTemplateContent("_icons")); utils.Check(err)
 }
 
 func getTemplateContent(templateName string) string {
 	box := packr.New("template-files", "./files")
 	content, err := box.FindString(templateName + ".html")
-	utils.HandleErr(err)
+	utils.Check(err)
 	return content
 }
