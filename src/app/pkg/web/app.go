@@ -42,14 +42,16 @@ func (s *Server) adminRoutes(r *gin.RouterGroup) {
 	middleware.RequireAuthRole(r, "admin")
 	r.GET("/admin/*filepath", backofficeAssets())
 
-	r.GET("/api/me", handle(ioc.MeAPIHandler))
-	r.POST("/api/me/change-password", handle(ioc.MeAPIChangePasswordHandler))
+	api := r.Group("/api")
+	middleware.APIErrorHandling(api)
+	api.GET("/me", handle(ioc.MeAPIHandler))
+	api.POST("/me/change-password", handle(ioc.MeAPIChangePasswordHandler))
 
-	r.GET("/api/talks", handle(ioc.TalksAPIGetAllHandler))
-	r.POST("/api/talks", handle(ioc.TalksAPIAddHandler))
-	r.GET("/api/talks/:id", handle(ioc.TalksAPIGetHandler))
-	r.PUT("/api/talks/:id", handle(ioc.TalksAPIUpdateHandler))
-	r.DELETE("/api/talks/:id", handle(ioc.TalksAPIDeleteHandler))
+	api.GET("/talks", handle(ioc.TalksAPIGetAllHandler))
+	api.POST("/talks", handle(ioc.TalksAPIAddHandler))
+	api.GET("/talks/:id", handle(ioc.TalksAPIGetHandler))
+	api.PUT("/talks/:id", handle(ioc.TalksAPIUpdateHandler))
+	api.DELETE("/talks/:id", handle(ioc.TalksAPIDeleteHandler))
 }
 
 func backofficeAssets() gin.HandlerFunc {

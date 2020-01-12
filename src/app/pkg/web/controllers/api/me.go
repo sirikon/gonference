@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gonference/pkg/domain"
 	"gonference/pkg/utils"
+	"gonference/pkg/web/models"
 	"gonference/pkg/web/session"
 	"net/http"
 )
@@ -36,6 +37,6 @@ func (s *MeAPIController) ChangePasswordHandler(ctx *gin.Context) {
 
 func checkNewPasswordMatchesWithRepetition(vm ChangePasswordViewModel)  {
 	if vm.NewPassword != vm.RepeatNewPassword {
-		panic(UserError{"New passwords doesn't match"})
+		panic(models.UserError{"New passwords doesn't match"})
 	}
 }
