@@ -12,9 +12,5 @@
 *.out
 
 # Custom
-/out/gonference
-/src/app/pkg/assets/backoffice/js/
-/src/app/pkg/assets/public/
-/src/front-style/node_modules/
 /.idea
 /.vscode

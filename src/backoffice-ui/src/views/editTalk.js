@@ -2,8 +2,9 @@ import m from 'mithril';
 import TalkForm from '../components/talkForm';
 import level from '../components/bulma/level';
 import ErrorBox from '../components/errorBox';
+import {objectToFormData} from "../utils/utils";
 
-function EditTalk(initialVnode) {
+export default function EditTalk(initialVnode) {
   const { talkId } = initialVnode.attrs;
 
   let talk = {
@@ -12,6 +13,7 @@ function EditTalk(initialVnode) {
     description: '',
     speakerName: '',
     speakerTitle: '',
+    speakerImage: null,
     track: '',
     when: new Date(),
   };
@@ -35,10 +37,11 @@ function EditTalk(initialVnode) {
 
   function save() {
     error = '';
+    const formData = objectToFormData(talk);
     m.request({
       method: 'PUT',
       url: `/api/talks/${talkId}`,
-      body: talk,
+      body: formData,
       withCredentials: true
     })
       .then(() => {
@@ -64,5 +67,3 @@ function EditTalk(initialVnode) {
     ]),
   };
 }
-
-export default EditTalk;

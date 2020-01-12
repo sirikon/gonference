@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gonference/pkg/utils"
 	"net/http"
+	"path/filepath"
 	"strconv"
 
 	"gonference/pkg/domain"
@@ -23,7 +24,7 @@ func (s *TalksAPIController) GetAllHandler(ctx *gin.Context) {
 // AddHandler .
 func (s *TalksAPIController) AddHandler(ctx *gin.Context) {
 	var vm AddTalkViewModel
-	utils.Check(ctx.BindJSON(&vm))
+	utils.Check(ctx.Bind(&vm))
 	talk := vm.ToDomainTalk()
 	utils.Check(s.TalkRepository.Add(talk))
 	ctx.Status(http.StatusOK)
@@ -54,7 +55,9 @@ func (s *TalksAPIController) UpdateHandler(ctx *gin.Context) {
 	talkID, err := strconv.Atoi(talkIDStr); utils.Check(err)
 
 	var vm UpdateTalkViewModel
-	utils.Check(ctx.BindJSON(&vm))
+	utils.Check(ctx.Bind(&vm))
+
+	updateSpeakerImageIfPresent(talkID, ctx)
 
 	vm.ID = talkID
 	talk := vm.ToDomainTalk()
@@ -76,4 +79,11 @@ func (s *TalksAPIController) DeleteHandler(ctx *gin.Context) {
 	utils.Check(s.TalkRepository.Delete(talkID))
 
 	ctx.Status(http.StatusOK)
+}
+
+func updateSpeakerImageIfPresent(talkID int, ctx *gin.Context) {
+	if len(ctx.Request.MultipartForm.File) == 0 { return }
+	file, err := ctx.FormFile("speakerImage"); utils.Check(err)
+	ext := filepath.Ext(file.Filename)
+	utils.Check(ctx.SaveUploadedFile(file, "uploads/talk-" + strconv.Itoa(talkID) + "-speaker-image" + ext))
 }

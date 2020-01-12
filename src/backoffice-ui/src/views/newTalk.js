@@ -1,21 +1,17 @@
 import m from 'mithril';
+
 import TalkForm from '../components/talkForm';
 import level from '../components/bulma/level';
 import ErrorBox from '../components/errorBox';
+import { objectToFormData } from '../utils/utils';
 
-function now() {
-  const d = new Date();
-  d.setSeconds(0);
-  d.setMilliseconds(0);
-  return d;
-}
-
-function NewTalk() {
+export default function NewTalk() {
   const talk = {
     name: '',
     description: '',
     speakerName: '',
     speakerTitle: '',
+    speakerImage: null,
     track: '',
     when: now(),
   };
@@ -24,10 +20,11 @@ function NewTalk() {
 
   function save() {
     error = '';
+    const formData = objectToFormData(talk);
     m.request({
       method: 'POST',
       url: '/api/talks',
-      body: talk,
+      body: formData,
       withCredentials: true
     })
       .then(() => {
@@ -53,4 +50,9 @@ function NewTalk() {
   };
 }
 
-export default NewTalk;
+function now() {
+  const d = new Date();
+  d.setSeconds(0);
+  d.setMilliseconds(0);
+  return d;
+}

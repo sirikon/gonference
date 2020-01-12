@@ -41,6 +41,14 @@ function timeElement({ value, onchange, size }) {
   });
 }
 
+function fileElement({ onchange, size }) {
+  return m('input.input', {
+    type: 'file',
+    class: size ? `is-${size}` : '',
+    onchange: e => onchange(e.target.files[0])
+  })
+}
+
 function pad(num, size) {
   let s = `${num}`;
   while (s.length < size) s = `0${s}`;
@@ -96,7 +104,7 @@ function getTimezoneText(value) {
 }
 
 function input({
-  label, value, onchange, size, multiline, date, time, secure,
+  label, value, onchange, size, multiline, date, time, secure, file,
 }) {
   let internalInput = null;
 
@@ -126,6 +134,8 @@ function input({
     internalInput = dateElement({ value, onchange, size });
   } else if (time) {
     internalInput = timeElement({ value, onchange, size });
+  } else if (file) {
+    internalInput = fileElement({ onchange, size })
   } else {
     internalInput = textElement({
       label, value, onchange, size, type: secure ? 'password' : 'text',

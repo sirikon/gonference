@@ -27,6 +27,11 @@ const TalkForm = {
         onchange: (value) => { vnode.attrs.talk.speakerTitle = value; },
       }),
       input({
+        label: 'Speaker Image',
+        file: true,
+        onchange: (value) => { vnode.attrs.talk.speakerImage = value; console.log(value); },
+      }),
+      input({
         label: 'Track',
         value: vnode.attrs.talk.track,
         onchange: (value) => { vnode.attrs.talk.track = value; },

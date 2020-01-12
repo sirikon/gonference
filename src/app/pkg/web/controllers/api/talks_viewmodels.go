@@ -7,23 +7,23 @@ import (
 
 // AddTalkViewModel .
 type AddTalkViewModel struct {
-	Name         string    `json:"name"`
-	Description  string    `json:"description"`
-	SpeakerName  string    `json:"speakerName"`
-	SpeakerTitle string    `json:"speakerTitle"`
-	Track        string    `json:"track"`
-	When         time.Time `json:"when"`
+	Name         string    `form:"name"`
+	Description  string    `form:"description"`
+	SpeakerName  string    `form:"speakerName"`
+	SpeakerTitle string    `form:"speakerTitle"`
+	Track        string    `form:"track"`
+	When         time.Time `form:"when"`
 }
 
 // UpdateTalkViewModel .
 type UpdateTalkViewModel struct {
-	ID           int       `json:"id"`
-	Name         string    `json:"name"`
-	Description  string    `json:"description"`
-	SpeakerName  string    `json:"speakerName"`
-	SpeakerTitle string    `json:"speakerTitle"`
-	Track        string    `json:"track"`
-	When         time.Time `json:"when"`
+	ID           int       `form:"id"`
+	Name         string    `form:"name"`
+	Description  string    `form:"description"`
+	SpeakerName  string    `form:"speakerName"`
+	SpeakerTitle string    `form:"speakerTitle"`
+	Track        string    `form:"track"`
+	When         time.Time `form:"when"`
 }
 
 // ToDomainTalk .
