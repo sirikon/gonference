@@ -28,13 +28,16 @@ func (tr *TalkRepository) GetAll() ([]domain.Talk, error) {
 }
 
 // Add .
-func (tr *TalkRepository) Add(domainTalk domain.Talk) error {
+func (tr *TalkRepository) Add(domainTalk domain.Talk) (int, error) {
 	talk := DomainTalkToTalk(domainTalk)
-	query := "INSERT INTO talk (name, description, speaker_name, speaker_title, track, when_date) VALUES ($1, $2, $3, $4, $5, $6)"
+	var id int
+	query := "INSERT INTO talk (name, description, speaker_name, speaker_title, track, when_date) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id"
 
 	tr.Logger.Info("Executing query '" + query + "' with name '" + talk.Name + "'")
-	_, err := tr.DB.Exec(query, talk.Name, talk.Description, talk.SpeakerName, talk.SpeakerTitle, talk.Track, talk.When)
-	return err
+	err := tr.DB.
+		QueryRow(query, talk.Name, talk.Description, talk.SpeakerName, talk.SpeakerTitle, talk.Track, talk.When).
+		Scan(&id)
+	return id, err
 }
 
 // Get .

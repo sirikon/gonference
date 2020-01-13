@@ -1,0 +1,26 @@
+{{define "content"}}
+
+    <div class="x-talk">
+        <section class="x-talk-section is-boxed">
+            <h1 class="x-talk-title">{{.talk.Name}}</h1>
+            <div class="x-talk-info">
+                <span class="x-talk-track">{{.talk.Track}}</span>
+                <span class="x-talk-when">{{.talk.When.Format "15:04"}}</span>
+            </div>
+            <div class="x-talk-description">{{markdown .talk.Description}}</div>
+        </section>
+
+        <section class="x-talk-section x-talk-speaker">
+            {{if .speakerImageFileName}}
+                <div class="x-talk-speaker-image" style="background-image: url({{.speakerImageFileName}});"></div>
+            {{end}}
+            <div class="x-talk-speaker-info">
+                <span class="x-talk-speaker-name">{{.talk.SpeakerName}}</span>
+                <span class="x-talk-speaker-title">{{.talk.SpeakerTitle}}</span>
+            </div>
+        </section>
+    </div>
+
+{{end}}
+
+{{define "title"}}Talk - {{.talk.Name}}{{end}}

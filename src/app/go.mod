@@ -8,12 +8,10 @@ require (
 	github.com/gobuffalo/packr/v2 v2.2.0
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/karrick/godirwalk v1.8.2 // indirect
-	github.com/lib/pq v1.0.0
-	github.com/logrusorgru/aurora v0.0.0-20200102142835-e9ef32dff381 // indirect
+	github.com/lib/pq v1.3.0
 	github.com/pkg/errors v0.8.1
 	github.com/russross/blackfriday v2.0.0+incompatible
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
-	github.com/sirikon/tsk v0.1.2 // indirect
 	github.com/sirupsen/logrus v1.4.1
 	github.com/toorop/gin-logrus v0.0.0-20190324082946-8887861896bb
 	golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 // indirect

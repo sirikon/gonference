@@ -36,6 +36,7 @@ func (s *Server) publicRoutes(r *gin.Engine) {
 	r.GET("/logout", handle(ioc.LoginLogoutHandler))
 
 	r.StaticFS("/assets", assets.FrontStyle)
+	r.StaticFS("/uploads", http.Dir("uploads/"))
 }
 
 func (s *Server) adminRoutes(r *gin.RouterGroup) {

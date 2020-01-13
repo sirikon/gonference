@@ -4,7 +4,7 @@ package domain
 type TalkRepository interface {
 	GetAll() ([]Talk, error)
 	Get(id int) (Talk, error)
-	Add(talk Talk) error
+	Add(talk Talk) (int, error)
 	Update(talk Talk) error
 	Delete(id int) error
 }

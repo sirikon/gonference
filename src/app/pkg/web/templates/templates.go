@@ -3,20 +3,15 @@ package templates
 import (
 	"bytes"
 	"github.com/gin-gonic/gin"
-	"github.com/gobuffalo/packr/v2"
 	"github.com/russross/blackfriday"
+	"gonference/pkg/assets"
 	"gonference/pkg/utils"
 	"html/template"
 	"net/http"
 )
 
 func ReplyTemplate(c *gin.Context, templateName string, data interface{}) {
-	result, err := renderTemplate(templateName, data)
-	if err != nil {
-		_ = c.Error(err)
-		return
-	}
-
+	result, err := renderTemplate(templateName, data); utils.Check(err)
 	c.Data(http.StatusOK, "text/html", result)
 }
 
@@ -52,8 +47,7 @@ func includeCommonTemplates(tmpl *template.Template)  {
 }
 
 func getTemplateContent(templateName string) string {
-	box := packr.New("template-files", "./files")
-	content, err := box.FindString(templateName + ".html")
+	content, err := assets.WebTemplates.FindString(templateName + ".html")
 	utils.Check(err)
 	return content
 }

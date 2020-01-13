@@ -26,7 +26,8 @@ func (s *TalksAPIController) AddHandler(ctx *gin.Context) {
 	var vm AddTalkViewModel
 	utils.Check(ctx.Bind(&vm))
 	talk := vm.ToDomainTalk()
-	utils.Check(s.TalkRepository.Add(talk))
+	id, err := s.TalkRepository.Add(talk); utils.Check(err)
+	updateSpeakerImageIfPresent(id, ctx)
 	ctx.Status(http.StatusOK)
 }
 
