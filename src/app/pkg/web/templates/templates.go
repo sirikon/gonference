@@ -3,7 +3,7 @@ package templates
 import (
 	"bytes"
 	"github.com/gin-gonic/gin"
-	"github.com/russross/blackfriday"
+	"github.com/yuin/goldmark"
 	"gonference/pkg/assets"
 	"gonference/pkg/utils"
 	"html/template"
@@ -35,9 +35,15 @@ func renderTemplate(templateName string, data interface{}) (result []byte, err e
 func templateFunctions() template.FuncMap {
 	return template.FuncMap{
 		"markdown": func(text string) template.HTML {
-			return template.HTML(blackfriday.Run([]byte(text)))
+			return template.HTML(markdownToHTML(text))
 		},
 	}
+}
+
+func markdownToHTML(source string) string {
+	var buf bytes.Buffer
+	utils.Check(goldmark.Convert([]byte(source), &buf))
+	return buf.String()
 }
 
 func includeCommonTemplates(tmpl *template.Template)  {
