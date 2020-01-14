@@ -19,6 +19,23 @@
                 <span class="x-talk-speaker-title">{{.talk.SpeakerTitle}}</span>
             </div>
         </section>
+
+        <section class="x-talk-section is-boxed">
+            <h2 class="x-talk-section-title">Haz una pregunta</h2>
+            <form action="">
+                <textarea class="x-talk-textarea" name="question" maxlength="600" placeholder="¿Qué quieres preguntar?"></textarea>
+                <input class="x-talk-button" type="submit" value="Enviar">
+            </form>
+        </section>
+
+        <section class="x-talk-section is-boxed">
+            <h2 class="x-talk-section-title">Valora la charla</h2>
+            <form action="">
+                {{ template "components/stars" }}
+                <textarea class="x-talk-textarea" name="comment" maxlength="600" placeholder="Deja un comentario... si lo ves oportuno :)"></textarea>
+                <input class="x-talk-button" type="submit" value="Enviar">
+            </form>
+        </section>
     </div>
 
 {{end}}

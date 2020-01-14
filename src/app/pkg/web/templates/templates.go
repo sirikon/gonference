@@ -44,6 +44,7 @@ func includeCommonTemplates(tmpl *template.Template)  {
 	var err error
 	_, err = tmpl.Parse(getTemplateContent("_layout")); utils.Check(err)
 	_, err = tmpl.Parse(getTemplateContent("_icons")); utils.Check(err)
+	_, err = tmpl.Parse(getTemplateContent("_components")); utils.Check(err)
 }
 
 func getTemplateContent(templateName string) string {

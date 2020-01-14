@@ -1,0 +1,17 @@
+{{define "components/star"}}
+    <label for="star-{{.}}">
+        {{ template "icons/star" }}
+    </label>
+    <input id="star-{{.}}" type="radio" name="stars" value="{{.}}" {{if (eq . 3) }}checked="checked"{{end}} >
+{{end}}
+
+
+{{define "components/stars"}}
+    <div class="x-stars">
+        {{ template "components/star" 1 }}
+        {{ template "components/star" 2 }}
+        {{ template "components/star" 3 }}
+        {{ template "components/star" 4 }}
+        {{ template "components/star" 5 }}
+    </div>
+{{end}}

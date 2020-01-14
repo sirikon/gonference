@@ -1,0 +1,25 @@
+.x-stars {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 300px;
+  margin: 10px auto;
+
+  label {
+    cursor: pointer;
+    
+    svg {
+      width: 40px;
+      height: 40px;
+      fill: var(--color-accent);
+    }
+  }
+
+  input {
+    display: none;
+    &:checked ~ label svg {
+      fill: rgba(0,0,0,0.05);
+    }
+  }
+
+}
