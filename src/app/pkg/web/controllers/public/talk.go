@@ -4,7 +4,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"gonference/pkg/domain"
 	"gonference/pkg/utils"
+	"gonference/pkg/web/session"
 	"gonference/pkg/web/templates"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -14,6 +16,7 @@ import (
 // TalkController .
 type TalkController struct {
 	TalkRepository domain.TalkRepository
+	RatingRepository domain.RatingRepository
 }
 
 // Handler .
@@ -25,6 +28,23 @@ func (s *TalkController) Handler(c *gin.Context) {
 		"talk": talk,
 		"speakerImageFileName": speakerImageFileName,
 	})
+}
+
+func (s *TalkController) PostRatingHandler(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id")); utils.Check(err)
+	visitorKey := session.GetSession(ctx).Get(session.VisitorKey)
+	var vm AddRatingViewModel
+	utils.Check(ctx.Bind(&vm))
+
+	rating := domain.Rating{
+		ID:         0,
+		TalkID:     id,
+		VisitorKey: visitorKey,
+		Stars:      vm.Stars,
+		Comment:    vm.Comment,
+	}
+	s.RatingRepository.Add(rating)
+	ctx.Redirect(http.StatusFound, "/talk/" + strconv.Itoa(id))
 }
 
 func getSpeakerImageFileName(talkID int) string {

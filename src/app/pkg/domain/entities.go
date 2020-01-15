@@ -15,6 +15,14 @@ type Talk struct {
 	When         time.Time `json:"when"`
 }
 
+type Rating struct {
+	ID int
+	TalkID int
+	VisitorKey string
+	Stars int
+	Comment string
+}
+
 type User struct {
 	Username string
 	Password string

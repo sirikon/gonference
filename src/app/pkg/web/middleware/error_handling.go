@@ -3,6 +3,7 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"gonference/pkg/web/models"
+	"runtime/debug"
 )
 
 func ErrorHandling(r *gin.Engine)  {
@@ -39,7 +40,7 @@ func getResponseForError(err interface{}) (int, string) {
 		message = v.Message
 	case error:
 		code = 500
-		message = v.Error()
+		message = v.Error() + "\n" + string(debug.Stack())
 	}
 
 	return code, message

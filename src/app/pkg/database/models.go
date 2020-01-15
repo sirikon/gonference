@@ -52,6 +52,24 @@ func DomainTalkToTalk(talk domain.Talk) TalkModel {
 	}
 }
 
+type RatingModel struct {
+	ID int `db:"id"`
+	TalkID int `db:"talk_id"`
+	VisitorKey string `db:"visitor_key"`
+	Stars int `db:"stars"`
+	Comment string `db:"comment"`
+}
+
+func DomainRatingToRating(rating domain.Rating) RatingModel {
+	return RatingModel{
+		ID:         rating.ID,
+		TalkID:     rating.TalkID,
+		VisitorKey: rating.VisitorKey,
+		Stars:      rating.Stars,
+		Comment:    rating.Comment,
+	}
+}
+
 type UserModel struct {
 	Username string `db:"username"`
 	Password string `db:"password"`

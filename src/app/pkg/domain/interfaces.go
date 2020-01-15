@@ -9,6 +9,10 @@ type TalkRepository interface {
 	Delete(id int) error
 }
 
+type RatingRepository interface {
+	Add(rating Rating)
+}
+
 // UserService .
 type UserService interface {
 	UserExists(username string) bool

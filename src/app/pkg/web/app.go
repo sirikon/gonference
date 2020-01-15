@@ -30,6 +30,7 @@ func (s *Server) Run(port string) error {
 func (s *Server) publicRoutes(r *gin.Engine) {
 	r.GET("/", handle(ioc.IndexHandler))
 	r.GET("/talk/:id", handle(ioc.TalkHandler))
+	r.POST("/talk/:id/rating", handle(ioc.TalkPostRatingHandler))
 
 	r.GET("/login", handle(ioc.LoginGetHandler))
 	r.POST("/login", handle(ioc.LoginPostHandler))
