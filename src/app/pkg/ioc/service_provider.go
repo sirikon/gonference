@@ -6,7 +6,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"gonference/pkg/database"
 	"gonference/pkg/domain"
-	"gonference/pkg/utils"
 	"gonference/pkg/web/controllers/api"
 	"gonference/pkg/web/controllers/public"
 )
@@ -14,6 +13,7 @@ import (
 // JobContext .
 type JobContext struct {
 	UID string
+	VisitorKey string
 	dbConnection *sqlx.DB
 }
 
@@ -25,16 +25,19 @@ func CreateJobContext(dbConnection *sqlx.DB) *JobContext {
 }
 
 // CreateScope .
-func (ctx *JobContext) CreateScope() *JobContext {
+func (ctx *JobContext) CreateScope(uid ,visitorKey string) *JobContext {
 	return &JobContext{
 		dbConnection: ctx.dbConnection,
-		UID:          utils.RandomString(32),
+		UID:          uid,
+		VisitorKey:   visitorKey,
 	}
 }
 
 // Logger .
 func Logger(ctx *JobContext) *logrus.Entry {
-	return logrus.WithField("job_uid", ctx.UID)
+	return logrus.
+		WithField("job_uid", ctx.UID).
+		WithField("visitor_key", ctx.VisitorKey)
 }
 
 // DbConnection .

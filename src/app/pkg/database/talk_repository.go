@@ -14,11 +14,10 @@ type TalkRepository struct {
 
 // GetAll .
 func (tr *TalkRepository) GetAll() ([]domain.Talk, error) {
-	talks := []TalkModel{}
+	var talks []TalkModel
 	query := "SELECT * FROM talk ORDER BY when_date ASC"
 
 	tr.Logger.Info("Executing query '" + query + "'")
-	tr.Logger.Info("Ameisin")
 	err := tr.DB.Select(&talks, query)
 	if err != nil {
 		return nil, err

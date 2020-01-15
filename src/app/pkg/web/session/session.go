@@ -9,6 +9,7 @@ import (
 type Key string
 
 const (
+	VisitorKey Key = "visitor"
 	UsernameKey Key = "username"
 	RoleKey Key = "role"
 )

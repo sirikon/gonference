@@ -37,6 +37,6 @@ func (s *MeAPIController) ChangePasswordHandler(ctx *gin.Context) {
 
 func checkNewPasswordMatchesWithRepetition(vm ChangePasswordViewModel)  {
 	if vm.NewPassword != vm.RepeatNewPassword {
-		panic(models.UserError{"New passwords doesn't match"})
+		panic(models.UserError{Message: "New passwords doesn't match"})
 	}
 }
