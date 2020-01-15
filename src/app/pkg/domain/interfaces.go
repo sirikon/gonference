@@ -11,6 +11,7 @@ type TalkRepository interface {
 
 type RatingRepository interface {
 	Add(rating Rating)
+	GetByTalkIdAndVisitorKey(talkID int, visitorKey string) *Rating
 }
 
 // UserService .

@@ -60,6 +60,16 @@ type RatingModel struct {
 	Comment string `db:"comment"`
 }
 
+func (rm RatingModel) ToDomainRating() domain.Rating {
+	return domain.Rating{
+		ID:         rm.ID,
+		TalkID:     rm.TalkID,
+		VisitorKey: rm.VisitorKey,
+		Stars:      rm.Stars,
+		Comment:    rm.Comment,
+	}
+}
+
 func DomainRatingToRating(rating domain.Rating) RatingModel {
 	return RatingModel{
 		ID:         rating.ID,

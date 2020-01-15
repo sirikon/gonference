@@ -21,12 +21,15 @@ type TalkController struct {
 
 // Handler .
 func (s *TalkController) Handler(c *gin.Context) {
+	visitorKey := session.GetSession(c).Get(session.VisitorKey)
 	id, err := strconv.Atoi(c.Param("id")); utils.Check(err)
 	talk, err := s.TalkRepository.Get(id); utils.Check(err)
+	rating := s.RatingRepository.GetByTalkIdAndVisitorKey(id, visitorKey)
 	speakerImageFileName := getSpeakerImageFileName(id)
 	templates.ReplyTemplate(c, "talk", gin.H{
 		"talk": talk,
 		"speakerImageFileName": speakerImageFileName,
+		"ratingDone": rating != nil,
 	})
 }
 
