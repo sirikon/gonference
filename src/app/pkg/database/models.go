@@ -80,6 +80,22 @@ func DomainRatingToRating(rating domain.Rating) RatingModel {
 	}
 }
 
+type QuestionModel struct {
+	ID int `db:"int"`
+	TalkID int `db:"talk_id"`
+	VisitorKey string `db:"visitor_key"`
+	Question string `db:"question"`
+}
+
+func DomainQuestionToQuestion(question domain.Question) QuestionModel {
+	return QuestionModel{
+		ID:         question.ID,
+		TalkID:     question.TalkID,
+		VisitorKey: question.VisitorKey,
+		Question:   question.Question,
+	}
+}
+
 type UserModel struct {
 	Username string `db:"username"`
 	Password string `db:"password"`

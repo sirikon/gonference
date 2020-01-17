@@ -14,6 +14,10 @@ type RatingRepository interface {
 	GetByTalkIdAndVisitorKey(talkID int, visitorKey string) *Rating
 }
 
+type QuestionRepository interface {
+	Add(question Question)
+}
+
 // UserService .
 type UserService interface {
 	UserExists(username string) bool

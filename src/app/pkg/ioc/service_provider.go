@@ -57,6 +57,10 @@ func RatingRepository(ctx *JobContext) domain.RatingRepository {
 	return &database.RatingRepository{DB:DbConnection(ctx)}
 }
 
+func QuestionRepository(ctx *JobContext) domain.QuestionRepository {
+	return &database.QuestionRepository{DB:DbConnection(ctx)}
+}
+
 func UserService(ctx *JobContext) domain.UserService {
 	return &database.UserService{
 		DB:     DbConnection(ctx),
@@ -77,10 +81,12 @@ func TalkController(ctx *JobContext) *public.TalkController {
 	return &public.TalkController{
 		TalkRepository: TalkRepository(ctx),
 		RatingRepository: RatingRepository(ctx),
+		QuestionRepository: QuestionRepository(ctx),
 	}
 }
 func TalkHandler(ctx *JobContext) gin.HandlerFunc { return TalkController(ctx).Handler }
 func TalkPostRatingHandler(ctx *JobContext) gin.HandlerFunc { return TalkController(ctx).PostRatingHandler }
+func TalkPostQuestionHandler(ctx *JobContext) gin.HandlerFunc { return TalkController(ctx).PostQuestionHandler }
 
 func LoginController(ctx *JobContext) *public.LoginController {
 	return &public.LoginController{

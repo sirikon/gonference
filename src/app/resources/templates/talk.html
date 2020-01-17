@@ -28,9 +28,16 @@
             </div>
         </section>
 
+        {{if .questionReceived}}
+            <div class="x-talk-notification">
+                {{ template "icons/check" }}
+                <span>¡Gracias por tu pregunta!</span>
+            </div>
+        {{end}}
+
         <section class="x-talk-section is-boxed">
             <h2 class="x-talk-section-title">Haz una pregunta</h2>
-            <form action="">
+            <form action="/talk/{{.talk.ID}}/question" method="POST" enctype="multipart/form-data">
                 <textarea class="x-talk-textarea" name="question" maxlength="600" placeholder="¿Qué quieres preguntar?"></textarea>
                 <input class="x-talk-button" type="submit" value="Enviar">
             </form>

@@ -17,6 +17,7 @@ import (
 type TalkController struct {
 	TalkRepository domain.TalkRepository
 	RatingRepository domain.RatingRepository
+	QuestionRepository domain.QuestionRepository
 }
 
 // Handler .
@@ -30,6 +31,7 @@ func (s *TalkController) Handler(c *gin.Context) {
 		"talk": talk,
 		"speakerImageFileName": speakerImageFileName,
 		"ratingDone": rating != nil,
+		"questionReceived": c.Query("q") == "1",
 	})
 }
 
@@ -48,6 +50,22 @@ func (s *TalkController) PostRatingHandler(ctx *gin.Context) {
 	}
 	s.RatingRepository.Add(rating)
 	ctx.Redirect(http.StatusFound, "/talk/" + strconv.Itoa(id))
+}
+
+func (s *TalkController) PostQuestionHandler(ctx *gin.Context) {
+	id, err := strconv.Atoi(ctx.Param("id")); utils.Check(err)
+	visitorKey := session.GetSession(ctx).Get(session.VisitorKey)
+	var vm AddQuestionViewModel
+	utils.Check(ctx.Bind(&vm))
+
+	question := domain.Question{
+		ID:         0,
+		TalkID:     id,
+		VisitorKey: visitorKey,
+		Question:   vm.Question,
+	}
+	s.QuestionRepository.Add(question)
+	ctx.Redirect(http.StatusFound, "/talk/" + strconv.Itoa(id) + "?q=1")
 }
 
 func getSpeakerImageFileName(talkID int) string {

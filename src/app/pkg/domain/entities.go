@@ -23,6 +23,13 @@ type Rating struct {
 	Comment string
 }
 
+type Question struct {
+	ID int
+	TalkID int
+	VisitorKey string
+	Question string
+}
+
 type User struct {
 	Username string
 	Password string

@@ -4,6 +4,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"gonference/pkg/assets"
 	"gonference/pkg/ioc"
+	"gonference/pkg/utils"
 	"gonference/pkg/web/middleware"
 	"net/http"
 )
@@ -28,9 +29,11 @@ func (s *Server) Run(port string) error {
 }
 
 func (s *Server) publicRoutes(r *gin.Engine) {
+	r.Use(customStatic)
 	r.GET("/", handle(ioc.IndexHandler))
 	r.GET("/talk/:id", handle(ioc.TalkHandler))
 	r.POST("/talk/:id/rating", handle(ioc.TalkPostRatingHandler))
+	r.POST("/talk/:id/question", handle(ioc.TalkPostQuestionHandler))
 
 	r.GET("/login", handle(ioc.LoginGetHandler))
 	r.POST("/login", handle(ioc.LoginPostHandler))
@@ -67,6 +70,14 @@ func backofficeAssets() gin.HandlerFunc {
 			_ = c.Error(err)
 		}
 		c.Data(http.StatusOK, "", data)
+	}
+}
+
+func customStatic(ctx *gin.Context)  {
+	filePath := "custom/static" + ctx.Request.URL.String()
+	if utils.FileExists(filePath) {
+		ctx.File(filePath)
+		ctx.Abort()
 	}
 }
 
