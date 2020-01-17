@@ -1,0 +1,10 @@
+version: '3.7'
+
+services:
+
+  app:
+    image: gonference
+    build:
+      context: ../../src
+    environment:
+      PORT: 80

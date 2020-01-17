@@ -1,0 +1,19 @@
+version: '3.7'
+
+services:
+
+  app:
+    environment:
+      DATABASE_URL: 'postgresql://postgres:12345@db/gonference?sslmode=disable'
+    ports:
+      - 127.0.0.1:3001:80
+
+  db:
+    image: postgres:11.6-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=gonference
+      - POSTGRES_PASSWORD=12345
+    ports:
+      - 127.0.0.1:5432:5432

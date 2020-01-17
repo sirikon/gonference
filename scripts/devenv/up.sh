@@ -1,6 +1,5 @@
 #!/bin/sh
 
-(cd ./docker && docker-compose \
+(cd ./docker/devenv && docker-compose \
   -p gonference-devenv \
-  -f devenv.yml \
   up -d)
