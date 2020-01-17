@@ -10,6 +10,9 @@ import (
 	"net/http"
 )
 
+const CUSTOM_META_FILEPATH = "custom/meta.html"
+const CUSTOM_META_POST_FILEPATH = "custom/meta-post.html"
+
 func ReplyTemplate(c *gin.Context, templateName string, data interface{}) {
 	result, err := renderTemplate(templateName, data); utils.Check(err)
 	c.Data(http.StatusOK, "text/html", result)
@@ -37,6 +40,17 @@ func templateFunctions() template.FuncMap {
 		"markdown": func(text string) template.HTML {
 			return template.HTML(markdownToHTML(text))
 		},
+		"custom_meta": fileIfExists(CUSTOM_META_FILEPATH),
+		"custom_meta_post": fileIfExists(CUSTOM_META_POST_FILEPATH),
+	}
+}
+
+func fileIfExists(filepath string) func() template.HTML {
+	return func() template.HTML {
+		if utils.FileExists(filepath) {
+			return template.HTML(utils.ReadFile(filepath))
+		}
+		return ""
 	}
 }
 

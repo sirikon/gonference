@@ -1,11 +1,20 @@
 package utils
 
-import "os"
+import (
+	"io/ioutil"
+	"os"
+)
 
-func FileExists(filename string) bool {
-	info, err := os.Stat(filename)
+func FileExists(filepath string) bool {
+	info, err := os.Stat(filepath)
 	if os.IsNotExist(err) {
 		return false
 	}
 	return !info.IsDir()
+}
+
+func ReadFile(filepath string) string {
+	file, err := os.Open(filepath); Check(err)
+	data, err := ioutil.ReadAll(file); Check(err)
+	return string(data)
 }
