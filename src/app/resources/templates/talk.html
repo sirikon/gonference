@@ -1,6 +1,14 @@
 {{define "content"}}
 
     <div class="x-talk">
+
+        {{if .ratingDone}}
+            <div class="x-talk-notification">
+                {{ template "icons/check" }}
+                <span>¡Gracias por tu feedback!</span>
+            </div>
+        {{end}}
+
         <section class="x-talk-section is-boxed">
             <h1 class="x-talk-title">{{.talk.Name}}</h1>
             <div class="x-talk-info">
@@ -28,9 +36,7 @@
             </form>
         </section>
 
-        {{if .ratingDone}}
-            <span>Thanks for the rating</span>
-        {{else}}
+        {{if not .ratingDone}}
             <section class="x-talk-section is-boxed">
                 <h2 class="x-talk-section-title">Valora la charla</h2>
                 <form action="/talk/{{.talk.ID}}/rating" method="POST" enctype="multipart/form-data">
