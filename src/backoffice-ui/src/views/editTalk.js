@@ -4,6 +4,8 @@ import level from '../components/bulma/level';
 import ErrorBox from '../components/errorBox';
 import {objectToFormData} from "../utils/utils";
 
+const CONFIRM_DELETE_TEXT = 'Esta acción eliminará la charla y toda su información. No puede revertirse. Está totalmente seguro/a?';
+
 export default function EditTalk(initialVnode) {
   const { talkId } = initialVnode.attrs;
 
@@ -35,6 +37,17 @@ export default function EditTalk(initialVnode) {
       });
   }
 
+  function deleteTalk(talkId) {
+    if (!confirm(CONFIRM_DELETE_TEXT)) { return; }
+    return m.request({
+      method: 'DELETE',
+      url: `/api/talks/${talkId}`,
+    })
+        .then(() => {
+          window.history.back();
+        });
+  }
+
   function save() {
     error = '';
     const formData = objectToFormData(talk);
@@ -60,10 +73,13 @@ export default function EditTalk(initialVnode) {
         m('h1', { class: 'title is-3' }, 'Edit Talk'),
         [
           m('button', { class: 'button', onclick: () => { window.history.back(); } }, 'Cancel'),
-          m('button', { class: 'button is-primary', onclick: () => save() }, 'Update'),
         ],
       ),
       m(TalkForm, { talk }),
+      level([], [
+        m('button.button.is-danger', { onclick: () => deleteTalk(talk.id) }, 'Delete'),
+        m('button.button.is-primary', { onclick: () => save() }, 'Update'),
+      ])
     ]),
   };
 }

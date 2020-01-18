@@ -1,8 +1,6 @@
 import m from 'mithril';
 import level from '../components/bulma/level';
 
-const CONFIRM_DELETE_TEXT = 'Esta acción eliminará la charla y toda su información. No puede revertirse. Está totalmente seguro/a?';
-
 function Talks() {
   let talks = [];
 
@@ -13,17 +11,6 @@ function Talks() {
     })
       .then((result) => {
         talks = result;
-      });
-  }
-
-  function deleteTalk(talkId) {
-    if (!confirm(CONFIRM_DELETE_TEXT)) { return; }
-    return m.request({
-      method: 'DELETE',
-      url: `/api/talks/${talkId}`,
-    })
-      .then(() => {
-        loadTalks();
       });
   }
 
@@ -56,8 +43,7 @@ function Talks() {
             // m('td', talk.track),
             // m('td', talk.when),
             m('td', [
-              m(`a[href=#!/talks/${talk.id}].button.is-small`, { oncreate: m.route.link }, 'Edit'),
-              m('a.button.is-small.is-danger', { onclick: () => deleteTalk(talk.id) }, 'Delete'),
+              m(`a[href=#!/talks/${talk.id}].button.is-small`, 'Edit'),
             ]),
           ])),
         ]),

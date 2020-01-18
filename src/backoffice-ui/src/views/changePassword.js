@@ -2,7 +2,7 @@ import m from 'mithril';
 import input from '../components/input';
 import level from '../components/bulma/level';
 
-function ChangePasswordView() {
+export default function ChangePasswordView() {
   const data = {
     currentPassword: '',
     newPassword: '',
@@ -28,10 +28,7 @@ function ChangePasswordView() {
   return {
     view: () => m('div', [
       level(
-        m('h1', { class: 'title is-3' }, 'Change Password'),
-        [
-          m('button', { class: 'button is-primary', onclick: () => save() }, 'Change password'),
-        ],
+        m('h1', { class: 'title is-3' }, 'Change Password')
       ),
       m('form', [
         input({
@@ -53,8 +50,9 @@ function ChangePasswordView() {
           onchange: (value) => { data.repeatNewPassword = value; },
         }),
       ]),
+      level([],[
+        m('button', { class: 'button is-primary', onclick: () => save() }, 'Change password'),
+      ])
     ]),
   };
 }
-
-export default ChangePasswordView;
