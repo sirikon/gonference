@@ -56,25 +56,26 @@ function pad(num, size) {
 }
 
 function getTime(date) {
-  const hours = date.getHours();
-  const minutes = date.getMinutes();
+  const hours = date.getUTCHours();
+  const minutes = date.getUTCMinutes();
   return `${pad(hours, 2)}:${pad(minutes, 2)}`;
 }
 
-function getDay(date) {
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  return `${pad(year, 4)}-${pad(month, 2)}-${pad(day, 2)}`;
-}
-
 function setTime(currentDate, newTime, callback) {
+  console.log(newTime);
   const parts = newTime.split(':');
   const hours = parseInt(parts[0], 10);
   const minutes = parseInt(parts[1], 10);
-  currentDate.setHours(hours);
-  currentDate.setMinutes(minutes);
+  currentDate.setUTCHours(hours);
+  currentDate.setUTCMinutes(minutes);
   callback(currentDate);
+}
+
+function getDay(date) {
+  const year = date.getUTCFullYear();
+  const month = date.getUTCMonth() + 1;
+  const day = date.getUTCDate();
+  return `${pad(year, 4)}-${pad(month, 2)}-${pad(day, 2)}`;
 }
 
 function setDay(currentDate, newDay, callback) {
@@ -82,9 +83,9 @@ function setDay(currentDate, newDay, callback) {
   const year = parseInt(parts[0], 10);
   const month = parseInt(parts[1], 10) - 1;
   const day = parseInt(parts[2], 10);
-  currentDate.setFullYear(year);
-  currentDate.setMonth(month);
-  currentDate.setDate(day);
+  currentDate.setUTCFullYear(year);
+  currentDate.setUTCMonth(month);
+  currentDate.setUTCDate(day);
   callback(currentDate);
 }
 
@@ -127,7 +128,7 @@ function input({
           onchange: newTime => setTime(value, newTime, onchange),
           size,
         }),
-        m('p.help', getTimezoneText(value)),
+        /* m('p.help', getTimezoneText(value)), */
       ]),
     ]);
   } else if (date) {
