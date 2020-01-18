@@ -11,6 +11,7 @@ export default function EditTalk(initialVnode) {
 
   let talk = {
     id: '',
+    slug: '',
     name: '',
     description: '',
     speakerName: '',

@@ -7,6 +7,7 @@ import (
 // Talk .
 type Talk struct {
 	ID           int       `json:"id"`
+	Slug         string    `json:"slug"`
 	Name         string    `json:"name"`
 	Description  string    `json:"description"`
 	SpeakerName  string    `json:"speakerName"`

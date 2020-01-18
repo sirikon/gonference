@@ -72,6 +72,7 @@ func UserService(ctx *JobContext) domain.UserService {
 func IndexController(ctx *JobContext) *public.IndexController {
 	return &public.IndexController{
 		TalkRepository: TalkRepository(ctx),
+		RatingRepository: RatingRepository(ctx),
 	}
 }
 func IndexHandler(ctx *JobContext) gin.HandlerFunc { return IndexController(ctx).Handler }

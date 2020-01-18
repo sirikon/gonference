@@ -37,7 +37,7 @@
 
         <section class="x-talk-section is-boxed">
             <h2 class="x-talk-section-title">Haz una pregunta</h2>
-            <form action="/talk/{{.talk.ID}}/question" method="POST" enctype="multipart/form-data">
+            <form action="/talk/{{.talk.Slug}}/question" method="POST" enctype="multipart/form-data">
                 <textarea class="x-talk-textarea" name="question" maxlength="600" placeholder="¿Qué quieres preguntar?"></textarea>
                 <input class="x-talk-button" type="submit" value="Enviar">
             </form>
@@ -46,7 +46,7 @@
         {{if not .ratingDone}}
             <section class="x-talk-section is-boxed">
                 <h2 class="x-talk-section-title">Valora la charla</h2>
-                <form action="/talk/{{.talk.ID}}/rating" method="POST" enctype="multipart/form-data">
+                <form action="/talk/{{.talk.Slug}}/rating" method="POST" enctype="multipart/form-data">
                     {{ template "components/stars" }}
                     <textarea class="x-talk-textarea" name="comment" maxlength="600" placeholder="Deja un comentario... si lo ves oportuno :)"></textarea>
                     <input class="x-talk-button" type="submit" value="Enviar">

@@ -8,10 +8,9 @@ function Talks() {
     return m.request({
       method: 'GET',
       url: '/api/talks',
-    })
-      .then((result) => {
-        talks = result;
-      });
+    }).then((result) => {
+      talks = result;
+    });
   }
 
   return {

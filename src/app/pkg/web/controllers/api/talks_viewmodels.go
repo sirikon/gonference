@@ -7,6 +7,7 @@ import (
 
 // AddTalkViewModel .
 type AddTalkViewModel struct {
+	Slug         string    `form:"slug"`
 	Name         string    `form:"name"`
 	Description  string    `form:"description"`
 	SpeakerName  string    `form:"speakerName"`
@@ -18,6 +19,7 @@ type AddTalkViewModel struct {
 // UpdateTalkViewModel .
 type UpdateTalkViewModel struct {
 	ID           int       `form:"id"`
+	Slug         string    `form:"slug"`
 	Name         string    `form:"name"`
 	Description  string    `form:"description"`
 	SpeakerName  string    `form:"speakerName"`
@@ -29,6 +31,7 @@ type UpdateTalkViewModel struct {
 // ToDomainTalk .
 func (vm AddTalkViewModel) ToDomainTalk() domain.Talk {
 	return domain.Talk{
+		Slug:         vm.Slug,
 		Name:         vm.Name,
 		Description:  vm.Description,
 		SpeakerName:  vm.SpeakerName,
@@ -42,6 +45,7 @@ func (vm AddTalkViewModel) ToDomainTalk() domain.Talk {
 func (vm UpdateTalkViewModel) ToDomainTalk() domain.Talk {
 	return domain.Talk{
 		ID:           vm.ID,
+		Slug:         vm.Slug,
 		Name:         vm.Name,
 		Description:  vm.Description,
 		SpeakerName:  vm.SpeakerName,

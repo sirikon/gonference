@@ -9,6 +9,7 @@ import (
 // TalkModel .
 type TalkModel struct {
 	ID           int       `db:"id"`
+	Slug         string    `db:"slug"`
 	Name         string    `db:"name"`
 	Description  string    `db:"description"`
 	SpeakerName  string    `db:"speaker_name"`
@@ -21,6 +22,7 @@ type TalkModel struct {
 func (tm TalkModel) ToDomainTalk() domain.Talk {
 	return domain.Talk{
 		ID:           tm.ID,
+		Slug:         tm.Slug,
 		Name:         tm.Name,
 		Description:  tm.Description,
 		SpeakerName:  tm.SpeakerName,
@@ -32,7 +34,7 @@ func (tm TalkModel) ToDomainTalk() domain.Talk {
 
 // TalksToDomainTalks .
 func TalksToDomainTalks(talks []TalkModel) []domain.Talk {
-	result := []domain.Talk{}
+	var result []domain.Talk
 	for _, talk := range talks {
 		result = append(result, talk.ToDomainTalk())
 	}
@@ -43,6 +45,7 @@ func TalksToDomainTalks(talks []TalkModel) []domain.Talk {
 func DomainTalkToTalk(talk domain.Talk) TalkModel {
 	return TalkModel{
 		ID:           talk.ID,
+		Slug:         talk.Slug,
 		Name:         talk.Name,
 		Description:  talk.Description,
 		SpeakerName:  talk.SpeakerName,
@@ -59,6 +62,15 @@ type RatingModel struct {
 	Stars int `db:"stars"`
 	Comment string `db:"comment"`
 }
+
+func RatingsToDomainRatings(ratings []RatingModel) []domain.Rating {
+	var result []domain.Rating
+	for _, rating := range ratings {
+		result = append(result, rating.ToDomainRating())
+	}
+	return result
+}
+
 
 func (rm RatingModel) ToDomainRating() domain.Rating {
 	return domain.Rating{

@@ -2,13 +2,18 @@
 
 <div class="x-talk-list">
     {{range .}}
-        <a class="x-talk-list-item" href="/talk/{{.ID}}">
+        <a class="x-talk-list-item {{if .Rated}}is-rated{{end}}" href="/talk/{{.Slug}}">
 
             <div class="x-talk-list-item-arrow">
                 {{ template "icons/chevron-right" }}
             </div>
 
-            <h3 class="x-talk-list-item-title" data-id="{{ .ID }}">{{ .Name }}</h3>
+            <h3 class="x-talk-list-item-title" data-id="{{ .ID }}">
+                {{if .Rated}}
+                    {{ template "icons/check" }}
+                {{end}}
+                <span>{{ .Name }}</span>
+            </h3>
             <div class="x-talk-list-item-info">
                 <span class="x-talk-list-item-speaker">{{ .SpeakerName }}</span>
                 <span class="x-talk-list-item-track">{{ .Track }}</span>

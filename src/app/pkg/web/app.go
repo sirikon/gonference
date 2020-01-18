@@ -31,9 +31,9 @@ func (s *Server) Run(port string) error {
 func (s *Server) publicRoutes(r *gin.Engine) {
 	r.Use(customStatic)
 	r.GET("/", handle(ioc.IndexHandler))
-	r.GET("/talk/:id", handle(ioc.TalkHandler))
-	r.POST("/talk/:id/rating", handle(ioc.TalkPostRatingHandler))
-	r.POST("/talk/:id/question", handle(ioc.TalkPostQuestionHandler))
+	r.GET("/talk/:slug", handle(ioc.TalkHandler))
+	r.POST("/talk/:slug/rating", handle(ioc.TalkPostRatingHandler))
+	r.POST("/talk/:slug/question", handle(ioc.TalkPostQuestionHandler))
 
 	r.GET("/login", handle(ioc.LoginGetHandler))
 	r.POST("/login", handle(ioc.LoginPostHandler))

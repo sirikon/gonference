@@ -6,6 +6,7 @@ INSERT INTO "public"."user" VALUES ('admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz_Eu4qB
 
 CREATE TABLE "public"."talk" (
     id serial PRIMARY KEY,
+    slug VARCHAR(200) NOT NULL UNIQUE,
     name VARCHAR (200) NOT NULL,
     description TEXT NOT NULL,
     speaker_name VARCHAR (200) NOT NULL,

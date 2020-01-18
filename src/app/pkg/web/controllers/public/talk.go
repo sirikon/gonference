@@ -23,10 +23,10 @@ type TalkController struct {
 // Handler .
 func (s *TalkController) Handler(c *gin.Context) {
 	visitorKey := session.GetSession(c).Get(session.VisitorKey)
-	id, err := strconv.Atoi(c.Param("id")); utils.Check(err)
-	talk, err := s.TalkRepository.Get(id); utils.Check(err)
-	rating := s.RatingRepository.GetByTalkIdAndVisitorKey(id, visitorKey)
-	speakerImageFileName := getSpeakerImageFileName(id)
+	slug := c.Param("slug")
+	talk := s.TalkRepository.GetBySlug(slug)
+	rating := s.RatingRepository.GetByTalkIdAndVisitorKey(talk.ID, visitorKey)
+	speakerImageFileName := getSpeakerImageFileName(talk.ID)
 	templates.ReplyTemplate(c, "talk", gin.H{
 		"talk": talk,
 		"speakerImageFileName": speakerImageFileName,
@@ -36,36 +36,38 @@ func (s *TalkController) Handler(c *gin.Context) {
 }
 
 func (s *TalkController) PostRatingHandler(ctx *gin.Context) {
-	id, err := strconv.Atoi(ctx.Param("id")); utils.Check(err)
+	slug := ctx.Param("slug")
 	visitorKey := session.GetSession(ctx).Get(session.VisitorKey)
 	var vm AddRatingViewModel
 	utils.Check(ctx.Bind(&vm))
 
+	talk := s.TalkRepository.GetBySlug(slug)
 	rating := domain.Rating{
 		ID:         0,
-		TalkID:     id,
+		TalkID:     talk.ID,
 		VisitorKey: visitorKey,
 		Stars:      vm.Stars,
 		Comment:    vm.Comment,
 	}
 	s.RatingRepository.Add(rating)
-	ctx.Redirect(http.StatusFound, "/talk/" + strconv.Itoa(id))
+	ctx.Redirect(http.StatusFound, "/talk/" + slug)
 }
 
 func (s *TalkController) PostQuestionHandler(ctx *gin.Context) {
-	id, err := strconv.Atoi(ctx.Param("id")); utils.Check(err)
+	slug := ctx.Param("slug")
 	visitorKey := session.GetSession(ctx).Get(session.VisitorKey)
 	var vm AddQuestionViewModel
 	utils.Check(ctx.Bind(&vm))
 
+	talk := s.TalkRepository.GetBySlug(slug)
 	question := domain.Question{
 		ID:         0,
-		TalkID:     id,
+		TalkID:     talk.ID,
 		VisitorKey: visitorKey,
 		Question:   vm.Question,
 	}
 	s.QuestionRepository.Add(question)
-	ctx.Redirect(http.StatusFound, "/talk/" + strconv.Itoa(id) + "?q=1")
+	ctx.Redirect(http.StatusFound, "/talk/" + slug + "?q=1")
 }
 
 func getSpeakerImageFileName(talkID int) string {

@@ -7,6 +7,7 @@ import { objectToFormData } from '../utils/utils';
 
 export default function NewTalk() {
   const talk = {
+    slug: '',
     name: '',
     description: '',
     speakerName: '',

@@ -11,6 +11,12 @@ const TalkForm = {
         size: 'medium',
       }),
       input({
+        label: 'Slug',
+        value: vnode.attrs.talk.slug,
+        onchange: (value) => { vnode.attrs.talk.slug = value; },
+        size: 'small',
+      }),
+      input({
         label: 'Description',
         value: vnode.attrs.talk.description,
         onchange: (value) => { vnode.attrs.talk.description = value; },
