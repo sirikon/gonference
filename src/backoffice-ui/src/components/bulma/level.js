@@ -9,7 +9,7 @@ function levelItems(value) {
 }
 
 function level(left, right) {
-  return m('nav', { class: 'level' }, [
+  return m('nav', { class: 'level is-mobile' }, [
     m('div', { class: 'level-left' }, [
       levelItems(left),
     ]),

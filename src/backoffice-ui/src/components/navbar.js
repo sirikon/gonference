@@ -17,13 +17,15 @@ function navbarTitle(text) {
   ]);
 }
 
-function navbarBurger() {
+function navbarBurger(state) {
+  console.log(state);
   return m('a', {
     role: 'button',
-    class: 'navbar-burger burger',
+    class: `navbar-burger burger ${state.menuOpen ? 'is-active' : ''}`,
     'aria-label': 'menu',
     'aria-expanded': 'false',
     'data-target': 'navbarBasicExample',
+    onclick: () => state.menuOpen = !state.menuOpen
   }, [
     m('span', { 'aria-hidden': 'true' }),
     m('span', { 'aria-hidden': 'true' }),
@@ -34,15 +36,19 @@ function navbarBurger() {
 function navbarMenuItems() {
   return getDisplayedRoutes().map((route) => {
     const isActiveClass = route.path === m.route.get() ? 'is-active' : '';
-    return m('div', { class: 'navbar-start' }, [
-      m(`a[href=#!${route.path}]`, { class: `navbar-item ${isActiveClass}`, oncreate: m.route.link }, route.name),
+    return m('div', { class: `navbar-start` }, [
+      m(`a[href=#!${route.path}]`, {
+        class: `navbar-item ${isActiveClass}`,
+        oncreate: m.route.link,
+      }, route.name),
     ]);
   });
 }
 
-function navbarMenu() {
-  return m('div', { id: 'navbarBasicExample', class: 'navbar-menu' }, [
-    m('div', { class: 'navbar-start' }, navbarMenuItems()),
+function navbarMenu(state) {
+  return m('div', { id: 'navbarBasicExample', class: `navbar-menu ${state.menuOpen ? 'is-active' : ''}` }, [
+    m('div', { class: 'navbar-start' }, navbarMenuItems(state)),
+    state.username ? navbarProfile(state.username) : null,
   ]);
 }
 
@@ -61,6 +67,7 @@ function navbarProfile(username) {
 function Navbar() {
   const state = {
     username: null,
+    menuOpen: false
   };
 
   function fetchUser() {
@@ -80,10 +87,9 @@ function Navbar() {
       m('div', { class: 'container' }, [
         m('div', { class: 'navbar-brand' }, [
           navbarTitle('Gonference'),
-          navbarBurger(),
+          navbarBurger(state),
         ]),
-        navbarMenu(),
-        state.username ? navbarProfile(state.username) : null,
+        navbarMenu(state),
       ]),
     ]),
   };

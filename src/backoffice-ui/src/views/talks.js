@@ -1,6 +1,8 @@
 import m from 'mithril';
 import level from '../components/bulma/level';
 
+const CONFIRM_DELETE_TEXT = 'Esta acción eliminará la charla y toda su información. No puede revertirse. Está totalmente seguro/a?';
+
 function Talks() {
   let talks = [];
 
@@ -15,6 +17,7 @@ function Talks() {
   }
 
   function deleteTalk(talkId) {
+    if (!confirm(CONFIRM_DELETE_TEXT)) { return; }
     return m.request({
       method: 'DELETE',
       url: `/api/talks/${talkId}`,
@@ -36,22 +39,22 @@ function Talks() {
         m('thead', [
           m('tr', [
             m('th', 'Name'),
-            m('th', 'Description'),
+            // m('th', 'Description'),
             m('th', 'Speaker Name'),
-            m('th', 'Speaker Title'),
-            m('th', 'Track'),
-            m('th', 'When'),
+            // m('th', 'Speaker Title'),
+            // m('th', 'Track'),
+            // m('th', 'When'),
             m('th', 'Actions'),
           ]),
         ]),
         m('tbody', [
           talks.map(talk => m('tr', { key: talk.id }, [
             m('td', talk.name),
-            m('td', talk.description),
+            // m('td', talk.description),
             m('td', talk.speakerName),
-            m('td', talk.speakerTitle),
-            m('td', talk.track),
-            m('td', talk.when),
+            // m('td', talk.speakerTitle),
+            // m('td', talk.track),
+            // m('td', talk.when),
             m('td', [
               m(`a[href=#!/talks/${talk.id}].button.is-small`, { oncreate: m.route.link }, 'Edit'),
               m('a.button.is-small.is-danger', { onclick: () => deleteTalk(talk.id) }, 'Delete'),
