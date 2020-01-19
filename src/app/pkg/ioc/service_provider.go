@@ -12,8 +12,8 @@ import (
 
 // JobContext .
 type JobContext struct {
-	UID string
-	VisitorKey string
+	UID          string
+	VisitorKey   string
 	dbConnection *sqlx.DB
 }
 
@@ -25,7 +25,7 @@ func CreateJobContext(dbConnection *sqlx.DB) *JobContext {
 }
 
 // CreateScope .
-func (ctx *JobContext) CreateScope(uid ,visitorKey string) *JobContext {
+func (ctx *JobContext) CreateScope(uid, visitorKey string) *JobContext {
 	return &JobContext{
 		dbConnection: ctx.dbConnection,
 		UID:          uid,
@@ -62,11 +62,17 @@ func TalkRepository(ctx *JobContext) domain.TalkRepository {
 }
 
 func RatingRepository(ctx *JobContext) domain.RatingRepository {
-	return &database.RatingRepository{DB:DbConnection(ctx)}
+	return &database.RatingRepository{
+		Logger: Logger(ctx),
+		DB:     DbConnection(ctx),
+	}
 }
 
 func QuestionRepository(ctx *JobContext) domain.QuestionRepository {
-	return &database.QuestionRepository{DB:DbConnection(ctx)}
+	return &database.QuestionRepository{
+		DB:     DbConnection(ctx),
+		Logger: Logger(ctx),
+	}
 }
 
 func UserService(ctx *JobContext) domain.UserService {
@@ -79,7 +85,7 @@ func UserService(ctx *JobContext) domain.UserService {
 // IndexController .
 func IndexController(ctx *JobContext) *public.IndexController {
 	return &public.IndexController{
-		TalkRepository: TalkRepository(ctx),
+		TalkRepository:   TalkRepository(ctx),
 		RatingRepository: RatingRepository(ctx),
 	}
 }
@@ -88,22 +94,26 @@ func IndexHandler(ctx *JobContext) gin.HandlerFunc { return IndexController(ctx)
 // TalkController .
 func TalkController(ctx *JobContext) *public.TalkController {
 	return &public.TalkController{
-		TalkRepository: TalkRepository(ctx),
-		RatingRepository: RatingRepository(ctx),
+		TalkRepository:     TalkRepository(ctx),
+		RatingRepository:   RatingRepository(ctx),
 		QuestionRepository: QuestionRepository(ctx),
 	}
 }
 func TalkHandler(ctx *JobContext) gin.HandlerFunc { return TalkController(ctx).Handler }
-func TalkPostRatingHandler(ctx *JobContext) gin.HandlerFunc { return TalkController(ctx).PostRatingHandler }
-func TalkPostQuestionHandler(ctx *JobContext) gin.HandlerFunc { return TalkController(ctx).PostQuestionHandler }
+func TalkPostRatingHandler(ctx *JobContext) gin.HandlerFunc {
+	return TalkController(ctx).PostRatingHandler
+}
+func TalkPostQuestionHandler(ctx *JobContext) gin.HandlerFunc {
+	return TalkController(ctx).PostQuestionHandler
+}
 
 func LoginController(ctx *JobContext) *public.LoginController {
 	return &public.LoginController{
 		UserService: UserService(ctx),
 	}
 }
-func LoginGetHandler(ctx *JobContext) gin.HandlerFunc { return LoginController(ctx).GetHandler }
-func LoginPostHandler(ctx *JobContext) gin.HandlerFunc { return LoginController(ctx).PostHandler }
+func LoginGetHandler(ctx *JobContext) gin.HandlerFunc    { return LoginController(ctx).GetHandler }
+func LoginPostHandler(ctx *JobContext) gin.HandlerFunc   { return LoginController(ctx).PostHandler }
 func LoginLogoutHandler(ctx *JobContext) gin.HandlerFunc { return LoginController(ctx).LogoutHandler }
 
 // TalksAPIController .
@@ -113,10 +123,16 @@ func TalksAPIController(ctx *JobContext) *api.TalksAPIController {
 	}
 }
 func TalksAPIGetHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).GetHandler }
-func TalksAPIGetAllHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).GetAllHandler }
+func TalksAPIGetAllHandler(ctx *JobContext) gin.HandlerFunc {
+	return TalksAPIController(ctx).GetAllHandler
+}
 func TalksAPIAddHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).AddHandler }
-func TalksAPIUpdateHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).UpdateHandler }
-func TalksAPIDeleteHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).DeleteHandler }
+func TalksAPIUpdateHandler(ctx *JobContext) gin.HandlerFunc {
+	return TalksAPIController(ctx).UpdateHandler
+}
+func TalksAPIDeleteHandler(ctx *JobContext) gin.HandlerFunc {
+	return TalksAPIController(ctx).DeleteHandler
+}
 
 // MeAPIController .
 func MeAPIController(ctx *JobContext) *api.MeAPIController {
@@ -125,4 +141,6 @@ func MeAPIController(ctx *JobContext) *api.MeAPIController {
 	}
 }
 func MeAPIHandler(ctx *JobContext) gin.HandlerFunc { return MeAPIController(ctx).Handler }
-func MeAPIChangePasswordHandler(ctx *JobContext) gin.HandlerFunc { return MeAPIController(ctx).ChangePasswordHandler }
+func MeAPIChangePasswordHandler(ctx *JobContext) gin.HandlerFunc {
+	return MeAPIController(ctx).ChangePasswordHandler
+}

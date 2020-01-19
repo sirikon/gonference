@@ -46,6 +46,7 @@ func (u *UserService) ChangePassword(username string, currentPassword string, ne
 func (u *UserService) get(username string) (UserModel, error) {
 	var user UserModel
 	query := "SELECT * FROM \"user\" WHERE username = $1 LIMIT 1"
+	logSelect(u.Logger, query)
 	err := u.DB.QueryRowx(query, username).StructScan(&user)
 	return user, err
 }
@@ -53,6 +54,7 @@ func (u *UserService) get(username string) (UserModel, error) {
 func (u *UserService) changePassword(username string, newPassword string) error {
 	hashedPassword := hashPassword(newPassword)
 	query := "UPDATE \"user\" SET password = $2 WHERE username = $1"
+	logMutation(u.Logger, query)
 	_, err := u.DB.Exec(query, username, hashedPassword)
 	return err
 }
