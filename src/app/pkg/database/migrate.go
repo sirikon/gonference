@@ -1,7 +1,7 @@
 package database
 
 import (
-	log "github.com/sirupsen/logrus"
+	"gonference/pkg/infrastructure/logger"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
@@ -9,6 +9,7 @@ import (
 
 // Migrate .
 func Migrate(conn *sqlx.DB) error {
+	log := logger.Instance
 	wrapErr := func(err error) error {
 		return errors.Wrap(err, "Migrating")
 	}
@@ -30,10 +31,10 @@ func Migrate(conn *sqlx.DB) error {
 
 	for _, migration := range migrations {
 		if migration.Order <= lastMigrationID {
-			log.Println("Migration", migration, "already applied. Skipping.")
+			log.Info("Migration", migration, "already applied. Skipping.")
 			continue
 		}
-		log.Println("Applying migration ", migration)
+		log.Info("Applying migration ", migration)
 		_, err := conn.Exec(migration.Up)
 		if err != nil {
 			return wrapErr(err)
@@ -44,7 +45,7 @@ func Migrate(conn *sqlx.DB) error {
 		}
 	}
 
-	log.Println("Migration done.")
+	log.Info("Migration done.")
 
 	return nil
 }
@@ -102,5 +103,5 @@ func CheckDatabaseExists(db *sqlx.DB, name string) (bool, error) {
 		count++
 	}
 
-	return count == 1, nil
+	return count == 1, rows.Close()
 }

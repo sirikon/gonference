@@ -2,6 +2,7 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
+	"gonference/pkg/infrastructure/logger"
 	"gonference/pkg/web/models"
 	"runtime/debug"
 )
@@ -23,6 +24,7 @@ func errorHandling(r *gin.RouterGroup, replier func(ctx *gin.Context, code int, 
 		defer func() {
 			if err := recover(); err != nil {
 				code, message := getResponseForError(err)
+				logger.Instance.Error(message)
 				replier(ctx, code, message)
 			}
 		}()

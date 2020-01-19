@@ -7,5 +7,8 @@ import (
 
 // GetConnection .
 func GetConnection(connectionString string) (*sqlx.DB, error) {
-	return sqlx.Connect("postgres", connectionString)
+	db, err := sqlx.Connect("postgres", connectionString)
+	if err != nil { return nil, err }
+	db.SetMaxOpenConns(90)
+	return db, nil
 }

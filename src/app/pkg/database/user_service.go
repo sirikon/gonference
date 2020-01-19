@@ -5,11 +5,11 @@ import (
 	"encoding/base64"
 	"github.com/jmoiron/sqlx"
 	"github.com/pkg/errors"
-	"github.com/sirupsen/logrus"
+	"gonference/pkg/infrastructure/logger"
 )
 
 type UserService struct {
-	Logger *logrus.Entry
+	Logger logger.Logger
 	DB     *sqlx.DB
 }
 

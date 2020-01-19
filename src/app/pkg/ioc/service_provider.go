@@ -3,9 +3,9 @@ package ioc
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
-	"github.com/sirupsen/logrus"
 	"gonference/pkg/database"
 	"gonference/pkg/domain"
+	"gonference/pkg/infrastructure/logger"
 	"gonference/pkg/web/controllers/api"
 	"gonference/pkg/web/controllers/public"
 )
@@ -34,8 +34,16 @@ func (ctx *JobContext) CreateScope(uid ,visitorKey string) *JobContext {
 }
 
 // Logger .
-func Logger(ctx *JobContext) *logrus.Entry {
-	return logrus.
+func Logger(ctx *JobContext) logger.Logger {
+	return contextualizeLogger(logger.Instance, ctx)
+}
+
+func LoggerForAccess(ctx *JobContext) logger.Logger {
+	return contextualizeLogger(logger.InstanceForAccess, ctx)
+}
+
+func contextualizeLogger(logger logger.Logger, ctx *JobContext) logger.Logger {
+	return logger.
 		WithField("job_uid", ctx.UID).
 		WithField("visitor_key", ctx.VisitorKey)
 }

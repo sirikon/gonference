@@ -7,6 +7,9 @@ services:
       DATABASE_URL: 'postgresql://postgres:12345@db/gonference?sslmode=disable'
     ports:
       - 0.0.0.0:3001:80
+    volumes:
+      - ./data/logs:/app/logs
+      - ./data/uploads:/app/uploads
 
   db:
     image: postgres:11.6-alpine

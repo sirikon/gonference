@@ -2,11 +2,14 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
-	ginlogrus "github.com/toorop/gin-logrus"
+	"github.com/toorop/gin-logrus"
+	"gonference/pkg/ioc"
 )
 
 func RequestLogger(r *gin.Engine)  {
-	log := logrus.New()
-	r.Use(ginlogrus.Logger(log))
+	r.Use(func(ctx *gin.Context) {
+		jobContext := ctx.MustGet("JobContext").(*ioc.JobContext)
+		log := ioc.LoggerForAccess(jobContext)
+		ginlogrus.Logger(log)(ctx)
+	})
 }
