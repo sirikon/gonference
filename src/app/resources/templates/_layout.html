@@ -12,9 +12,15 @@
 <body>
 
 <header class="x-header">
-    <div class="x-container">
-        <a href="/" class="x-header-title">Gonference</a>
-    </div>
+    {{if custom_logo_path}}
+        <a href="/" class="x-header-image">
+            <img src="{{custom_logo_path}}" alt="">
+        </a>
+    {{else}}
+        <div class="x-container">
+            <a href="/" class="x-header-title">{{brand_name}}</a>
+        </div>
+    {{end}}
 </header>
 
 <div class="x-body">
@@ -24,7 +30,7 @@
 </div>
 
 <footer class="x-footer">
-    <span>Gonference 2019</span>
+    <span>{{brand_name}}</span>
 </footer>
 
 </body>

@@ -13,5 +13,17 @@
     font-size: 2em;
     font-weight: bold;
     color: var(--header-text-color);
+    height: 100%;
+  }
+
+  &-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+
+    img {
+      max-height: 100%;
+    }
   }
 }

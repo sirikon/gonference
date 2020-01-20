@@ -8,10 +8,13 @@ import (
 	"gonference/pkg/utils"
 	"html/template"
 	"net/http"
+	"os"
 )
 
-const CUSTOM_META_FILEPATH = "custom/meta.html"
-const CUSTOM_META_POST_FILEPATH = "custom/meta-post.html"
+const customMetaFilepath = "custom/meta.html"
+const customMetaPostFilepath = "custom/meta-post.html"
+var customLogoStaticPath = os.Getenv("CUSTOM_LOGO_PATH")
+var customBrandName = os.Getenv("CUSTOM_BRAND_NAME")
 
 func ReplyTemplate(c *gin.Context, templateName string, data interface{}) {
 	result, err := renderTemplate(templateName, data); utils.Check(err)
@@ -40,8 +43,17 @@ func templateFunctions() template.FuncMap {
 		"markdown": func(text string) template.HTML {
 			return template.HTML(markdownToHTML(text))
 		},
-		"custom_meta": fileIfExists(CUSTOM_META_FILEPATH),
-		"custom_meta_post": fileIfExists(CUSTOM_META_POST_FILEPATH),
+		"custom_meta": fileIfExists(customMetaFilepath),
+		"custom_meta_post": fileIfExists(customMetaPostFilepath),
+		"custom_logo_path": func() string {
+			return customLogoStaticPath
+		},
+		"brand_name": func() string {
+			if customBrandName != "" {
+				return customBrandName
+			}
+			return "Gonference"
+		},
 	}
 }
 
