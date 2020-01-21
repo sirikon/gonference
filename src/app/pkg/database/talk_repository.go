@@ -16,7 +16,7 @@ type TalkRepository struct {
 // GetAll .
 func (tr *TalkRepository) GetAll() ([]domain.Talk, error) {
 	var talks []TalkModel
-	query := "SELECT * FROM talk ORDER BY when_date ASC"
+	query := "SELECT * FROM talk ORDER BY when_date ASC, track ASC"
 	logSelect(tr.Logger, query)
 	err := tr.DB.Select(&talks, query)
 	if err != nil {

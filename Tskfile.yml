@@ -2,6 +2,7 @@ name: Gonference
 env:
   GOPROXY: direct
   DATABASE_URL: "postgresql://postgres:12345@localhost/gonference?sslmode=disable"
+  COOKIE_SECRET: "secret"
   PORT: 3000
   CUSTOM_LOGO_PATH: /logo.png
   CUSTOM_BRAND_NAME: Custom Gonference
