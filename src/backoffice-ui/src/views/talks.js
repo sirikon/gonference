@@ -21,31 +21,34 @@ function Talks() {
           m('button', { class: 'button is-primary' }, 'New'),
         ]),
       ),
-      m('table', { class: 'table is-fullwidth is-striped' }, [
-        m('thead', [
-          m('tr', [
-            m('th', 'Name'),
-            // m('th', 'Description'),
-            m('th', 'Speaker Name'),
-            // m('th', 'Speaker Title'),
-            m('th', 'Track'),
-            m('th', 'When'),
-            m('th', 'Actions'),
-          ]),
-        ]),
-        m('tbody', [
-          talks.map(talk => m('tr', { key: talk.id }, [
-            m('td', talk.name),
-            // m('td', talk.description),
-            m('td', talk.speakerName),
-            // m('td', talk.speakerTitle),
-            m('td', talk.track),
-            m('td', talk.when),
-            m('td', [
-              m(`a[href=#!/talks/${talk.id}].button.is-small`, 'Edit'),
+      m('div.table-container', [
+        m('table', { class: 'table is-fullwidth is-striped' }, [
+          m('thead', [
+            m('tr', [
+              m('th', 'Name'),
+              // m('th', 'Description'),
+              m('th', 'Speaker Name'),
+              // m('th', 'Speaker Title'),
+              m('th', 'Track'),
+              m('th', 'When'),
+              m('th', 'Actions'),
             ]),
-          ])),
-        ]),
+          ]),
+          m('tbody', [
+            talks.map(talk => m('tr', { key: talk.id }, [
+              m('td', talk.name),
+              // m('td', talk.description),
+              m('td', talk.speakerName),
+              // m('td', talk.speakerTitle),
+              m('td', talk.track),
+              m('td', talk.when),
+              m('td', [
+                m(`a[href=#!/talks/${talk.id}].button.is-small`, 'Edit'),
+                m(`a[href=#!/talks/${talk.id}/questions].button.is-small`, 'Questions'),
+              ]),
+            ])),
+          ]),
+        ])
       ]),
     ]),
     oninit: () => loadTalks(),

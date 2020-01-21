@@ -71,6 +71,13 @@ func RatingsToDomainRatings(ratings []RatingModel) []domain.Rating {
 	return result
 }
 
+func QuestionsToDomainQuestions(questions []QuestionModel) []domain.Question {
+	result := make([]domain.Question, 0)
+	for _, question := range questions {
+		result = append(result, question.ToDomainQuestion())
+	}
+	return result
+}
 
 func (rm RatingModel) ToDomainRating() domain.Rating {
 	return domain.Rating{
@@ -93,10 +100,19 @@ func DomainRatingToRating(rating domain.Rating) RatingModel {
 }
 
 type QuestionModel struct {
-	ID int `db:"int"`
+	ID int `db:"id"`
 	TalkID int `db:"talk_id"`
 	VisitorKey string `db:"visitor_key"`
 	Question string `db:"question"`
+}
+
+func (qm QuestionModel) ToDomainQuestion() domain.Question {
+	return domain.Question{
+		ID:         qm.ID,
+		TalkID:     qm.TalkID,
+		VisitorKey: qm.VisitorKey,
+		Question:   qm.Question,
+	}
 }
 
 func DomainQuestionToQuestion(question domain.Question) QuestionModel {

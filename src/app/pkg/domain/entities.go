@@ -25,10 +25,10 @@ type Rating struct {
 }
 
 type Question struct {
-	ID int
-	TalkID int
-	VisitorKey string
-	Question string
+	ID int `json:"id"`
+	TalkID int `json:"talkId"`
+	VisitorKey string `json:"visitorKey"`
+	Question string `json:"question"`
 }
 
 type User struct {

@@ -120,11 +120,15 @@ func LoginLogoutHandler(ctx *JobContext) gin.HandlerFunc { return LoginControlle
 func TalksAPIController(ctx *JobContext) *api.TalksAPIController {
 	return &api.TalksAPIController{
 		TalkRepository: TalkRepository(ctx),
+		QuestionRepository: QuestionRepository(ctx),
 	}
 }
 func TalksAPIGetHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).GetHandler }
 func TalksAPIGetAllHandler(ctx *JobContext) gin.HandlerFunc {
 	return TalksAPIController(ctx).GetAllHandler
+}
+func TalksAPIGetTalkQuestionsHandler(ctx *JobContext) gin.HandlerFunc {
+	return TalksAPIController(ctx).GetTalkQuestionsHandler
 }
 func TalksAPIAddHandler(ctx *JobContext) gin.HandlerFunc { return TalksAPIController(ctx).AddHandler }
 func TalksAPIUpdateHandler(ctx *JobContext) gin.HandlerFunc {

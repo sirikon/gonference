@@ -13,6 +13,7 @@ import (
 // TalksAPIController .
 type TalksAPIController struct {
 	TalkRepository domain.TalkRepository
+	QuestionRepository domain.QuestionRepository
 }
 
 // GetAllHandler .
@@ -80,6 +81,19 @@ func (s *TalksAPIController) DeleteHandler(ctx *gin.Context) {
 	utils.Check(s.TalkRepository.Delete(talkID))
 
 	ctx.Status(http.StatusOK)
+}
+
+func (s *TalksAPIController) GetTalkQuestionsHandler(ctx *gin.Context) {
+	talkIDStr := ctx.Params.ByName("id")
+	if talkIDStr == "" {
+		ctx.AbortWithStatus(404)
+		return
+	}
+
+	talkID, err := strconv.Atoi(talkIDStr); utils.Check(err)
+	questions := s.QuestionRepository.GetByTalkId(talkID)
+
+	ctx.JSON(http.StatusOK, questions)
 }
 
 func updateSpeakerImageIfPresent(talkID int, ctx *gin.Context) {

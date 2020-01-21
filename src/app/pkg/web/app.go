@@ -57,6 +57,7 @@ func (s *Server) adminRoutes(r *gin.RouterGroup) {
 	api.GET("/talks/:id", handle(ioc.TalksAPIGetHandler))
 	api.PUT("/talks/:id", handle(ioc.TalksAPIUpdateHandler))
 	api.DELETE("/talks/:id", handle(ioc.TalksAPIDeleteHandler))
+	api.GET("/talks/:id/questions", handle(ioc.TalksAPIGetTalkQuestionsHandler))
 }
 
 func backofficeAssets() gin.HandlerFunc {
