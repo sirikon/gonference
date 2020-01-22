@@ -10,7 +10,7 @@ import (
 
 func main() {
 	log := logger.Instance
-	connectionString := os.Getenv("DATABASE_URL")
+	connectionString := "postgresql://postgres:12345@localhost/gonference?sslmode=disable"
 	port := os.Getenv("PORT")
 
 	log.

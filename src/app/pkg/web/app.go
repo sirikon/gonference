@@ -17,6 +17,7 @@ type Server struct {
 // Run .
 func (s *Server) Run(port string) error {
 	router := gin.New()
+	middleware.Measure(router)
 	middleware.Sessions(router)
 	middleware.Init(router, s.JobContext)
 	middleware.ErrorHandling(router)
