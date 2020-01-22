@@ -113,6 +113,10 @@ func calculateRatingsSummary(ratings []domain.Rating) RatingsSummary {
 		},
 	}
 
+	if len(ratings) == 0 {
+		return result
+	}
+
 	for _, rating := range ratings {
 		averageCounter += rating.Stars
 		result.Count[rating.Stars]++
