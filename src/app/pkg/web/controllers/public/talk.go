@@ -6,6 +6,7 @@ import (
 	"gonference/pkg/utils"
 	"gonference/pkg/web/session"
 	"gonference/pkg/web/templates"
+	"math"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -70,6 +71,19 @@ func (s *TalkController) PostQuestionHandler(ctx *gin.Context) {
 	ctx.Redirect(http.StatusFound, "/talk/" + slug + "?q=1")
 }
 
+func (s *TalkController) GetRatingsHandler(ctx *gin.Context) {
+	slug := ctx.Param("slug")
+	talk := s.TalkRepository.GetBySlug(slug)
+	ratings := s.RatingRepository.GetByTalkId(talk.ID)
+	summary := calculateRatingsSummary(ratings)
+
+	templates.ReplyTemplate(ctx, "talk_ratings", gin.H{
+		"talk": talk,
+		"ratings": ratings,
+		"summary": summary,
+	})
+}
+
 func getSpeakerImageFileName(talkID int) string {
 	var result string
 	utils.Check(filepath.Walk("uploads/", func(path string, info os.FileInfo, err error) error {
@@ -78,5 +92,27 @@ func getSpeakerImageFileName(talkID int) string {
 		}
 		return nil
 	}))
+	return result
+}
+
+func calculateRatingsSummary(ratings []domain.Rating) RatingsSummary {
+	averageCounter := 0
+	result := RatingsSummary{
+		Average: 0,
+		Count: map[int]int{
+			1: 0,
+			2: 0,
+			3: 0,
+			4: 0,
+			5: 0,
+		},
+	}
+
+	for _, rating := range ratings {
+		averageCounter += rating.Stars
+		result.Count[rating.Stars]++
+	}
+
+	result.Average = math.Floor((float64(averageCounter) / float64(len(ratings))) * 100)/100
 	return result
 }

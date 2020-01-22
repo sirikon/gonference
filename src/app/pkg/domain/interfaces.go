@@ -14,6 +14,7 @@ type RatingRepository interface {
 	Add(rating Rating)
 	GetByVisitorKey(visitorKey string) []Rating
 	GetByTalkIdAndVisitorKey(talkID int, visitorKey string) *Rating
+	GetByTalkId(talkID int) []Rating
 }
 
 type QuestionRepository interface {

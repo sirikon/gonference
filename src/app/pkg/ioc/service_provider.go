@@ -106,6 +106,9 @@ func TalkPostRatingHandler(ctx *JobContext) gin.HandlerFunc {
 func TalkPostQuestionHandler(ctx *JobContext) gin.HandlerFunc {
 	return TalkController(ctx).PostQuestionHandler
 }
+func TalkGetRatingsHandler(ctx *JobContext) gin.HandlerFunc {
+	return TalkController(ctx).GetRatingsHandler
+}
 
 func LoginController(ctx *JobContext) *public.LoginController {
 	return &public.LoginController{

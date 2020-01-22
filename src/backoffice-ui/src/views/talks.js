@@ -45,6 +45,7 @@ function Talks() {
               m('td', [
                 m(`a[href=#!/talks/${talk.id}].button.is-small`, 'Edit'),
                 m(`a[href=#!/talks/${talk.id}/questions].button.is-small`, 'Questions'),
+                m(`a[href=/talk/${talk.slug}/ratings].button.is-small`, 'Ratings'),
               ]),
             ])),
           ]),

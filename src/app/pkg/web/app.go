@@ -46,6 +46,7 @@ func (s *Server) publicRoutes(r *gin.Engine) {
 
 func (s *Server) adminRoutes(r *gin.RouterGroup) {
 	middleware.RequireAuthRole(r, "admin")
+	r.GET("/talk/:slug/ratings", handle(ioc.TalkGetRatingsHandler))
 	r.GET("/admin/*filepath", backofficeAssets())
 
 	api := r.Group("/api")

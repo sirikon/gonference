@@ -27,6 +27,14 @@ func (rr *RatingRepository) GetByVisitorKey(visitorKey string) []domain.Rating {
 	return RatingsToDomainRatings(ratings)
 }
 
+func (rr *RatingRepository) GetByTalkId(talkID int) []domain.Rating {
+	var ratings []RatingModel
+	sql := "SELECT id, talk_id, visitor_key, stars, comment FROM rating WHERE talk_id = $1"
+	logSelect(rr.Logger, sql)
+	utils.Check(rr.DB.Select(&ratings, sql, talkID))
+	return RatingsToDomainRatings(ratings)
+}
+
 func (rr *RatingRepository) GetByTalkIdAndVisitorKey(talkID int, visitorKey string) *domain.Rating {
 	var ratings []RatingModel
 	sql := "SELECT id, talk_id, visitor_key, stars, comment FROM rating WHERE talk_id = $1 AND visitor_key = $2"

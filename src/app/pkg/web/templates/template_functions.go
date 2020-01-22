@@ -19,6 +19,7 @@ var templateFunctions = template.FuncMap{
 	"custom_meta_post": fileIfExistsFunc(customMetaPostFilepath),
 	"custom_logo_path": customLogoFunc,
 	"brand_name": brandNameFunc,
+	"iterate": iterateFunc,
 }
 
 func markdownFunc(text string) template.HTML {
@@ -45,4 +46,12 @@ func brandNameFunc() string {
 		return customBrandName
 	}
 	return "Gonference"
+}
+
+func iterateFunc(count int) []int {
+	result := make([]int, 0)
+	for i := 0; i < count; i++ {
+		result = append(result, i)
+	}
+	return result
 }

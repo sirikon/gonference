@@ -8,3 +8,8 @@ type AddRatingViewModel struct {
 type AddQuestionViewModel struct {
 	Question string `form:"question"`
 }
+
+type RatingsSummary struct {
+	Average float64
+	Count map[int]int
+}
