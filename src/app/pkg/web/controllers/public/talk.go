@@ -42,6 +42,11 @@ func (s *TalkController) PostRatingHandler(ctx *gin.Context) {
 	var vm AddRatingViewModel
 	utils.Check(ctx.Bind(&vm))
 
+	if vm.Stars < 1 || vm.Stars > 5 {
+		ctx.AbortWithStatus(400)
+		return
+	}
+
 	talk := s.TalkRepository.GetBySlug(slug)
 	rating := domain.Rating{
 		ID:         0,
