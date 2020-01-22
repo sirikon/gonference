@@ -40,7 +40,7 @@ func (s *Server) publicRoutes(r *gin.Engine) {
 	r.POST("/login", handle(ioc.LoginPostHandler))
 	r.GET("/logout", handle(ioc.LoginLogoutHandler))
 
-	r.StaticFS("/assets", assets.FrontStyle)
+	r.GET("/assets/*filepath", frontAssets())
 	r.StaticFS("/uploads", http.Dir("uploads/"))
 }
 
@@ -62,6 +62,18 @@ func (s *Server) adminRoutes(r *gin.RouterGroup) {
 	api.GET("/talks/:id/questions", handle(ioc.TalksAPIGetTalkQuestionsHandler))
 }
 
+func frontAssets() gin.HandlerFunc {
+	return func (c *gin.Context) {
+		path := c.Params.ByName("filepath")
+		data, err := assets.FrontStyle.Find(path)
+		if err != nil {
+			_ = c.Error(err)
+		}
+		c.Header("Cache-Control", "max-age=86400, public")
+		c.Data(http.StatusOK, "", data)
+	}
+}
+
 func backofficeAssets() gin.HandlerFunc {
 	return func (c *gin.Context) {
 		path := c.Params.ByName("filepath")
@@ -72,6 +84,7 @@ func backofficeAssets() gin.HandlerFunc {
 		if err != nil {
 			_ = c.Error(err)
 		}
+		c.Header("Cache-Control", "max-age=86400, public")
 		c.Data(http.StatusOK, "", data)
 	}
 }
