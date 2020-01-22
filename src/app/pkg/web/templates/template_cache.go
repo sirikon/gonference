@@ -2,11 +2,12 @@ package templates
 
 import (
 	"html/template"
+	"os"
 	"sync"
 )
 
 
-var cacheEnabled = true
+var cacheEnabled = os.Getenv("TEMPLATE_CACHE") == "true"
 var templateCache = make(map[string]*template.Template)
 var templateCacheMutex = sync.Mutex{}
 

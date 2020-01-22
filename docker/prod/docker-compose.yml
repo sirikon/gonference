@@ -8,3 +8,4 @@ services:
       context: ../../src
     environment:
       PORT: 80
+      TEMPLATE_CACHE: 'true'

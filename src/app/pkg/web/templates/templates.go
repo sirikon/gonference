@@ -4,10 +4,7 @@ import (
 	"gonference/pkg/assets"
 	"gonference/pkg/utils"
 	"html/template"
-	"sync"
 )
-
-var templateConstructionMutex = sync.Mutex{}
 
 func getTemplate(name string) *template.Template {
 	if name == "" {
@@ -39,7 +36,7 @@ func includeCommonTemplates(tmpl *template.Template)  {
 }
 
 func extend(base *template.Template, name string) {
-	tmpl := getTemplate(name)
+	tmpl, err := getTemplate(name).Clone(); utils.Check(err)
 	for _, t := range tmpl.Templates() {
 		_, err := base.AddParseTree(t.Name(), t.Tree); utils.Check(err)
 	}
