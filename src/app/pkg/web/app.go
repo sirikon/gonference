@@ -26,7 +26,7 @@ func (s *Server) Run(port string) error {
 	s.adminRoutes(router.Group(""))
 	s.publicRoutes(router)
 
-	return router.Run("127.0.0.1:" + port)
+	return router.Run("0.0.0.0:" + port)
 }
 
 func (s *Server) publicRoutes(r *gin.Engine) {
