@@ -34,9 +34,9 @@ func (tm TalkModel) ToDomainTalk() domain.Talk {
 
 // TalksToDomainTalks .
 func TalksToDomainTalks(talks []TalkModel) []domain.Talk {
-	var result []domain.Talk
-	for _, talk := range talks {
-		result = append(result, talk.ToDomainTalk())
+	result := make([]domain.Talk, len(talks))
+	for i, talk := range talks {
+		result[i] = talk.ToDomainTalk()
 	}
 	return result
 }
@@ -64,17 +64,17 @@ type RatingModel struct {
 }
 
 func RatingsToDomainRatings(ratings []RatingModel) []domain.Rating {
-	var result []domain.Rating
-	for _, rating := range ratings {
-		result = append(result, rating.ToDomainRating())
+	result := make([]domain.Rating, len(ratings))
+	for i, rating := range ratings {
+		result[i] = rating.ToDomainRating()
 	}
 	return result
 }
 
 func QuestionsToDomainQuestions(questions []QuestionModel) []domain.Question {
-	result := make([]domain.Question, 0)
-	for _, question := range questions {
-		result = append(result, question.ToDomainQuestion())
+	result := make([]domain.Question, len(questions))
+	for i, question := range questions {
+		result[i] = question.ToDomainQuestion()
 	}
 	return result
 }

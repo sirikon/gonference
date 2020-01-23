@@ -4,7 +4,7 @@ env:
   DATABASE_URL: "postgresql://postgres:12345@localhost/gonference?sslmode=disable"
   COOKIE_SECRET: "secret"
   PORT: 3000
-  TEMPLATE_CACHE: 'true'
+  BASE_URL: 'http://localhost:3000'
   CUSTOM_LOGO_PATH: /logo.png
   CUSTOM_BRAND_NAME: Custom Gonference
   DEVENV_PATH: docker/gonference-devenv

@@ -3,10 +3,10 @@
     <div class="x-talk">
 
         <section class="x-talk-section is-boxed">
-            <h1 class="x-talk-title">{{.talk.Name}}</h1>
+            <h1 class="x-talk-title">{{.data.talk.Name}}</h1>
             <div class="x-talk-info">
-                <span class="x-talk-track">{{.talk.Track}}</span>
-                <span class="x-talk-when">{{.talk.When.Format "15:04"}}</span>
+                <span class="x-talk-track">{{.data.talk.Track}}</span>
+                <span class="x-talk-when">{{.data.talk.When.Format "15:04"}}</span>
             </div>
         </section>
 
@@ -14,12 +14,12 @@
             <div class="x-talk-rating">
                 <div class="x-talk-rating-stars">
                     <div class="x-talk-rating-stars-numbers">
-                        {{range $index, $element := .summary.Count}}
+                        {{range $index, $element := .data.summary.Count}}
                             <span>{{$element}}</span>
                         {{end}}
                     </div>
                     <div class="x-talk-rating-stars-bars">
-                        {{range $index, $element := .summary.Count}}
+                        {{range $index, $element := .data.summary.Count}}
                             <div>
                                 {{range iterate $index}}
                                     {{ template "icons/star" }}
@@ -29,7 +29,7 @@
                     </div>
                 </div>
                 <div class="x-talk-average">
-                    <span class="x-talk-average-value">{{ .summary.Average }}</span><span class="x-talk-average-max">/5</span>
+                    <span class="x-talk-average-value">{{ .data.summary.Average }}</span><span class="x-talk-average-max">/5</span>
                 </div>
             </div>
         </section>
@@ -37,12 +37,12 @@
         <section class="x-talk-section is-boxed">
             <h2 class="x-talk-section-title">Comentarios</h2>
             <p class="x-talk-section-advice">
-                A continuación aparecen todos los comentarios que la gente ha puesto acompañando a la nota de la charla. Por desgracia, a veces hay que lidiar con los comentarios de gente que no tiene sus capacidades sociales del todo desarrolladas, que es incapaz de valorar el esfuerzo de los demás, o que simplemente son tóxicas.
+                A continuación aparecen todos los comentarios que la gente ha puesto acompañando a la nota de la charla. Por desgracia, a veces hay que lidiar con los comentarios de personas que no tienen sus capacidades sociales del todo desarrolladas, que son incapaces de valorar el esfuerzo de los demás, o que simplemente son tóxicas.
             </p>
             <p class="x-talk-section-advice">
                 Coge aire, tómatelo con calma, y recuerda que si te hemos llamado para participar es por algo. Nos ha encantado tenerte por aquí.
             </p>
-            {{range .ratings}}
+            {{range .data.ratings}}
                 {{if .Comment}}
                     <div class="x-talk-comment">
                         <p>{{.Comment}} — <span class="x-talk-comment-stars">{{.Stars}}{{ template "icons/star" }}</span></p>
@@ -55,4 +55,5 @@
 
 {{end}}
 
-{{define "title"}}{{.talk.Name}} | Ratings | {{brand_name}}{{end}}
+{{define "title"}}{{.data.talk.Name}} | Ratings | {{brand_name}}{{end}}
+{{define "meta"}}{{end}}

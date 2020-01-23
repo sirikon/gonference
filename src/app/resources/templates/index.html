@@ -1,7 +1,7 @@
 {{define "content"}}
 
 <div class="x-talk-list">
-    {{range .}}
+    {{range .data}}
         <a class="x-talk-list-item {{if .Rated}}is-rated{{end}}" href="/talk/{{.Slug}}">
 
             <div class="x-talk-list-item-arrow">
@@ -28,3 +28,4 @@
 {{end}}
 
 {{define "title"}}{{brand_name}}{{end}}
+{{define "meta"}}{{end}}

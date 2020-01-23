@@ -19,10 +19,10 @@ type Talk struct {
 
 func DomainTalksToTalks(talks []domain.Talk, ratings []domain.Rating) []Talk {
 	ratingMap := ratingMap(ratings)
-	var result []Talk
-	for _, talk := range talks {
+	result := make([]Talk, len(talks))
+	for i, talk := range talks {
 		_, exists := ratingMap[talk.ID]
-		result = append(result, DomainTalkToTalk(talk, exists))
+		result[i] = DomainTalkToTalk(talk, exists)
 	}
 	return result
 }

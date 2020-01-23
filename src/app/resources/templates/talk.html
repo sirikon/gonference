@@ -2,7 +2,7 @@
 
     <div class="x-talk">
 
-        {{if .ratingDone}}
+        {{if .data.ratingDone}}
             <div class="x-talk-notification">
                 {{ template "icons/check" }}
                 <span>¡Gracias por tu feedback!</span>
@@ -10,25 +10,25 @@
         {{end}}
 
         <section class="x-talk-section is-boxed">
-            <h1 class="x-talk-title">{{.talk.Name}}</h1>
+            <h1 class="x-talk-title">{{.data.talk.Name}}</h1>
             <div class="x-talk-info">
-                <span class="x-talk-track">{{.talk.Track}}</span>
-                <span class="x-talk-when">{{.talk.When.Format "15:04"}}</span>
+                <span class="x-talk-track">{{.data.talk.Track}}</span>
+                <span class="x-talk-when">{{.data.talk.When.Format "15:04"}}</span>
             </div>
-            <div class="x-talk-description">{{markdown .talk.Description}}</div>
+            <div class="x-talk-description">{{markdown .data.talk.Description}}</div>
         </section>
 
         <section class="x-talk-section x-talk-speaker">
-            {{if .speakerImageFileName}}
-                <div class="x-talk-speaker-image" style="background-image: url({{.speakerImageFileName}});"></div>
+            {{if .data.speakerImageFileName}}
+                <div class="x-talk-speaker-image" style="background-image: url({{.data.speakerImageFileName}});"></div>
             {{end}}
             <div class="x-talk-speaker-info">
-                <span class="x-talk-speaker-name">{{.talk.SpeakerName}}</span>
-                <span class="x-talk-speaker-title">{{.talk.SpeakerTitle}}</span>
+                <span class="x-talk-speaker-name">{{.data.talk.SpeakerName}}</span>
+                <span class="x-talk-speaker-title">{{.data.talk.SpeakerTitle}}</span>
             </div>
         </section>
 
-        {{if .questionReceived}}
+        {{if .data.questionReceived}}
             <div class="x-talk-notification">
                 {{ template "icons/check" }}
                 <span>¡Gracias por tu pregunta!</span>
@@ -37,16 +37,16 @@
 
         <section class="x-talk-section is-boxed">
             <h2 class="x-talk-section-title">Haz una pregunta</h2>
-            <form action="/talk/{{.talk.Slug}}/question" method="POST" enctype="multipart/form-data">
+            <form action="/talk/{{.data.talk.Slug}}/question" method="POST" enctype="multipart/form-data">
                 <textarea class="x-talk-textarea" name="question" maxlength="600" placeholder="¿Qué quieres preguntar?"></textarea>
                 <input class="x-talk-button" type="submit" value="Enviar">
             </form>
         </section>
 
-        {{if not .ratingDone}}
+        {{if not .data.ratingDone}}
             <section class="x-talk-section is-boxed">
                 <h2 class="x-talk-section-title">Valora la charla</h2>
-                <form action="/talk/{{.talk.Slug}}/rating" method="POST" enctype="multipart/form-data">
+                <form action="/talk/{{.data.talk.Slug}}/rating" method="POST" enctype="multipart/form-data">
                     {{ template "components/stars" }}
                     <textarea class="x-talk-textarea" name="comment" maxlength="600" placeholder="Deja un comentario... si lo ves oportuno :)"></textarea>
                     <input class="x-talk-button" type="submit" value="Enviar">
@@ -58,4 +58,14 @@
 
 {{end}}
 
-{{define "title"}}{{.talk.Name}} | {{brand_name}}{{end}}
+{{define "title"}}{{.data.talk.Name}} | {{brand_name}}{{end}}
+
+{{define "meta"}}
+    <meta name="twitter:card" content="summary" />
+    <meta property="og:title" content="{{.data.talk.Name}}. ¡Dame feedback!" />
+    <meta property="og:type" content="website" />
+    {{if .data.speakerImageFileName}}
+        <meta property="og:image" content="{{base_url}}{{.data.speakerImageFileName}}">
+    {{end}}
+    <meta property="og:description" content="Por {{.data.talk.SpeakerName}} en {{brand_name}}" />
+{{end}}

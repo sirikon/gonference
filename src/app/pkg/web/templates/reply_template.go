@@ -16,6 +16,8 @@ func ReplyTemplate(c *gin.Context, templateName string, data interface{}) {
 func renderTemplate(templateName string, data interface{}) (result []byte) {
 	tmpl := getTemplate(templateName)
 	var buffer bytes.Buffer
-	utils.Check(tmpl.ExecuteTemplate(&buffer, "layout", data))
+	utils.Check(tmpl.ExecuteTemplate(&buffer, "layout", gin.H{
+		"data": data,
+	}))
 	return buffer.Bytes()
 }

@@ -19,6 +19,7 @@ var templateFunctions = template.FuncMap{
 	"custom_meta_post": fileIfExistsFunc(customMetaPostFilepath),
 	"custom_logo_path": customLogoFunc,
 	"brand_name": brandNameFunc,
+	"base_url": baseUrlFunc,
 	"iterate": iterateFunc,
 }
 
@@ -46,6 +47,10 @@ func brandNameFunc() string {
 		return customBrandName
 	}
 	return "Gonference"
+}
+
+func baseUrlFunc() string {
+	return os.Getenv("BASE_URL")
 }
 
 func iterateFunc(count int) []int {
