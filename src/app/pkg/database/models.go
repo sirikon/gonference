@@ -33,7 +33,7 @@ func (tm TalkModel) ToDomainTalk() domain.Talk {
 }
 
 // TalksToDomainTalks .
-func TalksToDomainTalks(talks []TalkModel) []domain.Talk {
+func TalksToDomainTalks(talks []*TalkModel) []domain.Talk {
 	result := make([]domain.Talk, len(talks))
 	for i, talk := range talks {
 		result[i] = talk.ToDomainTalk()
@@ -63,7 +63,7 @@ type RatingModel struct {
 	Comment string `db:"comment"`
 }
 
-func RatingsToDomainRatings(ratings []RatingModel) []domain.Rating {
+func RatingsToDomainRatings(ratings []*RatingModel) []domain.Rating {
 	result := make([]domain.Rating, len(ratings))
 	for i, rating := range ratings {
 		result[i] = rating.ToDomainRating()

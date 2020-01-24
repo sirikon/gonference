@@ -10,7 +10,7 @@ import (
 
 func main() {
 	log := logger.Instance
-	connectionString := os.Getenv("DATABASE_URL")
+	connectionString := "postgresql://postgres:12345@localhost/gonference?sslmode=disable"
 	port := os.Getenv("PORT")
 
 	log.
@@ -23,12 +23,17 @@ func main() {
 		log.Fatal(err)
 	}
 
+	pool, err := database.GetConnectionPool(connectionString)
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	err = database.Migrate(conn)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	jobContext := ioc.CreateJobContext(conn)
+	jobContext := ioc.CreateJobContext(conn, pool)
 
 	httpServer := web.Server{
 		JobContext: jobContext,
