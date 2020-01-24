@@ -1,5 +1,9 @@
 # Gonference
 
+Get feedback in your event.
+
+## Setup
+
 Requires `tsk` to run the project's tasks. More info [here](https://github.com/Sirikon/tsk).
 
 ```bash
