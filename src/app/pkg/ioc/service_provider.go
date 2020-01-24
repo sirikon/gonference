@@ -2,6 +2,7 @@ package ioc
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/jmoiron/sqlx"
 	"gonference/pkg/database"
 	"gonference/pkg/domain"
@@ -15,12 +16,14 @@ type JobContext struct {
 	UID          string
 	VisitorKey   string
 	dbConnection *sqlx.DB
+	newPool *pgxpool.Pool
 }
 
 // CreateJobContext .
-func CreateJobContext(dbConnection *sqlx.DB) *JobContext {
+func CreateJobContext(dbConnection *sqlx.DB, newPool *pgxpool.Pool) *JobContext {
 	return &JobContext{
 		dbConnection: dbConnection,
+		newPool: newPool,
 	}
 }
 
@@ -28,6 +31,7 @@ func CreateJobContext(dbConnection *sqlx.DB) *JobContext {
 func (ctx *JobContext) CreateScope(uid, visitorKey string) *JobContext {
 	return &JobContext{
 		dbConnection: ctx.dbConnection,
+		newPool: ctx.newPool,
 		UID:          uid,
 		VisitorKey:   visitorKey,
 	}
@@ -57,6 +61,7 @@ func DbConnection(ctx *JobContext) *sqlx.DB {
 func TalkRepository(ctx *JobContext) domain.TalkRepository {
 	return &database.TalkRepository{
 		DB:     DbConnection(ctx),
+		NewPool: ctx.newPool,
 		Logger: Logger(ctx),
 	}
 }
@@ -64,6 +69,7 @@ func TalkRepository(ctx *JobContext) domain.TalkRepository {
 func RatingRepository(ctx *JobContext) domain.RatingRepository {
 	return &database.RatingRepository{
 		Logger: Logger(ctx),
+		NewPool: ctx.newPool,
 		DB:     DbConnection(ctx),
 	}
 }

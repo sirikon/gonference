@@ -1,6 +1,8 @@
 package database
 
 import (
+	"context"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/jmoiron/sqlx"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
@@ -10,17 +12,25 @@ import (
 // TalkRepository .
 type TalkRepository struct {
 	Logger logger.Logger
+	NewPool *pgxpool.Pool
 	DB     *sqlx.DB
 }
 
 // GetAll .
 func (tr *TalkRepository) GetAll() ([]domain.Talk, error) {
-	var talks []TalkModel
-	query := "SELECT * FROM talk ORDER BY when_date ASC, track ASC"
+	//conn, err := tr.NewPool.Acquire(context.Background()); utils.Check(err)
+	//defer conn.Release()
+
+	query := "SELECT id, slug, name, description, speaker_name, speaker_title, track, when_date FROM talk ORDER BY when_date ASC, track ASC"
 	logSelect(tr.Logger, query)
-	err := tr.DB.Select(&talks, query)
-	if err != nil {
-		return nil, err
+	rows, err := tr.NewPool.Query(context.Background(), query); utils.Check(err)
+
+	talks := make([]*TalkModel, 0)
+
+	for rows.Next() {
+		talk := &TalkModel{}
+		utils.Check(rows.Scan(&talk.ID, &talk.Slug, &talk.Name, &talk.Description, &talk.SpeakerName, &talk.SpeakerTitle, &talk.Track, &talk.When))
+		talks = append(talks, talk)
 	}
 
 	return TalksToDomainTalks(talks), nil

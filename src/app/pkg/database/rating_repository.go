@@ -1,6 +1,8 @@
 package database
 
 import (
+	"context"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/jmoiron/sqlx"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
@@ -9,6 +11,7 @@ import (
 
 type RatingRepository struct {
 	Logger logger.Logger
+	NewPool *pgxpool.Pool
 	DB *sqlx.DB
 }
 
@@ -20,18 +23,30 @@ func (rr *RatingRepository) Add(domainRating domain.Rating) {
 }
 
 func (rr *RatingRepository) GetByVisitorKey(visitorKey string) []domain.Rating {
-	var ratings []RatingModel
 	sql := "SELECT id, talk_id, visitor_key, stars, comment FROM rating WHERE visitor_key = $1"
 	logSelect(rr.Logger, sql)
-	utils.Check(rr.DB.Select(&ratings, sql, visitorKey))
+	rows, err := rr.NewPool.Query(context.Background(), sql, visitorKey); utils.Check(err)
+
+	ratings := make([]*RatingModel, 0)
+	for rows.Next() {
+		rating := &RatingModel{}
+		utils.Check(rows.Scan(&rating.ID, &rating.TalkID, &rating.VisitorKey, &rating.Stars, &rating.Comment))
+	}
+
 	return RatingsToDomainRatings(ratings)
 }
 
 func (rr *RatingRepository) GetByTalkId(talkID int) []domain.Rating {
-	var ratings []RatingModel
 	sql := "SELECT id, talk_id, visitor_key, stars, comment FROM rating WHERE talk_id = $1"
 	logSelect(rr.Logger, sql)
-	utils.Check(rr.DB.Select(&ratings, sql, talkID))
+	rows, err := rr.NewPool.Query(context.Background(), sql, talkID); utils.Check(err)
+
+	ratings := make([]*RatingModel, 0)
+	for rows.Next() {
+		rating := &RatingModel{}
+		utils.Check(rows.Scan(&rating.ID, &rating.TalkID, &rating.VisitorKey, &rating.Stars, &rating.Comment))
+	}
+
 	return RatingsToDomainRatings(ratings)
 }
 
