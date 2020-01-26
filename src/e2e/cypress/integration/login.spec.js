@@ -7,9 +7,7 @@ describe('Login correctly', function () {
     it('should login with correct credentials and redirect to backoffice', function() {
         cy.clearCookies()
         cy.visit('http://localhost:3000/login')
-        cy.get('input#username').type('admin')
-        cy.get('input#password').type('admin')
-        cy.get('input[type=submit]').click()
+        cy.login('admin', 'admin')
         cy.url().should('eq', 'http://localhost:3000/admin/#!/talks')
     })
 })
