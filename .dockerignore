@@ -1,0 +1,7 @@
+/src/front-style/dist
+/src/front-style/node-modules
+
+/src/backoffice-ui/dist
+/src/backoffice-ui/node-modules
+
+/src/app/dist
