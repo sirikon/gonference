@@ -15,6 +15,7 @@ function installBackofficeUIDeps {(
 
 function installAppDeps {(
   cd src/app || exit
+  export GOPROXY=direct
   go mod download && go get -u github.com/gobuffalo/packr/v2/packr2
 )}
 

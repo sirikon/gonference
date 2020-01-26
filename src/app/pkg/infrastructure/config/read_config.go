@@ -6,8 +6,10 @@ import (
 	"io/ioutil"
 )
 
-func ReadConfig() *Config {
-	var config *Config
+var Config = ReadConfig()
+
+func ReadConfig() *RootConfig {
+	config := &RootConfig{}
 	data := readConfigFile()
 	utils.Check(toml.Unmarshal(data, config))
 	return config

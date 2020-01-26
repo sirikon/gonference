@@ -1,11 +1,10 @@
 package middleware
 
 import (
-	"errors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
-	"os"
+	"gonference/pkg/infrastructure/config"
 )
 
 func Sessions(router *gin.Engine)  {
@@ -14,9 +13,5 @@ func Sessions(router *gin.Engine)  {
 }
 
 func getCookieSecret() string {
-	envValue := os.Getenv("COOKIE_SECRET")
-	if envValue != "" {
-		return envValue
-	}
-	panic(errors.New("COOKIE_SECRET missing"))
+	return config.Config.Web.CookieSecret
 }

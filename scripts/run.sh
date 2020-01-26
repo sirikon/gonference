@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-(cd ./src/app && go run .)
+(
+  export GOPROXY=direct
+  cd ./src/app/workdir || exit
+  go run ..
+)

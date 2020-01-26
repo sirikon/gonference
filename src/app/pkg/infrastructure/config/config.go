@@ -5,7 +5,7 @@ type DatabaseConfig struct {
 }
 
 type WebConfig struct {
-	Port string
+	Port int
 	BaseURL string
 	CookieSecret string
 	TemplateCache bool
@@ -16,7 +16,7 @@ type CustomConfig struct {
 	BrandName string
 }
 
-type Config struct {
+type RootConfig struct {
 	Database DatabaseConfig
 	Web WebConfig
 	Custom CustomConfig

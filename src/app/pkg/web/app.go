@@ -7,6 +7,7 @@ import (
 	"gonference/pkg/utils"
 	"gonference/pkg/web/middleware"
 	"net/http"
+	"strconv"
 )
 
 // Server .
@@ -15,7 +16,7 @@ type Server struct {
 }
 
 // Run .
-func (s *Server) Run(port string) error {
+func (s *Server) Run(port int) error {
 	router := gin.New()
 	middleware.Measure(router)
 	middleware.Sessions(router)
@@ -26,7 +27,7 @@ func (s *Server) Run(port string) error {
 	s.adminRoutes(router.Group(""))
 	s.publicRoutes(router)
 
-	return router.Run("0.0.0.0:" + port)
+	return router.Run("0.0.0.0:" + strconv.Itoa(port))
 }
 
 func (s *Server) publicRoutes(r *gin.Engine) {

@@ -2,28 +2,29 @@ package main
 
 import (
 	"gonference/pkg/database"
+	"gonference/pkg/infrastructure/config"
 	"gonference/pkg/infrastructure/logger"
 	"gonference/pkg/ioc"
 	"gonference/pkg/web"
-	"os"
 )
 
 func main() {
+
+	cfg := config.ReadConfig()
+
 	log := logger.Instance
-	connectionString := "postgresql://postgres:12345@localhost/gonference?sslmode=disable"
-	port := os.Getenv("PORT")
 
 	log.
-		WithField("connectionString", connectionString).
-		WithField("port", port).
+		WithField("connectionString", cfg.Database.URL).
+		WithField("port", cfg.Web.Port).
 		Info("Starting")
 
-	conn, err := database.GetConnection(connectionString)
+	conn, err := database.GetConnection(cfg.Database.URL)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	pool, err := database.GetConnectionPool(connectionString)
+	pool, err := database.GetConnectionPool(cfg.Database.URL)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -39,7 +40,7 @@ func main() {
 		JobContext: jobContext,
 	}
 
-	err = httpServer.Run(port)
+	err = httpServer.Run(cfg.Web.Port)
 	if err != nil {
 		log.Fatal(err)
 	}

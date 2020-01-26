@@ -1,13 +1,12 @@
 package templates
 
 import (
+	"gonference/pkg/infrastructure/config"
 	"html/template"
-	"os"
 	"sync"
 )
 
-
-var cacheEnabled = os.Getenv("TEMPLATE_CACHE") == "true"
+var cacheEnabled = config.Config.Web.TemplateCache
 var templateCache = make(map[string]*template.Template)
 var templateCacheMutex = sync.Mutex{}
 

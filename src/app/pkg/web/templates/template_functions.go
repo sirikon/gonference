@@ -3,15 +3,15 @@ package templates
 import (
 	"bytes"
 	"github.com/yuin/goldmark"
+	"gonference/pkg/infrastructure/config"
 	"gonference/pkg/utils"
 	"html/template"
-	"os"
 )
 
 const customMetaFilepath = "custom/meta.html"
 const customMetaPostFilepath = "custom/meta-post.html"
-var customLogoStaticPath = os.Getenv("CUSTOM_LOGO_PATH")
-var customBrandName = os.Getenv("CUSTOM_BRAND_NAME")
+var customLogoStaticPath = config.Config.Custom.LogoPath
+var customBrandName = config.Config.Custom.BrandName
 
 var templateFunctions = template.FuncMap{
 	"markdown": markdownFunc,
@@ -50,7 +50,7 @@ func brandNameFunc() string {
 }
 
 func baseUrlFunc() string {
-	return os.Getenv("BASE_URL")
+	return config.Config.Web.BaseURL
 }
 
 func iterateFunc(count int) []int {
