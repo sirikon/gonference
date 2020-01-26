@@ -15,7 +15,7 @@ type LoginController struct {
 
 // GetHandler .
 func (l *LoginController) GetHandler(c *gin.Context) {
-	templates.ReplyTemplate(c, "login", nil)
+	templates.ReplyTemplate(c, "login", gin.H{})
 }
 
 func (l *LoginController) PostHandler(c *gin.Context) {
@@ -25,7 +25,7 @@ func (l *LoginController) PostHandler(c *gin.Context) {
 	password := c.PostForm("password")
 
 	if !l.UserService.UserExists(username) {
-		templates.ReplyTemplate(c, "login", nil)
+		templates.ReplyTemplate(c, "login", gin.H{"wrong": true})
 		return
 	}
 
@@ -40,7 +40,7 @@ func (l *LoginController) PostHandler(c *gin.Context) {
 		s.Set(session.UsernameKey, username)
 		c.Redirect(http.StatusFound, "/admin/")
 	} else {
-		templates.ReplyTemplate(c, "login", nil)
+		templates.ReplyTemplate(c, "login", gin.H{"wrong": true})
 	}
 }
 

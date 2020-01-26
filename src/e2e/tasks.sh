@@ -11,4 +11,8 @@ function open {(
   npm run -s open
 )}
 
+function test {(
+  npm test -s
+)}
+
 "$1"

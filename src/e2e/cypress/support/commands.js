@@ -25,8 +25,15 @@
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
 
-Cypress.Commands.add('login', (username, password) => {
-    cy.get('input#username').type(username)
-    cy.get('input#password').type(password)
-    cy.get('input[type=submit]').click()
+Cypress.Commands.add('loginAs', (key) => {
+    cy.fixture('users').then((users) => {
+        cy.get('input#username').type(users[key].username)
+        cy.get('input#password').type(users[key].password)
+        cy.get('input[type=submit]').click()
+    })
+})
+
+Cypress.Commands.add('enterBackoffice', () => {
+    cy.visit('http://localhost:3000/login')
+    cy.loginAs('admin')
 })
