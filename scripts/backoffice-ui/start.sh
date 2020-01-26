@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-(cd "${BACKOFFICE_UI_PATH}" && npm start -s)
+(cd src/backoffice-ui && npm start -s)

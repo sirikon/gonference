@@ -1,22 +1,16 @@
 #!/usr/bin/env bash
 
 set -e
+cd "$(dirname "${BASH_SOURCE[0]}")/.."
 
 function buildFrontStyle {(
   cd src/front-style || exit
-  npm install
   npm run -s build
 )}
 
 function buildBackofficeUI {(
   cd src/backoffice-ui || exit
-  npm install
   npm run -s build
-)}
-
-function installAppDependencies {(
-  cd src/app || exit
-  go mod download && go get -u github.com/gobuffalo/packr/v2/packr2
 )}
 
 function packAssets {(
@@ -36,7 +30,6 @@ function unpackAssets {(
 
 buildFrontStyle
 buildBackofficeUI
-installAppDependencies
 packAssets
 buildApp
 unpackAssets

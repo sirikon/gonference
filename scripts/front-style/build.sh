@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-(cd "${FRONT_STYLE_PATH}" && npm run -s build)
+(cd src/front-style && npm run -s build)
