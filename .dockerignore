@@ -1,0 +1,5 @@
+/src/front-style/dist
+/src/front-style/node_modules
+/src/backoffice-ui/dist
+/src/backoffice-ui/node_modules
+/src/app/workdir
