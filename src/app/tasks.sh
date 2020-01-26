@@ -9,6 +9,11 @@ function install {(
   go get -u github.com/gobuffalo/packr/v2/packr2
 )}
 
+function update {(
+  export GOPROXY=direct
+  go get -u
+)}
+
 function run {(
   cd ./workdir || exit
   go run ..
