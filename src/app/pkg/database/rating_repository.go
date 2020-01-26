@@ -22,18 +22,16 @@ func (rr *RatingRepository) Add(domainRating domain.Rating) {
 	_, err := rr.DB.Exec(sql, rating.TalkID, rating.VisitorKey, rating.Stars, rating.Comment); utils.Check(err)
 }
 
-func (rr *RatingRepository) GetByVisitorKey(visitorKey string) []domain.Rating {
-	sql := "SELECT id, talk_id, visitor_key, stars, comment FROM rating WHERE visitor_key = $1"
-	logSelect(rr.Logger, sql)
+func (rr *RatingRepository) GetByVisitorKey(visitorKey string) []*domain.Rating {
+	sql := "SELECT " + ratingFields + " FROM rating WHERE visitor_key = $1"
 	rows, err := rr.NewPool.Query(context.Background(), sql, visitorKey); utils.Check(err)
 
-	ratings := make([]*RatingModel, 0)
+	ratings := make([]*domain.Rating, 0)
 	for rows.Next() {
-		rating := &RatingModel{}
-		utils.Check(rows.Scan(&rating.ID, &rating.TalkID, &rating.VisitorKey, &rating.Stars, &rating.Comment))
+		ratings = append(ratings, ratingBinder(&rows))
 	}
 
-	return RatingsToDomainRatings(ratings)
+	return ratings
 }
 
 func (rr *RatingRepository) GetByTalkId(talkID int) []domain.Rating {

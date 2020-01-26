@@ -18,7 +18,7 @@ type TalksAPIController struct {
 
 // GetAllHandler .
 func (s *TalksAPIController) GetAllHandler(ctx *gin.Context) {
-	talks, err := s.TalkRepository.GetAll(); utils.Check(err)
+	talks := s.TalkRepository.GetAll()
 	ctx.JSON(http.StatusOK, talks)
 }
 

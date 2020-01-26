@@ -3,7 +3,6 @@ package public
 import (
 	"github.com/gin-gonic/gin"
 	"gonference/pkg/domain"
-	u "gonference/pkg/utils"
 	"gonference/pkg/web/session"
 	"gonference/pkg/web/templates"
 )
@@ -17,7 +16,7 @@ type IndexController struct {
 // Handler .
 func (s *IndexController) Handler(c *gin.Context) {
 	visitorKey := session.GetSession(c).Get(session.VisitorKey)
-	domainTalks, err := s.TalkRepository.GetAll(); u.Check(err)
+	domainTalks := s.TalkRepository.GetAll()
 	ratings := s.RatingRepository.GetByVisitorKey(visitorKey)
 	talks := DomainTalksToTalks(domainTalks, ratings)
 

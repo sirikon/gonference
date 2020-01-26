@@ -17,7 +17,7 @@ type Talk struct {
 	Rated        bool
 }
 
-func DomainTalksToTalks(talks []domain.Talk, ratings []domain.Rating) []Talk {
+func DomainTalksToTalks(talks []*domain.Talk, ratings []*domain.Rating) []Talk {
 	ratingMap := ratingMap(ratings)
 	result := make([]Talk, len(talks))
 	for i, talk := range talks {
@@ -27,7 +27,7 @@ func DomainTalksToTalks(talks []domain.Talk, ratings []domain.Rating) []Talk {
 	return result
 }
 
-func DomainTalkToTalk(talk domain.Talk, rated bool) Talk {
+func DomainTalkToTalk(talk *domain.Talk, rated bool) Talk {
 	return Talk{
 		ID:           talk.ID,
 		Slug:         talk.Slug,
@@ -41,8 +41,8 @@ func DomainTalkToTalk(talk domain.Talk, rated bool) Talk {
 	}
 }
 
-func ratingMap(ratings []domain.Rating) map[int]domain.Rating {
-	result := make(map[int]domain.Rating)
+func ratingMap(ratings []*domain.Rating) map[int]*domain.Rating {
+	result := make(map[int]*domain.Rating)
 	for _, rating := range ratings {
 		result[rating.TalkID] = rating
 	}

@@ -2,7 +2,7 @@
 Port = 3000
 BaseURL = 'http://localhost:3000'
 CookieSecret = 'secret'
-TemplateCache = false
+TemplateCache = true
 
 [Database]
 URL = "postgresql://postgres:12345@localhost/gonference?sslmode=disable"

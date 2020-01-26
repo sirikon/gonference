@@ -1,10 +1,68 @@
 package database
 
 import (
+	"github.com/jackc/pgx/v4"
+	"gonference/pkg/utils"
 	"time"
 
 	"gonference/pkg/domain"
 )
+
+type Scanner = func(dest ...interface{}) error
+
+func scan(scanner Scanner, dest ...interface{}) {
+	utils.Check(scanner(dest...))
+}
+
+const talkFields = "id, slug, name, description, speaker_name, speaker_title, track, when_date"
+func talkBinder(scanner Scanner) *domain.Talk {
+	talk := &domain.Talk{}
+	scan(scanner,
+		&talk.ID,
+		&talk.Slug,
+		&talk.Name,
+		&talk.Description,
+		&talk.SpeakerName,
+		&talk.SpeakerTitle,
+		&talk.Track,
+		&talk.When)
+	return talk
+}
+
+const ratingFields = "id, talk_id, visitor_key, stars, comment"
+func ratingBinder(rows *pgx.Rows) *domain.Rating {
+	rating := &domain.Rating{}
+	utils.Check((*rows).Scan(
+		&rating.ID,
+		&rating.TalkID,
+		&rating.VisitorKey,
+		&rating.Stars,
+		&rating.Comment))
+	return rating
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // TalkModel .
 type TalkModel struct {

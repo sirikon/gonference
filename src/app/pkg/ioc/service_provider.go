@@ -60,8 +60,7 @@ func DbConnection(ctx *JobContext) *sqlx.DB {
 // TalkRepository .
 func TalkRepository(ctx *JobContext) domain.TalkRepository {
 	return &database.TalkRepository{
-		DB:     DbConnection(ctx),
-		NewPool: ctx.newPool,
+		DB:     ctx.newPool,
 		Logger: Logger(ctx),
 	}
 }

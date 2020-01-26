@@ -2,7 +2,7 @@ package domain
 
 // TalkRepository .
 type TalkRepository interface {
-	GetAll() ([]Talk, error)
+	GetAll() []*Talk
 	Get(id int) (Talk, error)
 	GetBySlug(slug string) Talk
 	Add(talk Talk) (int, error)
@@ -12,7 +12,7 @@ type TalkRepository interface {
 
 type RatingRepository interface {
 	Add(rating Rating)
-	GetByVisitorKey(visitorKey string) []Rating
+	GetByVisitorKey(visitorKey string) []*Rating
 	GetByTalkIdAndVisitorKey(talkID int, visitorKey string) *Rating
 	GetByTalkId(talkID int) []Rating
 }
