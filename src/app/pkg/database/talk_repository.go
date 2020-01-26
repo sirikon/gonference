@@ -19,7 +19,7 @@ func (tr *TalkRepository) GetAll() []*domain.Talk {
 	rows, err := tr.DB.Query(context.Background(), query); utils.Check(err)
 	talks := make([]*domain.Talk, 0)
 	for rows.Next() {
-		talks = append(talks, talkBinder(rows.Scan))
+		talks = append(talks, talkReader(rows.Scan))
 	}
 	return talks
 }
@@ -55,5 +55,5 @@ func (tr *TalkRepository) Delete(id int) error {
 func (tr *TalkRepository) selectOneWhere(where string, args ...interface{}) *domain.Talk {
 	query := "SELECT " + talkFields + " FROM talk WHERE " + where + " LIMIT 1"
 	row := tr.DB.QueryRow(context.Background(), query, args...)
-	return talkBinder(row.Scan)
+	return talkReader(row.Scan)
 }

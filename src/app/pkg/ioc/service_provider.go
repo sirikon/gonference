@@ -75,7 +75,7 @@ func RatingRepository(ctx *JobContext) domain.RatingRepository {
 
 func QuestionRepository(ctx *JobContext) domain.QuestionRepository {
 	return &database.QuestionRepository{
-		DB:     DbConnection(ctx),
+		DB:     ctx.newPool,
 		Logger: Logger(ctx),
 	}
 }

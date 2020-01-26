@@ -1,7 +1,6 @@
 package database
 
 import (
-	"github.com/jackc/pgx/v4"
 	"gonference/pkg/utils"
 	"time"
 
@@ -15,7 +14,7 @@ func scan(scanner Scanner, dest ...interface{}) {
 }
 
 const talkFields = "id, slug, name, description, speaker_name, speaker_title, track, when_date"
-func talkBinder(scanner Scanner) *domain.Talk {
+func talkReader(scanner Scanner) *domain.Talk {
 	talk := &domain.Talk{}
 	scan(scanner,
 		&talk.ID,
@@ -30,19 +29,27 @@ func talkBinder(scanner Scanner) *domain.Talk {
 }
 
 const ratingFields = "id, talk_id, visitor_key, stars, comment"
-func ratingBinder(rows *pgx.Rows) *domain.Rating {
+func ratingReader(scanner Scanner) *domain.Rating {
 	rating := &domain.Rating{}
-	utils.Check((*rows).Scan(
+	scan(scanner,
 		&rating.ID,
 		&rating.TalkID,
 		&rating.VisitorKey,
 		&rating.Stars,
-		&rating.Comment))
+		&rating.Comment)
 	return rating
 }
 
-
-
+const questionFields = "id, talk_id, visitor_key, question"
+func questionReader(scanner Scanner) *domain.Question {
+	question := &domain.Question{}
+	scan(scanner,
+		&question.ID,
+		&question.TalkID,
+		&question.VisitorKey,
+		&question.Question)
+	return question
+}
 
 
 

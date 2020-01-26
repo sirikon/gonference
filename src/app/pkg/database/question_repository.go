@@ -1,7 +1,8 @@
 package database
 
 import (
-	"github.com/jmoiron/sqlx"
+	"context"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
 	"gonference/pkg/utils"
@@ -9,20 +10,22 @@ import (
 
 type QuestionRepository struct {
 	Logger logger.Logger
-	DB *sqlx.DB
+	DB *pgxpool.Pool
 }
 
 func (qr *QuestionRepository) GetByTalkId(talkId int) []domain.Question {
-	var questions []QuestionModel
-	query := "SELECT * FROM question WHERE talk_id = $1 ORDER BY id"
-	logSelect(qr.Logger, query)
-	utils.Check(qr.DB.Select(&questions, query, talkId))
-	return QuestionsToDomainQuestions(questions)
+	query := "SELECT " + questionFields + " FROM question WHERE talk_id = $1 ORDER BY id"
+	rows, err := qr.DB.Query(context.Background(), query, talkId); utils.Check(err)
+
+	questions := make([]domain.Question, 0)
+	for rows.Next() {
+		questions = append(questions, *questionReader(rows.Scan))
+	}
+
+	return questions
 }
 
-func (qr *QuestionRepository) Add(domainQuestion domain.Question) {
-	question := DomainQuestionToQuestion(domainQuestion)
+func (qr *QuestionRepository) Add(question domain.Question) {
 	sql := "INSERT INTO question (talk_id, visitor_key, question) VALUES ($1, $2, $3)"
-	logMutation(qr.Logger, sql)
-	_, err := qr.DB.Exec(sql, question.TalkID, question.VisitorKey, question.Question); utils.Check(err)
+	_, err := qr.DB.Exec(context.Background(), sql, question.TalkID, question.VisitorKey, question.Question); utils.Check(err)
 }

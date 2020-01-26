@@ -28,7 +28,7 @@ func (rr *RatingRepository) GetByVisitorKey(visitorKey string) []*domain.Rating 
 
 	ratings := make([]*domain.Rating, 0)
 	for rows.Next() {
-		ratings = append(ratings, ratingBinder(&rows))
+		ratings = append(ratings, ratingReader(rows.Scan))
 	}
 
 	return ratings
