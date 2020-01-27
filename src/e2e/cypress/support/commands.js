@@ -37,3 +37,7 @@ Cypress.Commands.add('enterBackoffice', () => {
     cy.visit('http://localhost:3000/login')
     cy.loginAs('admin')
 })
+
+Cypress.Commands.add('verifyUrl', (url) => {
+    cy.url().should('eq', `${Cypress.env('baseUrl')}${url}`)
+})
