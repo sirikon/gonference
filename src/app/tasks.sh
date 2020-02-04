@@ -47,4 +47,5 @@ function devenv-down {(
   docker-compose -p gonference-devenv down
 )}
 
+[ -z "$1" ] && help && exit 0
 "$1" ${@:2}

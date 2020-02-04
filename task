@@ -1,0 +1,36 @@
+#!/usr/bin/env bash
+
+function install {(
+  install-app
+  install-front-style
+  install-backoffice-ui
+)}
+
+function install-app {(
+  cd ./src/app
+  export GOPROXY=direct
+  go mod download
+  go get -u github.com/gobuffalo/packr/v2/packr2
+)}
+
+function install-front-style {(
+  cd ./src/front-style
+  npm install -s
+)}
+
+function install-backoffice-ui {(
+  cd ./src/backoffice-ui
+  npm install -s
+)}
+
+function help {(
+  echo "Available commands:"
+  for fn in $(compgen -A function); do echo "  ${fn}"; done
+)}
+
+
+
+set -e
+cd "$(dirname "${BASH_SOURCE[0]}")"
+[ -z "$1" ] && help && exit 0
+"$1" ${@:2}
