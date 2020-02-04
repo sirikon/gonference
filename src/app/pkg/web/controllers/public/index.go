@@ -16,9 +16,6 @@ type IndexController struct {
 // Handler .
 func (s *IndexController) Handler(c *gin.Context) {
 	visitorKey := session.GetSession(c).Get(session.VisitorKey)
-	domainTalks := s.TalkRepository.GetAll()
-	ratings := s.RatingRepository.GetByVisitorKey(visitorKey)
-	talks := DomainTalksToTalks(domainTalks, ratings)
-
+	talks := s.TalkRepository.GetAllWithRated(visitorKey)
 	templates.ReplyTemplate(c, "index", talks)
 }

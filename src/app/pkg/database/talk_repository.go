@@ -15,11 +15,21 @@ type TalkRepository struct {
 }
 
 func (tr *TalkRepository) GetAll() []*domain.Talk {
-	query := "SELECT " + talkFields + " FROM talk ORDER BY when_date ASC, track ASC"
+	query := "SELECT " + talkFields + " FROM talk t ORDER BY when_date ASC, track ASC"
 	rows, err := tr.DB.Query(context.Background(), query); utils.Check(err)
 	talks := make([]*domain.Talk, 0)
 	for rows.Next() {
 		talks = append(talks, talkReader(rows.Scan))
+	}
+	return talks
+}
+
+func (tr *TalkRepository) GetAllWithRated(visitorKey string) []*domain.RatedTalk {
+	query := "SELECT " + ratedTalkFields + " FROM talk t LEFT JOIN rating r ON r.talk_id = t.id AND r.visitor_key = $1 ORDER BY when_date ASC, track ASC"
+	rows, err := tr.DB.Query(context.Background(), query, visitorKey); utils.Check(err)
+	talks := make([]*domain.RatedTalk, 0)
+	for rows.Next() {
+		talks = append(talks, ratedTalkReader(rows.Scan))
 	}
 	return talks
 }
@@ -53,7 +63,7 @@ func (tr *TalkRepository) Delete(id int) error {
 }
 
 func (tr *TalkRepository) selectOneWhere(where string, args ...interface{}) *domain.Talk {
-	query := "SELECT " + talkFields + " FROM talk WHERE " + where + " LIMIT 1"
+	query := "SELECT " + talkFields + " FROM talk t WHERE " + where + " LIMIT 1"
 	row := tr.DB.QueryRow(context.Background(), query, args...)
 	return talkReader(row.Scan)
 }

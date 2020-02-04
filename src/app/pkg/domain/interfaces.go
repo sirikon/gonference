@@ -3,6 +3,7 @@ package domain
 // TalkRepository .
 type TalkRepository interface {
 	GetAll() []*Talk
+	GetAllWithRated(visitorKey string) []*RatedTalk
 	Get(id int) (Talk, error)
 	GetBySlug(slug string) Talk
 	Add(talk Talk) (int, error)

@@ -16,6 +16,11 @@ type Talk struct {
 	When         time.Time `json:"when"`
 }
 
+type RatedTalk struct {
+	Talk
+	Rated bool
+}
+
 type Rating struct {
 	ID int
 	TalkID int
