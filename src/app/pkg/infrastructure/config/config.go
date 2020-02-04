@@ -16,8 +16,13 @@ type CustomConfig struct {
 	BrandName string
 }
 
+type LoggingConfig struct {
+	AccessLog bool
+}
+
 type RootConfig struct {
 	Database DatabaseConfig
 	Web WebConfig
 	Custom CustomConfig
+	Logging  LoggingConfig
 }

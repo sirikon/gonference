@@ -10,3 +10,6 @@ URL = "postgresql://postgres:12345@localhost/gonference?sslmode=disable"
 [Custom]
 LogoPath = ''
 BrandName = ''
+
+[Logging]
+AccessLog = false
