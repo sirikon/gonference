@@ -23,6 +23,22 @@ function install-backoffice-ui {(
   npm install -s
 )}
 
+function run-app {(
+  cd ./src/app/workdir
+  export GOPROXY=direct
+  go run ..
+)}
+
+function devenv-up {(
+  cd ./docker/devenv || exit
+  docker-compose -p gonference-devenv up -d
+)}
+
+function devenv-down {(
+  cd ./docker/devenv || exit
+  docker-compose -p gonference-devenv down
+)}
+
 function help {(
   echo "Available commands:"
   for fn in $(compgen -A function); do echo "  ${fn}"; done
