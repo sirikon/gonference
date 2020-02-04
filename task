@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+export GOPROXY=direct
+
 function install {(
   install-app
   install-front-style
@@ -8,7 +10,6 @@ function install {(
 
 function install-app {(
   cd ./src/app
-  export GOPROXY=direct
   go mod download
   go get -u github.com/gobuffalo/packr/v2/packr2
 )}
@@ -25,8 +26,17 @@ function install-backoffice-ui {(
 
 function run-app {(
   cd ./src/app/workdir
-  export GOPROXY=direct
   go run ..
+)}
+
+function pack {(
+  cd ./src/app/pkg/assets || exit
+  packr2
+)}
+
+function unpack {(
+  cd ./src/app/pkg/assets || exit
+  packr2
 )}
 
 function devenv-up {(
@@ -37,6 +47,16 @@ function devenv-up {(
 function devenv-down {(
   cd ./docker/devenv || exit
   docker-compose -p gonference-devenv down
+)}
+
+function build-app {(
+  cd ./src/app
+  go build -ldflags "-s -w" -o dist/gonference .
+)}
+
+function update-app {(
+  cd ./src/app
+  go get -u
 )}
 
 function help {(
