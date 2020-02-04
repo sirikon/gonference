@@ -1,0 +1,15 @@
+[Web]
+Port = 80
+BaseURL = 'http://localhost:3001'
+CookieSecret = 'secret'
+TemplateCache = true
+
+[Database]
+URL = "postgresql://postgres:12345@db/gonference?sslmode=disable"
+
+[Custom]
+LogoPath = ''
+BrandName = ''
+
+[Logging]
+AccessLog = false
