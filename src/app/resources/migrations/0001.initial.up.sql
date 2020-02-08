@@ -5,7 +5,7 @@ CREATE TABLE "public"."user" (
 INSERT INTO "public"."user" VALUES ('admin', 'jGl25bVBBBW96Qi9Te4V37Fnqchz_Eu4qB9vKrRIqRg=');
 
 CREATE TABLE "public"."talk" (
-    id serial PRIMARY KEY,
+    id uuid PRIMARY KEY,
     slug VARCHAR(200) NOT NULL UNIQUE,
     name VARCHAR (200) NOT NULL,
     description TEXT NOT NULL,
@@ -16,7 +16,7 @@ CREATE TABLE "public"."talk" (
 );
 
 CREATE TABLE "public"."rating" (
-    id serial PRIMARY KEY,
+    id uuid PRIMARY KEY,
     talk_id integer NOT NULL REFERENCES "public"."talk" (id) ON DELETE CASCADE,
     visitor_key uuid NOT NULL,
     stars smallint NOT NULL,
@@ -25,7 +25,7 @@ CREATE TABLE "public"."rating" (
 );
 
 CREATE TABLE "public"."question" (
-    id serial PRIMARY KEY,
+    id uuid PRIMARY KEY,
     talk_id integer NOT NULL REFERENCES "public"."talk" (id) ON DELETE CASCADE,
     visitor_key uuid NOT NULL,
     question varchar(600)

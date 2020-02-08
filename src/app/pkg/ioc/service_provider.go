@@ -15,14 +15,12 @@ import (
 type JobContext struct {
 	UID          string
 	VisitorKey   string
-	dbConnection *sqlx.DB
 	newPool *pgxpool.Pool
 }
 
 // CreateJobContext .
-func CreateJobContext(dbConnection *sqlx.DB, newPool *pgxpool.Pool) *JobContext {
+func CreateJobContext(newPool *pgxpool.Pool) *JobContext {
 	return &JobContext{
-		dbConnection: dbConnection,
 		newPool: newPool,
 	}
 }
@@ -30,7 +28,6 @@ func CreateJobContext(dbConnection *sqlx.DB, newPool *pgxpool.Pool) *JobContext 
 // CreateScope .
 func (ctx *JobContext) CreateScope(uid, visitorKey string) *JobContext {
 	return &JobContext{
-		dbConnection: ctx.dbConnection,
 		newPool: ctx.newPool,
 		UID:          uid,
 		VisitorKey:   visitorKey,

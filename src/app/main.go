@@ -24,17 +24,17 @@ func main() {
 		log.Fatal(err)
 	}
 
-	pool, err := database.GetConnectionPool(cfg.Database.URL)
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	err = database.Migrate(conn)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	jobContext := ioc.CreateJobContext(conn, pool)
+	pool, err := database.GetConnectionPool(cfg.Database.URL)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	jobContext := ioc.CreateJobContext(pool)
 
 	httpServer := web.Server{
 		JobContext: jobContext,

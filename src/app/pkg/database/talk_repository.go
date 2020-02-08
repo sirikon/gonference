@@ -35,11 +35,11 @@ func (tr *TalkRepository) GetAllWithRated(visitorKey string) []*domain.RatedTalk
 }
 
 func (tr *TalkRepository) GetBySlug(slug string) domain.Talk {
-	return *tr.selectOneWhere("slug = $1", slug)
+	return *tr.selectOneQuery("slug = $1", slug)
 }
 
 func (tr *TalkRepository) Get(id int) (domain.Talk, error) {
-	return *tr.selectOneWhere("id = $1", id), nil
+	return *tr.selectOneQuery("id = $1", id), nil
 }
 
 func (tr *TalkRepository) Add(talk domain.Talk) (int, error) {
@@ -62,8 +62,23 @@ func (tr *TalkRepository) Delete(id int) error {
 	return err
 }
 
-func (tr *TalkRepository) selectOneWhere(where string, args ...interface{}) *domain.Talk {
-	query := "SELECT " + talkFields + " FROM talk t WHERE " + where + " LIMIT 1"
-	row := tr.DB.QueryRow(context.Background(), query, args...)
-	return talkReader(row.Scan)
+func (tr *TalkRepository) selectOneQuery(extra string, args ...interface{}) *domain.Talk {
+	results := tr.selectQuery(extra, args...)
+	if len(results) == 0 {
+		return nil
+	}
+	return results[0]
+}
+
+func (tr *TalkRepository) selectQuery(extra string, args ...interface{}) []*domain.Talk {
+	rows := selectQuery(tr.DB, talkFields, "talk", extra, args...)
+	ratings := make([]*domain.Talk, 0)
+	for rows.Next() {
+		ratings = append(ratings, talkReader(rows.Scan))
+	}
+	return ratings
+}
+
+func (tr *TalkRepository) insertQuery(rating *domain.Rating) {
+	insertQuery(tr.DB, talkFields, "talk", talkWriter(rating))
 }

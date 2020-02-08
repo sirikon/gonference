@@ -3,38 +3,48 @@
 export GOPROXY=direct
 
 function install {(
-  install-app
-  install-front-style
-  install-backoffice-ui
+  app-install
+  front-style-install
+  backoffice-ui-install
 )}
 
-function install-app {(
+function app-install {(
   cd ./src/app
   go mod download
   go get -u github.com/gobuffalo/packr/v2/packr2
 )}
 
-function install-front-style {(
+function front-style-install {(
   cd ./src/front-style
   npm install -s
 )}
 
-function install-backoffice-ui {(
+function backoffice-ui-install {(
   cd ./src/backoffice-ui
   npm install -s
 )}
 
-function run-app {(
+function app-run {(
   cd ./src/app/workdir
   go run ..
 )}
 
-function pack {(
+function front-style-run {(
+  cd ./src/front-style
+  npm start -s
+)}
+
+function backoffice-ui-run {(
+  cd ./src/backoffice-ui
+  npm start -s
+)}
+
+function app-pack {(
   cd ./src/app/pkg/assets || exit
   packr2
 )}
 
-function unpack {(
+function app-unpack {(
   cd ./src/app/pkg/assets || exit
   packr2
 )}
@@ -49,12 +59,12 @@ function devenv-down {(
   docker-compose -p gonference-devenv down
 )}
 
-function build-app {(
+function app-build {(
   cd ./src/app
   go build -ldflags "-s -w" -o dist/gonference .
 )}
 
-function update-app {(
+function app-update {(
   cd ./src/app
   go get -u
 )}

@@ -13,21 +13,6 @@ func scan(scanner Scanner, dest ...interface{}) {
 	utils.Check(scanner(dest...))
 }
 
-const talkFields = "t.id, t.slug, t.name, t.description, t.speaker_name, t.speaker_title, t.track, t.when_date"
-func talkReader(scanner Scanner) *domain.Talk {
-	talk := &domain.Talk{}
-	scan(scanner,
-		&talk.ID,
-		&talk.Slug,
-		&talk.Name,
-		&talk.Description,
-		&talk.SpeakerName,
-		&talk.SpeakerTitle,
-		&talk.Track,
-		&talk.When)
-	return talk
-}
-
 const ratedTalkFields = "t.id, t.slug, t.name, t.description, t.speaker_name, t.speaker_title, t.track, t.when_date, r.id is not null as rated"
 func ratedTalkReader(scanner Scanner) *domain.RatedTalk {
 	talk := &domain.RatedTalk{}
@@ -45,6 +30,14 @@ func ratedTalkReader(scanner Scanner) *domain.RatedTalk {
 }
 
 const ratingFields = "id, talk_id, visitor_key, stars, comment"
+func ratingWriter(rating *domain.Rating) []interface{} {
+	return []interface{}{
+		rating.TalkID,
+		rating.VisitorKey,
+		rating.Stars,
+		rating.Comment,
+	}
+}
 func ratingReader(scanner Scanner) *domain.Rating {
 	rating := &domain.Rating{}
 	scan(scanner,
