@@ -1,8 +1,12 @@
 package binders
 
-import "gonference/pkg/domain"
+import (
+	"gonference/pkg/domain"
+	"strings"
+)
 
 var TalkFields = []string{"id", "slug", "name", "description", "speaker_name", "speaker_title", "track", "when_date"}
+var TalkFieldsString = strings.Join(TalkFields, ", ")
 
 func TalkWriter(talk *domain.Talk) []interface{} {
 	return []interface{}{

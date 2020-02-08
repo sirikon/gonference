@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"github.com/jackc/pgx/v4/pgxpool"
+	"gonference/pkg/database/binders"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
 	"gonference/pkg/utils"
@@ -15,13 +16,7 @@ type TalkRepository struct {
 }
 
 func (tr *TalkRepository) GetAll() []*domain.Talk {
-	query := "SELECT " + talkFields + " FROM talk t ORDER BY when_date ASC, track ASC"
-	rows, err := tr.DB.Query(context.Background(), query); utils.Check(err)
-	talks := make([]*domain.Talk, 0)
-	for rows.Next() {
-		talks = append(talks, talkReader(rows.Scan))
-	}
-	return talks
+	return tr.selectQuery("ORDER BY when_date ASC, track ASC")
 }
 
 func (tr *TalkRepository) GetAllWithRated(visitorKey string) []*domain.RatedTalk {
@@ -71,14 +66,14 @@ func (tr *TalkRepository) selectOneQuery(extra string, args ...interface{}) *dom
 }
 
 func (tr *TalkRepository) selectQuery(extra string, args ...interface{}) []*domain.Talk {
-	rows := selectQuery(tr.DB, talkFields, "talk", extra, args...)
-	ratings := make([]*domain.Talk, 0)
+	rows := selectQuery(tr.DB, binders.TalkFieldsString, "talk", extra, args...)
+	talks := make([]*domain.Talk, 0)
 	for rows.Next() {
-		ratings = append(ratings, talkReader(rows.Scan))
+		talks = append(talks, binders.TalkReader(rows.Scan))
 	}
-	return ratings
+	return talks
 }
 
-func (tr *TalkRepository) insertQuery(rating *domain.Rating) {
-	insertQuery(tr.DB, talkFields, "talk", talkWriter(rating))
+func (tr *TalkRepository) insertQuery(talk *domain.Talk) {
+	insertQuery(tr.DB, binders.TalkFieldsString, "talk", binders.TalkWriter(talk))
 }
