@@ -4,11 +4,11 @@ package domain
 type TalkRepository interface {
 	GetAll() []*Talk
 	GetAllWithRated(visitorKey string) []*RatedTalk
-	Get(id int) (Talk, error)
-	GetBySlug(slug string) Talk
-	Add(talk Talk) (int, error)
-	Update(talk Talk) error
-	Delete(id int) error
+	Get(id int) *Talk
+	GetBySlug(slug string) *Talk
+	Add(talk *Talk)
+	Update(talk *Talk)
+	Delete(id int)
 }
 
 type RatingRepository interface {
