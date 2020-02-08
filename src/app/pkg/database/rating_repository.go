@@ -2,15 +2,14 @@ package database
 
 import (
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/jmoiron/sqlx"
+	"gonference/pkg/database/binders"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
 )
 
 type RatingRepository struct {
 	Logger logger.Logger
-	NewPool *pgxpool.Pool
-	DB *sqlx.DB
+	DB     *pgxpool.Pool
 }
 
 func (rr *RatingRepository) Add(rating *domain.Rating) {
@@ -21,11 +20,11 @@ func (rr *RatingRepository) GetByVisitorKey(visitorKey string) []*domain.Rating 
 	return rr.selectQuery("WHERE visitor_key = $1", visitorKey)
 }
 
-func (rr *RatingRepository) GetByTalkId(talkID int) []*domain.Rating {
+func (rr *RatingRepository) GetByTalkId(talkID string) []*domain.Rating {
 	return rr.selectQuery("WHERE talk_id = $1", talkID)
 }
 
-func (rr *RatingRepository) GetByTalkIdAndVisitorKey(talkID int, visitorKey string) *domain.Rating {
+func (rr *RatingRepository) GetByTalkIdAndVisitorKey(talkID string, visitorKey string) *domain.Rating {
 	return rr.selectOneQuery("WHERE talk_id = $1 AND visitor_key = $2 LIMIT 1", talkID, visitorKey)
 }
 
@@ -39,14 +38,14 @@ func (rr *RatingRepository) selectOneQuery(extra string, args ...interface{}) *d
 }
 
 func (rr *RatingRepository) selectQuery(extra string, args ...interface{}) []*domain.Rating {
-	rows := selectQuery(rr.NewPool, ratingFields, "rating", extra, args...)
+	rows := selectQuery(rr.DB, binders.RatingFieldsString, "rating", extra, args...)
 	ratings := make([]*domain.Rating, 0)
 	for rows.Next() {
-		ratings = append(ratings, ratingReader(rows.Scan))
+		ratings = append(ratings, binders.RatingReader(rows.Scan))
 	}
 	return ratings
 }
 
 func (rr *RatingRepository) insertQuery(rating *domain.Rating) {
-	insertQuery(rr.NewPool, ratingFields, "rating", ratingWriter(rating))
+	insertQuery(rr.DB, binders.RatingFieldsString, "rating", binders.RatingWriter(rating)...)
 }

@@ -30,7 +30,7 @@ func (s *MeAPIController) ChangePasswordHandler(ctx *gin.Context) {
 	checkNewPasswordMatchesWithRepetition(vm)
 
 	username := session.GetSession(ctx).Get(session.UsernameKey)
-	utils.Check(s.UserService.ChangePassword(username, vm.CurrentPassword, vm.NewPassword))
+	s.UserService.ChangePassword(username, vm.CurrentPassword, vm.NewPassword)
 
 	ctx.Status(http.StatusOK)
 }

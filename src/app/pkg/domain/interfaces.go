@@ -4,28 +4,28 @@ package domain
 type TalkRepository interface {
 	GetAll() []*Talk
 	GetAllWithRated(visitorKey string) []*RatedTalk
-	Get(id int) *Talk
+	Get(id string) *Talk
 	GetBySlug(slug string) *Talk
 	Add(talk *Talk)
 	Update(talk *Talk)
-	Delete(id int)
+	Delete(id string)
 }
 
 type RatingRepository interface {
 	Add(rating *Rating)
 	GetByVisitorKey(visitorKey string) []*Rating
-	GetByTalkIdAndVisitorKey(talkID int, visitorKey string) *Rating
-	GetByTalkId(talkID int) []*Rating
+	GetByTalkIdAndVisitorKey(talkID string, visitorKey string) *Rating
+	GetByTalkId(talkID string) []*Rating
 }
 
 type QuestionRepository interface {
-	GetByTalkId(talkId int) []Question
-	Add(question Question)
+	GetByTalkId(talkId int) []*Question
+	Add(question *Question)
 }
 
 // UserService .
 type UserService interface {
 	UserExists(username string) bool
-	CheckPassword(username string, password string) (bool, error)
-	ChangePassword(username string, currentPassword string, newPassword string) error
+	CheckPassword(username string, password string) bool
+	ChangePassword(username string, currentPassword string, newPassword string)
 }

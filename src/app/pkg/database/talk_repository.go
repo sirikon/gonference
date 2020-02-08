@@ -35,11 +35,11 @@ func (tr *TalkRepository) GetAllWithRated(visitorKey string) []*domain.RatedTalk
 }
 
 func (tr *TalkRepository) GetBySlug(slug string) *domain.Talk {
-	return tr.selectOneQuery("slug = $1", slug)
+	return tr.selectOneQuery("WHERE slug = $1", slug)
 }
 
-func (tr *TalkRepository) Get(id int) *domain.Talk {
-	return tr.selectOneQuery("id = $1", id)
+func (tr *TalkRepository) Get(id string) *domain.Talk {
+	return tr.selectOneQuery("WHERE id = $1", id)
 }
 
 func (tr *TalkRepository) Add(talk *domain.Talk) {
@@ -61,7 +61,7 @@ func (tr *TalkRepository) Update(talk *domain.Talk) {
 	`, binders.TalkWriter(talk)...)
 }
 
-func (tr *TalkRepository) Delete(id int) {
+func (tr *TalkRepository) Delete(id string) {
 	exec(tr.DB, "DELETE FROM talk WHERE id = $1", id)
 }
 
@@ -83,5 +83,5 @@ func (tr *TalkRepository) selectQuery(extra string, args ...interface{}) []*doma
 }
 
 func (tr *TalkRepository) insertQuery(talk *domain.Talk) {
-	insertQuery(tr.DB, binders.TalkFieldsString, "talk", binders.TalkWriter(talk))
+	insertQuery(tr.DB, binders.TalkFieldsString, "talk", binders.TalkWriter(talk)...)
 }

@@ -29,11 +29,7 @@ func (l *LoginController) PostHandler(c *gin.Context) {
 		return
 	}
 
-	result, err := l.UserService.CheckPassword(username, password)
-	if err != nil {
-		_ = c.Error(err)
-		return
-	}
+	result := l.UserService.CheckPassword(username, password)
 
 	if result {
 		s.Set(session.RoleKey, "admin")

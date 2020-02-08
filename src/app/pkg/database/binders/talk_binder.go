@@ -34,7 +34,7 @@ func TalkReader(scanner Scanner) *domain.Talk {
 }
 
 var RatedTalkFields = []string{
-	"t.id", "t.slug", "t.description", "t.speaker_name", "t.speaker_title", "t.track", "t.when_date",
+	"t.id", "t.slug", "t.name", "t.description", "t.speaker_name", "t.speaker_title", "t.track", "t.when_date",
 	"r.id is not null as rated"}
 var RatedTalkFieldsString = strings.Join(RatedTalkFields, ", ")
 func RatedTalkReader(scanner Scanner) *domain.RatedTalk {

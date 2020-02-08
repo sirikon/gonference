@@ -2,6 +2,7 @@ package database
 
 import (
 	"context"
+	"fmt"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"gonference/pkg/utils"
@@ -15,6 +16,8 @@ func query(conn *pgxpool.Pool, sql string, args ...interface{}) pgx.Rows {
 }
 
 func exec(conn *pgxpool.Pool, sql string, args ...interface{})  {
+	fmt.Println(sql)
+	fmt.Println(args)
 	_, err := conn.Exec(context.Background(), sql, args...); utils.Check(err)
 }
 
@@ -24,7 +27,7 @@ func selectQuery(conn *pgxpool.Pool, fields string, table string, extra string, 
 
 func insertQuery(conn *pgxpool.Pool, fields string, table string, args ...interface{}) {
 	valuesFragment := make([]string, len(args))
-	for i := range args {
+	for i := 0; i < len(args); i++ {
 		valuesFragment[i] = "$" + strconv.Itoa(i + 1)
 	}
 

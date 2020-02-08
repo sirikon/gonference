@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gonference/pkg/utils"
 	"net/http"
 	"path/filepath"
@@ -27,34 +28,32 @@ func (s *TalksAPIController) AddHandler(ctx *gin.Context) {
 	var vm AddTalkViewModel
 	utils.Check(ctx.Bind(&vm))
 	talk := vm.ToDomainTalk()
-	id, err := s.TalkRepository.Add(talk); utils.Check(err)
-	updateSpeakerImageIfPresent(id, ctx)
+	talk.ID = createUUID()
+	s.TalkRepository.Add(talk)
+	updateSpeakerImageIfPresent(talk.ID, ctx)
 	ctx.Status(http.StatusOK)
 }
 
 // GetHandler .
 func (s *TalksAPIController) GetHandler(ctx *gin.Context) {
-	talkIDStr := ctx.Params.ByName("id")
-	if talkIDStr == "" {
+	talkID := ctx.Params.ByName("id")
+	if talkID == "" {
 		ctx.AbortWithStatus(404)
 		return
 	}
 
-	talkID, err := strconv.Atoi(talkIDStr); utils.Check(err)
-	talk, err := s.TalkRepository.Get(talkID); utils.Check(err)
+	talk := s.TalkRepository.Get(talkID)
 
 	ctx.JSON(http.StatusOK, talk)
 }
 
 // UpdateHandler .
 func (s *TalksAPIController) UpdateHandler(ctx *gin.Context) {
-	talkIDStr := ctx.Params.ByName("id")
-	if talkIDStr == "" {
+	talkID := ctx.Params.ByName("id")
+	if talkID == "" {
 		ctx.AbortWithStatus(404)
 		return
 	}
-
-	talkID, err := strconv.Atoi(talkIDStr); utils.Check(err)
 
 	var vm UpdateTalkViewModel
 	utils.Check(ctx.Bind(&vm))
@@ -64,21 +63,20 @@ func (s *TalksAPIController) UpdateHandler(ctx *gin.Context) {
 	vm.ID = talkID
 	talk := vm.ToDomainTalk()
 
-	utils.Check(s.TalkRepository.Update(talk))
+	s.TalkRepository.Update(talk)
 
 	ctx.Status(http.StatusOK)
 }
 
 // DeleteHandler .
 func (s *TalksAPIController) DeleteHandler(ctx *gin.Context) {
-	talkIDStr := ctx.Params.ByName("id")
-	if talkIDStr == "" {
+	talkID := ctx.Params.ByName("id")
+	if talkID == "" {
 		ctx.AbortWithStatus(404)
 		return
 	}
 
-	talkID, err := strconv.Atoi(talkIDStr); utils.Check(err)
-	utils.Check(s.TalkRepository.Delete(talkID))
+	s.TalkRepository.Delete(talkID)
 
 	ctx.Status(http.StatusOK)
 }
@@ -96,9 +94,13 @@ func (s *TalksAPIController) GetTalkQuestionsHandler(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, questions)
 }
 
-func updateSpeakerImageIfPresent(talkID int, ctx *gin.Context) {
+func updateSpeakerImageIfPresent(talkID string, ctx *gin.Context) {
 	if len(ctx.Request.MultipartForm.File) == 0 { return }
 	file, err := ctx.FormFile("speakerImage"); utils.Check(err)
 	ext := filepath.Ext(file.Filename)
-	utils.Check(ctx.SaveUploadedFile(file, "uploads/talk-" + strconv.Itoa(talkID) + "-speaker-image" + ext))
+	utils.Check(ctx.SaveUploadedFile(file, "uploads/talk-" + talkID + "-speaker-image" + ext))
+}
+
+func createUUID() string {
+	return uuid.New().String()
 }

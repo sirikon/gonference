@@ -3,7 +3,6 @@ package ioc
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v4/pgxpool"
-	"github.com/jmoiron/sqlx"
 	"gonference/pkg/database"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
@@ -49,11 +48,6 @@ func contextualizeLogger(logger logger.Logger, ctx *JobContext) logger.Logger {
 		WithField("visitor_key", ctx.VisitorKey)
 }
 
-// DbConnection .
-func DbConnection(ctx *JobContext) *sqlx.DB {
-	return ctx.dbConnection
-}
-
 // TalkRepository .
 func TalkRepository(ctx *JobContext) domain.TalkRepository {
 	return &database.TalkRepository{
@@ -65,8 +59,7 @@ func TalkRepository(ctx *JobContext) domain.TalkRepository {
 func RatingRepository(ctx *JobContext) domain.RatingRepository {
 	return &database.RatingRepository{
 		Logger: Logger(ctx),
-		NewPool: ctx.newPool,
-		DB:     DbConnection(ctx),
+		DB:     ctx.newPool,
 	}
 }
 
@@ -79,7 +72,7 @@ func QuestionRepository(ctx *JobContext) domain.QuestionRepository {
 
 func UserService(ctx *JobContext) domain.UserService {
 	return &database.UserService{
-		DB:     DbConnection(ctx),
+		DB:     ctx.newPool,
 		Logger: Logger(ctx),
 	}
 }

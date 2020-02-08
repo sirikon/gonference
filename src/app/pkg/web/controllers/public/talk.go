@@ -2,6 +2,7 @@ package public
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 	"gonference/pkg/domain"
 	"gonference/pkg/utils"
 	"gonference/pkg/web/session"
@@ -10,7 +11,6 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -48,8 +48,8 @@ func (s *TalkController) PostRatingHandler(ctx *gin.Context) {
 	}
 
 	talk := s.TalkRepository.GetBySlug(slug)
-	rating := domain.Rating{
-		ID:         0,
+	rating := &domain.Rating{
+		ID:         createUUID(),
 		TalkID:     talk.ID,
 		VisitorKey: visitorKey,
 		Stars:      vm.Stars,
@@ -66,8 +66,8 @@ func (s *TalkController) PostQuestionHandler(ctx *gin.Context) {
 	utils.Check(ctx.Bind(&vm))
 
 	talk := s.TalkRepository.GetBySlug(slug)
-	question := domain.Question{
-		ID:         0,
+	question := &domain.Question{
+		ID:         createUUID(),
 		TalkID:     talk.ID,
 		VisitorKey: visitorKey,
 		Question:   vm.Question,
@@ -89,10 +89,10 @@ func (s *TalkController) GetRatingsHandler(ctx *gin.Context) {
 	})
 }
 
-func getSpeakerImageFileName(talkID int) string {
+func getSpeakerImageFileName(talkID string) string {
 	var result string
 	utils.Check(filepath.Walk("uploads/", func(path string, info os.FileInfo, err error) error {
-		if strings.Contains(info.Name(), "talk-" + strconv.Itoa(talkID) + "-speaker-image") {
+		if strings.Contains(info.Name(), "talk-" + talkID + "-speaker-image") {
 			result = "/uploads/" + info.Name()
 		}
 		return nil
@@ -100,7 +100,7 @@ func getSpeakerImageFileName(talkID int) string {
 	return result
 }
 
-func calculateRatingsSummary(ratings []domain.Rating) RatingsSummary {
+func calculateRatingsSummary(ratings []*domain.Rating) RatingsSummary {
 	averageCounter := 0
 	result := RatingsSummary{
 		Average: 0,
@@ -124,4 +124,8 @@ func calculateRatingsSummary(ratings []domain.Rating) RatingsSummary {
 
 	result.Average = math.Floor((float64(averageCounter) / float64(len(ratings))) * 100)/100
 	return result
+}
+
+func createUUID() string {
+	return uuid.New().String()
 }

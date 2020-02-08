@@ -17,7 +17,7 @@ CREATE TABLE "public"."talk" (
 
 CREATE TABLE "public"."rating" (
     id uuid PRIMARY KEY,
-    talk_id integer NOT NULL REFERENCES "public"."talk" (id) ON DELETE CASCADE,
+    talk_id uuid NOT NULL REFERENCES "public"."talk" (id) ON DELETE CASCADE,
     visitor_key uuid NOT NULL,
     stars smallint NOT NULL,
     comment varchar(600),
@@ -26,7 +26,7 @@ CREATE TABLE "public"."rating" (
 
 CREATE TABLE "public"."question" (
     id uuid PRIMARY KEY,
-    talk_id integer NOT NULL REFERENCES "public"."talk" (id) ON DELETE CASCADE,
+    talk_id uuid NOT NULL REFERENCES "public"."talk" (id) ON DELETE CASCADE,
     visitor_key uuid NOT NULL,
     question varchar(600)
 );

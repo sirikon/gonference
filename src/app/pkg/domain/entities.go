@@ -6,7 +6,7 @@ import (
 
 // Talk .
 type Talk struct {
-	ID           int       `json:"id"`
+	ID           string       `json:"id"`
 	Slug         string    `json:"slug"`
 	Name         string    `json:"name"`
 	Description  string    `json:"description"`
@@ -22,16 +22,16 @@ type RatedTalk struct {
 }
 
 type Rating struct {
-	ID int
-	TalkID int
+	ID string
+	TalkID string
 	VisitorKey string
 	Stars int
 	Comment string
 }
 
 type Question struct {
-	ID int `json:"id"`
-	TalkID int `json:"talkId"`
+	ID string `json:"id"`
+	TalkID string `json:"talkId"`
 	VisitorKey string `json:"visitorKey"`
 	Question string `json:"question"`
 }

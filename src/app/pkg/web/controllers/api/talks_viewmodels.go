@@ -18,7 +18,7 @@ type AddTalkViewModel struct {
 
 // UpdateTalkViewModel .
 type UpdateTalkViewModel struct {
-	ID           int       `form:"id"`
+	ID           string       `form:"id"`
 	Slug         string    `form:"slug"`
 	Name         string    `form:"name"`
 	Description  string    `form:"description"`
@@ -29,8 +29,8 @@ type UpdateTalkViewModel struct {
 }
 
 // ToDomainTalk .
-func (vm AddTalkViewModel) ToDomainTalk() domain.Talk {
-	return domain.Talk{
+func (vm AddTalkViewModel) ToDomainTalk() *domain.Talk {
+	return &domain.Talk{
 		Slug:         vm.Slug,
 		Name:         vm.Name,
 		Description:  vm.Description,
@@ -42,8 +42,8 @@ func (vm AddTalkViewModel) ToDomainTalk() domain.Talk {
 }
 
 // ToDomainTalk .
-func (vm UpdateTalkViewModel) ToDomainTalk() domain.Talk {
-	return domain.Talk{
+func (vm UpdateTalkViewModel) ToDomainTalk() *domain.Talk {
+	return &domain.Talk{
 		ID:           vm.ID,
 		Slug:         vm.Slug,
 		Name:         vm.Name,
