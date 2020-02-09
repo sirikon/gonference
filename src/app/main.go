@@ -1,12 +1,12 @@
 package main
 
 import (
-	"gonference/pkg/database/client"
-	"gonference/pkg/database/migrator"
 	"gonference/pkg/infrastructure/config"
+	"gonference/pkg/infrastructure/database/client"
+	"gonference/pkg/infrastructure/database/migrator"
 	"gonference/pkg/infrastructure/logger"
+	"gonference/pkg/infrastructure/web"
 	"gonference/pkg/ioc"
-	"gonference/pkg/web"
 )
 
 func main() {

@@ -2,12 +2,12 @@ package ioc
 
 import (
 	"github.com/gin-gonic/gin"
-	"gonference/pkg/database"
-	"gonference/pkg/database/client"
-	"gonference/pkg/domain"
+	"gonference/pkg/application"
+	"gonference/pkg/infrastructure/database"
+	"gonference/pkg/infrastructure/database/client"
 	"gonference/pkg/infrastructure/logger"
-	"gonference/pkg/web/controllers/api"
-	"gonference/pkg/web/controllers/public"
+	"gonference/pkg/infrastructure/web/controllers/api"
+	"gonference/pkg/infrastructure/web/controllers/public"
 )
 
 // JobContext .
@@ -49,28 +49,28 @@ func contextualizeLogger(logger logger.Logger, ctx *JobContext) logger.Logger {
 }
 
 // TalkRepository .
-func TalkRepository(ctx *JobContext) domain.TalkRepository {
+func TalkRepository(ctx *JobContext) application.TalkRepository {
 	return &database.TalkRepository{
 		DB:     ctx.db,
 		Logger: Logger(ctx),
 	}
 }
 
-func RatingRepository(ctx *JobContext) domain.RatingRepository {
+func RatingRepository(ctx *JobContext) application.RatingRepository {
 	return &database.RatingRepository{
 		Logger: Logger(ctx),
 		DB:     ctx.db,
 	}
 }
 
-func QuestionRepository(ctx *JobContext) domain.QuestionRepository {
+func QuestionRepository(ctx *JobContext) application.QuestionRepository {
 	return &database.QuestionRepository{
 		DB:     ctx.db,
 		Logger: Logger(ctx),
 	}
 }
 
-func UserService(ctx *JobContext) domain.UserService {
+func UserService(ctx *JobContext) application.UserService {
 	return &database.UserService{
 		DB:     ctx.db,
 		Logger: Logger(ctx),
