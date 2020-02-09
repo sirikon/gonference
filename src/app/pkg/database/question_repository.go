@@ -12,7 +12,7 @@ type QuestionRepository struct {
 	DB *pgxpool.Pool
 }
 
-func (qr *QuestionRepository) GetByTalkId(talkId int) []*domain.Question {
+func (qr *QuestionRepository) GetByTalkId(talkId string) []*domain.Question {
 	rows := selectQuery(
 		qr.DB, binders.QuestionFieldsString, "question", "WHERE talk_id = $1 ORDER BY id", talkId)
 

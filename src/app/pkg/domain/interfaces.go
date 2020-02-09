@@ -19,7 +19,7 @@ type RatingRepository interface {
 }
 
 type QuestionRepository interface {
-	GetByTalkId(talkId int) []*Question
+	GetByTalkId(talkId string) []*Question
 	Add(question *Question)
 }
 

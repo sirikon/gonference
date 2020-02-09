@@ -70,13 +70,16 @@ function app-update {(
 )}
 
 function help {(
-  echo "Available commands:"
-  for fn in $(compgen -A function); do echo "  ${fn}"; done
+  if [ -z "$1" ]; then
+    echo "Available commands:"
+  fi
+  export functions=$(compgen -A function | grep "${1}")
+  for fn in $functions; do echo "  ${fn}"; done
 )}
 
 
 
 set -e
 cd "$(dirname "${BASH_SOURCE[0]}")"
-[ -z "$1" ] && help && exit 0
+[ -z "$1" ] || [ $(echo $1 | head -c 1) == "?" ] && help ${1:1} && exit 0
 "$1" ${@:2}

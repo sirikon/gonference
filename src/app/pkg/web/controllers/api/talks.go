@@ -3,12 +3,10 @@ package api
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"gonference/pkg/domain"
 	"gonference/pkg/utils"
 	"net/http"
 	"path/filepath"
-	"strconv"
-
-	"gonference/pkg/domain"
 )
 
 // TalksAPIController .
@@ -82,13 +80,12 @@ func (s *TalksAPIController) DeleteHandler(ctx *gin.Context) {
 }
 
 func (s *TalksAPIController) GetTalkQuestionsHandler(ctx *gin.Context) {
-	talkIDStr := ctx.Params.ByName("id")
-	if talkIDStr == "" {
+	talkID := ctx.Params.ByName("id")
+	if talkID == "" {
 		ctx.AbortWithStatus(404)
 		return
 	}
 
-	talkID, err := strconv.Atoi(talkIDStr); utils.Check(err)
 	questions := s.QuestionRepository.GetByTalkId(talkID)
 
 	ctx.JSON(http.StatusOK, questions)

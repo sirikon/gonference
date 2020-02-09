@@ -2,7 +2,6 @@ package database
 
 import (
 	"context"
-	"fmt"
 	"github.com/jackc/pgx/v4"
 	"github.com/jackc/pgx/v4/pgxpool"
 	"gonference/pkg/utils"
@@ -16,8 +15,6 @@ func query(conn *pgxpool.Pool, sql string, args ...interface{}) pgx.Rows {
 }
 
 func exec(conn *pgxpool.Pool, sql string, args ...interface{})  {
-	fmt.Println(sql)
-	fmt.Println(args)
 	_, err := conn.Exec(context.Background(), sql, args...); utils.Check(err)
 }
 
