@@ -1,6 +1,8 @@
-package database
+package migrator
 
 import (
+	"context"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"gonference/pkg/infrastructure/logger"
 
 	"github.com/jmoiron/sqlx"
@@ -8,7 +10,7 @@ import (
 )
 
 // Migrate .
-func Migrate(conn *sqlx.DB) error {
+func Migrate(conn *pgxpool.Pool) error {
 	log := logger.Instance
 	wrapErr := func(err error) error {
 		return errors.Wrap(err, "Migrating")
@@ -51,8 +53,8 @@ func Migrate(conn *sqlx.DB) error {
 }
 
 // EnsureMigrationHistoryTableExists .
-func EnsureMigrationHistoryTableExists(db *sqlx.DB) error {
-	_, err := db.Exec(`
+func EnsureMigrationHistoryTableExists(db *pgxpool.Pool) error {
+	_, err := db.Exec(context.Background(), `
 		CREATE TABLE IF NOT EXISTS __migration_history (
 			id INTEGER PRIMARY KEY,
 			name VARCHAR (200) NOT NULL
@@ -62,8 +64,8 @@ func EnsureMigrationHistoryTableExists(db *sqlx.DB) error {
 }
 
 // RegisterMigration .
-func RegisterMigration(db *sqlx.DB, migration Migration) error {
-	_, err := db.Exec(`
+func RegisterMigration(db *pgxpool.Pool, migration Migration) error {
+	_, err := db.Exec(context.Background(), `
 		INSERT INTO __migration_history
 		("id", "name") VALUES ($1, $2);
 	`, migration.Order, migration.Name)

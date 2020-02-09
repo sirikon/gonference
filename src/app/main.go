@@ -2,6 +2,7 @@ package main
 
 import (
 	"gonference/pkg/database"
+	"gonference/pkg/database/migrator"
 	"gonference/pkg/infrastructure/config"
 	"gonference/pkg/infrastructure/logger"
 	"gonference/pkg/ioc"
@@ -24,7 +25,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	err = database.Migrate(conn)
+	err = migrator.Migrate(conn)
 	if err != nil {
 		log.Fatal(err)
 	}
