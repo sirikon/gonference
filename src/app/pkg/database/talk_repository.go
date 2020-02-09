@@ -1,8 +1,8 @@
 package database
 
 import (
-	"github.com/jackc/pgx/v4/pgxpool"
 	"gonference/pkg/database/binders"
+	"gonference/pkg/database/client"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
 )
@@ -10,7 +10,7 @@ import (
 // TalkRepository .
 type TalkRepository struct {
 	Logger logger.Logger
-	DB     *pgxpool.Pool
+	DB     *client.DBClient
 }
 
 func (tr *TalkRepository) GetAll() []*domain.Talk {
@@ -18,7 +18,7 @@ func (tr *TalkRepository) GetAll() []*domain.Talk {
 }
 
 func (tr *TalkRepository) GetAllWithRated(visitorKey string) []*domain.RatedTalk {
-	rows := query(tr.DB,`
+	rows := tr.DB.Query(`
 		SELECT ` + binders.RatedTalkFieldsString + `
 		FROM talk t
 		LEFT JOIN rating r
@@ -47,7 +47,7 @@ func (tr *TalkRepository) Add(talk *domain.Talk) {
 }
 
 func (tr *TalkRepository) Update(talk *domain.Talk) {
-	exec(tr.DB, `
+	tr.DB.Exec(`
 		UPDATE talk
 		SET
 			slug = $2,
@@ -62,7 +62,7 @@ func (tr *TalkRepository) Update(talk *domain.Talk) {
 }
 
 func (tr *TalkRepository) Delete(id string) {
-	exec(tr.DB, "DELETE FROM talk WHERE id = $1", id)
+	tr.DB.Exec("DELETE FROM talk WHERE id = $1", id)
 }
 
 func (tr *TalkRepository) selectOneQuery(extra string, args ...interface{}) *domain.Talk {
@@ -74,7 +74,7 @@ func (tr *TalkRepository) selectOneQuery(extra string, args ...interface{}) *dom
 }
 
 func (tr *TalkRepository) selectQuery(extra string, args ...interface{}) []*domain.Talk {
-	rows := selectQuery(tr.DB, binders.TalkFieldsString, "talk", extra, args...)
+	rows := tr.DB.Select(binders.TalkFieldsString, "talk", extra, args...)
 	talks := make([]*domain.Talk, 0)
 	for rows.Next() {
 		talks = append(talks, binders.TalkReader(rows.Scan))
@@ -83,5 +83,5 @@ func (tr *TalkRepository) selectQuery(extra string, args ...interface{}) []*doma
 }
 
 func (tr *TalkRepository) insertQuery(talk *domain.Talk) {
-	insertQuery(tr.DB, binders.TalkFieldsString, "talk", binders.TalkWriter(talk)...)
+	tr.DB.Insert(binders.TalkFieldsString, "talk", binders.TalkWriter(talk)...)
 }

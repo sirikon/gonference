@@ -1,7 +1,7 @@
 package main
 
 import (
-	"gonference/pkg/database"
+	"gonference/pkg/database/client"
 	"gonference/pkg/database/migrator"
 	"gonference/pkg/infrastructure/config"
 	"gonference/pkg/infrastructure/logger"
@@ -10,38 +10,23 @@ import (
 )
 
 func main() {
-
 	cfg := config.ReadConfig()
-
 	log := logger.Instance
-
 	log.
 		WithField("connectionString", cfg.Database.URL).
 		WithField("port", cfg.Web.Port).
 		Info("Starting")
 
-	conn, err := database.GetConnection(cfg.Database.URL)
-	if err != nil {
-		log.Fatal(err)
-	}
+	conn := client.GetDBClient(cfg.Database.URL)
+	migrator.Migrate(conn)
 
-	err = migrator.Migrate(conn)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	pool, err := database.GetConnectionPool(cfg.Database.URL)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	jobContext := ioc.CreateJobContext(pool)
+	jobContext := ioc.CreateJobContext(conn)
 
 	httpServer := web.Server{
 		JobContext: jobContext,
 	}
 
-	err = httpServer.Run(cfg.Web.Port)
+	err := httpServer.Run(cfg.Web.Port)
 	if err != nil {
 		log.Fatal(err)
 	}

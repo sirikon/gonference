@@ -1,35 +1,18 @@
 package migrator
 
 import (
-	"context"
-	"github.com/jackc/pgx/v4/pgxpool"
+	"gonference/pkg/database/client"
 	"gonference/pkg/infrastructure/logger"
-
-	"github.com/jmoiron/sqlx"
-	"github.com/pkg/errors"
+	"gonference/pkg/utils"
 )
 
-// Migrate .
-func Migrate(conn *pgxpool.Pool) error {
+func Migrate(conn *client.DBClient) {
 	log := logger.Instance
-	wrapErr := func(err error) error {
-		return errors.Wrap(err, "Migrating")
-	}
 
-	migrations, err := GetMigrations()
-	if err != nil {
-		return wrapErr(err)
-	}
+	migrations := getMigrations()
+	ensureMigrationHistoryTableExists(conn)
 
-	err = EnsureMigrationHistoryTableExists(conn)
-	if err != nil {
-		return wrapErr(err)
-	}
-
-	lastMigrationID, err := GetMostRecentMigrationID(conn)
-	if err != nil {
-		return wrapErr(err)
-	}
+	lastMigrationID := getMostRecentMigrationID(conn)
 
 	for _, migration := range migrations {
 		if migration.Order <= lastMigrationID {
@@ -37,73 +20,42 @@ func Migrate(conn *pgxpool.Pool) error {
 			continue
 		}
 		log.Info("Applying migration ", migration)
-		_, err := conn.Exec(migration.Up)
-		if err != nil {
-			return wrapErr(err)
-		}
-		err = RegisterMigration(conn, migration)
-		if err != nil {
-			return wrapErr(err)
-		}
+		conn.Exec(migration.Up)
+		registerMigration(conn, migration)
 	}
 
 	log.Info("Migration done.")
-
-	return nil
 }
 
-// EnsureMigrationHistoryTableExists .
-func EnsureMigrationHistoryTableExists(db *pgxpool.Pool) error {
-	_, err := db.Exec(context.Background(), `
+func ensureMigrationHistoryTableExists(conn *client.DBClient) {
+	conn.Exec(`
 		CREATE TABLE IF NOT EXISTS __migration_history (
 			id INTEGER PRIMARY KEY,
 			name VARCHAR (200) NOT NULL
 		);
 	`)
-	return err
 }
 
-// RegisterMigration .
-func RegisterMigration(db *pgxpool.Pool, migration Migration) error {
-	_, err := db.Exec(context.Background(), `
+func registerMigration(conn *client.DBClient, migration Migration) {
+	conn.Exec(`
 		INSERT INTO __migration_history
 		("id", "name") VALUES ($1, $2);
 	`, migration.Order, migration.Name)
-	return err
 }
 
-// GetMostRecentMigrationID .
-func GetMostRecentMigrationID(db *sqlx.DB) (int, error) {
-	wrapErr := func(err error) error {
-		return errors.Wrap(err, "Getting most recent migration ID")
-	}
+func getMostRecentMigrationID(conn *client.DBClient) int {
+	rows := conn.Query("SELECT id FROM __migration_history order by id desc LIMIT 1")
 
-	migrations := []int{}
-	err := db.Select(&migrations, "SELECT id FROM __migration_history order by id desc LIMIT 1")
-	if err != nil {
-		return -1, wrapErr(err)
-	}
-	if len(migrations) == 0 {
-		return -1, nil
-	}
-	return migrations[0], nil
-}
-
-// CheckDatabaseExists .
-func CheckDatabaseExists(db *sqlx.DB, name string) (bool, error) {
-	wrapErr := func(err error) error {
-		return errors.Wrap(err, "Checking database '"+name+"' exists")
-	}
-
-	rows, err := db.Query("SELECT 1 FROM pg_database WHERE datname=$1", name)
-	if err != nil {
-		return false, wrapErr(err)
-	}
-
-	count := 0
+	migrations := make([]int, 0)
 	for rows.Next() {
-		count++
+		id := 0
+		err := rows.Scan(&id); utils.Check(err)
+		migrations = append(migrations, id)
 	}
 
-	return count == 1, rows.Close()
+	if len(migrations) == 0 {
+		return -1
+	}
+
+	return migrations[0]
 }

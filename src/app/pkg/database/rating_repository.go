@@ -1,15 +1,15 @@
 package database
 
 import (
-	"github.com/jackc/pgx/v4/pgxpool"
 	"gonference/pkg/database/binders"
+	"gonference/pkg/database/client"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
 )
 
 type RatingRepository struct {
 	Logger logger.Logger
-	DB     *pgxpool.Pool
+	DB     *client.DBClient
 }
 
 func (rr *RatingRepository) Add(rating *domain.Rating) {
@@ -38,7 +38,7 @@ func (rr *RatingRepository) selectOneQuery(extra string, args ...interface{}) *d
 }
 
 func (rr *RatingRepository) selectQuery(extra string, args ...interface{}) []*domain.Rating {
-	rows := selectQuery(rr.DB, binders.RatingFieldsString, "rating", extra, args...)
+	rows := rr.DB.Select(binders.RatingFieldsString, "rating", extra, args...)
 	ratings := make([]*domain.Rating, 0)
 	for rows.Next() {
 		ratings = append(ratings, binders.RatingReader(rows.Scan))
@@ -47,5 +47,5 @@ func (rr *RatingRepository) selectQuery(extra string, args ...interface{}) []*do
 }
 
 func (rr *RatingRepository) insertQuery(rating *domain.Rating) {
-	insertQuery(rr.DB, binders.RatingFieldsString, "rating", binders.RatingWriter(rating)...)
+	rr.DB.Insert(binders.RatingFieldsString, "rating", binders.RatingWriter(rating)...)
 }

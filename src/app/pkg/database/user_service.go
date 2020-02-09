@@ -3,16 +3,16 @@ package database
 import (
 	"crypto/sha256"
 	"encoding/base64"
-	"github.com/jackc/pgx/v4/pgxpool"
 	"github.com/pkg/errors"
 	"gonference/pkg/database/binders"
+	"gonference/pkg/database/client"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
 )
 
 type UserService struct {
 	Logger logger.Logger
-	DB     *pgxpool.Pool
+	DB     *client.DBClient
 }
 
 func (u *UserService) UserExists(username string) bool {
@@ -40,11 +40,11 @@ func (u *UserService) ChangePassword(username string, currentPassword string, ne
 
 func (u *UserService) changePassword(username string, newPassword string) {
 	hashedPassword := hashPassword(newPassword)
-	exec(u.DB, `UPDATE \"user\" SET password = $2 WHERE username = $1`, username, hashedPassword)
+	u.DB.Exec(`UPDATE \"user\" SET password = $2 WHERE username = $1`, username, hashedPassword)
 }
 
 func (u *UserService) get(username string) *domain.User {
-	rows := selectQuery(u.DB, binders.UserFieldsString, "\"user\"", "WHERE username = $1 LIMIT 1", username)
+	rows := u.DB.Select(binders.UserFieldsString, "\"user\"", "WHERE username = $1 LIMIT 1", username)
 	users := make([]*domain.User, 0)
 	for rows.Next() {
 		users = append(users, binders.UserReader(rows.Scan))

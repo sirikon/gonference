@@ -3,6 +3,7 @@ package migrator
 import (
 	"fmt"
 	"gonference/pkg/assets"
+	"gonference/pkg/utils"
 	"sort"
 	"strconv"
 	"strings"
@@ -28,19 +29,13 @@ type MigrationFile struct {
 	Content   string
 }
 
-// GetMigrations .
-func GetMigrations() ([]Migration, error) {
-	var files []MigrationFile
+// getMigrations .
+func getMigrations() []Migration {
 	migrations := make([]Migration, 0)
 	migrationsIndex := make(map[string]*Migration)
+	migrationsFiles := getMigrationsFiles()
 
-	if f, err := getMigrationsFiles(); err == nil {
-		files = f
-	} else {
-		return nil, err
-	}
-
-	for _, file := range files {
+	for _, file := range migrationsFiles {
 		var migration *Migration
 		if value, ok := migrationsIndex[file.Name]; ok {
 			migration = value
@@ -64,26 +59,23 @@ func GetMigrations() ([]Migration, error) {
 		return migrations[a].Order < migrations[b].Order
 	})
 
-	return migrations, nil
+	return migrations
 }
 
-func getMigrationsFiles() ([]MigrationFile, error) {
+func getMigrationsFiles() []MigrationFile {
 	box := assets.DatabaseMigrations
 
 	migrationFiles := make([]MigrationFile, 0)
 	files := box.List()
 
 	for _, file := range files {
-		data, err := box.FindString(file)
-		if err != nil {
-			return nil, err
-		}
+		data, err := box.FindString(file); utils.Check(err)
 		mf := parseMigrationFileName(file)
 		mf.Content = data
 		migrationFiles = append(migrationFiles, mf)
 	}
 
-	return migrationFiles, nil
+	return migrationFiles
 }
 
 func parseMigrationFileName(name string) MigrationFile {

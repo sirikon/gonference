@@ -2,8 +2,8 @@ package ioc
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/jackc/pgx/v4/pgxpool"
 	"gonference/pkg/database"
+	"gonference/pkg/database/client"
 	"gonference/pkg/domain"
 	"gonference/pkg/infrastructure/logger"
 	"gonference/pkg/web/controllers/api"
@@ -12,24 +12,24 @@ import (
 
 // JobContext .
 type JobContext struct {
-	UID          string
-	VisitorKey   string
-	newPool *pgxpool.Pool
+	UID        string
+	VisitorKey string
+	db         *client.DBClient
 }
 
 // CreateJobContext .
-func CreateJobContext(newPool *pgxpool.Pool) *JobContext {
+func CreateJobContext(db *client.DBClient) *JobContext {
 	return &JobContext{
-		newPool: newPool,
+		db: db,
 	}
 }
 
 // CreateScope .
 func (ctx *JobContext) CreateScope(uid, visitorKey string) *JobContext {
 	return &JobContext{
-		newPool: ctx.newPool,
-		UID:          uid,
-		VisitorKey:   visitorKey,
+		db:         ctx.db,
+		UID:        uid,
+		VisitorKey: visitorKey,
 	}
 }
 
@@ -51,7 +51,7 @@ func contextualizeLogger(logger logger.Logger, ctx *JobContext) logger.Logger {
 // TalkRepository .
 func TalkRepository(ctx *JobContext) domain.TalkRepository {
 	return &database.TalkRepository{
-		DB:     ctx.newPool,
+		DB:     ctx.db,
 		Logger: Logger(ctx),
 	}
 }
@@ -59,20 +59,20 @@ func TalkRepository(ctx *JobContext) domain.TalkRepository {
 func RatingRepository(ctx *JobContext) domain.RatingRepository {
 	return &database.RatingRepository{
 		Logger: Logger(ctx),
-		DB:     ctx.newPool,
+		DB:     ctx.db,
 	}
 }
 
 func QuestionRepository(ctx *JobContext) domain.QuestionRepository {
 	return &database.QuestionRepository{
-		DB:     ctx.newPool,
+		DB:     ctx.db,
 		Logger: Logger(ctx),
 	}
 }
 
 func UserService(ctx *JobContext) domain.UserService {
 	return &database.UserService{
-		DB:     ctx.newPool,
+		DB:     ctx.db,
 		Logger: Logger(ctx),
 	}
 }

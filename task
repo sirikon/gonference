@@ -66,6 +66,7 @@ function app-build {(
 
 function app-update {(
   cd ./src/app
+  go mod tidy
   go get -u
 )}
 
