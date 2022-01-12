@@ -31,7 +31,7 @@ COPY --from=front-style-build /src/dist .
 WORKDIR /src/backoffice-ui/dist
 COPY --from=backoffice-ui-build /src/dist .
 WORKDIR /src/app
-RUN (cd ./pkg/assets && packr2) && go build -ldflags "-s -w" -o dist/gonference .
+RUN (cd ./pkg/infrastructure/assets && packr2) && go build -ldflags "-s -w" -o dist/gonference .
 
 FROM alpine:3.11
 ENV GIN_MODE release
